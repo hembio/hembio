@@ -1,20 +1,18 @@
 {
   "extends": "@hembio/tsconfig/dev",
   "compilerOptions": {
-    "target": "ES2019",
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "noEmit": true,
     "incremental": true,
     "jsx": "react-jsx",
     "allowJs": true,
     "module": "esnext",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "~/*": ["./src/*"],
+      "$/*": ["./public/*"]
+    }
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

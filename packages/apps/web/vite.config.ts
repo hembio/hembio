@@ -7,6 +7,7 @@ export default defineConfig({
     jsxInject: `import React from 'react'`,
   },
   plugins: [reactRefresh()],
+  root: path.resolve(__dirname),
   build: {
     outDir: "./dist",
   },
@@ -16,6 +17,10 @@ export default defineConfig({
     base: "https://hembio.local:3443",
     hmr: {
       port: 3443,
+    },
+    fs: {
+      allow: [path.resolve("../../../")],
+      strict: true,
     },
   },
   resolve: {
