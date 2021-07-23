@@ -30,6 +30,7 @@ import { ImageModule } from "./image/image.module";
 import { IndexerModule } from "./indexer/indexer.module";
 import { LibraryModule } from "./library/library.module";
 import { MikroORMMiddleware } from "./mikro-orm.middleware";
+import { PersonModule } from "./person/person.module";
 import { StatsModule } from "./stats/stats.module";
 import { StreamModule } from "./stream/stream.module";
 import { TitleModule } from "./title/title.module";
@@ -75,6 +76,7 @@ const AppConfigModule = ConfigModule.forRoot({
     StreamModule,
     StatsModule,
     CreditModule,
+    PersonModule,
   ],
   controllers: [AppController],
   providers: [

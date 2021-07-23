@@ -1,0 +1,30 @@
+fragment Person on PersonEntity {
+  id
+  createdAt
+  name
+  image
+  bio
+  birthday
+  placeOfBirth
+  credits {
+    job
+    character
+    department
+    title {
+      id
+      name
+      year
+      thumb
+    }
+  }
+  externalIds {
+    imdb
+    tmdb
+  }
+}
+
+query Person($id: String!) {
+  person(id: $id) {
+    ...Person
+  }
+}
