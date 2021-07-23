@@ -1,3 +1,7 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
 type PersonExternalIds {
   imdb: String
   tmdb: Int
@@ -170,16 +174,6 @@ type PaginatedTitleResponse {
   totalCount: Int!
 }
 
-type StatsModel {
-  time: Int!
-  uptime: Int!
-  cpuUsage: Int!
-  totalMem: Int!
-  freeMem: Int!
-  totalFiles: Int!
-  totalTitles: Int!
-}
-
 type IdentityModel {
   provider: String!
   externalId: String!
@@ -200,15 +194,25 @@ type UpdateMetadataModel {
   id: String
 }
 
+type StatsModel {
+  time: Int!
+  uptime: Int!
+  cpuUsage: Int!
+  totalMem: Int!
+  freeMem: Int!
+  totalFiles: Int!
+  totalTitles: Int!
+}
+
 type Query {
-  file(fileId: String!): FileEntity
-  library(id: String!): LibraryEntity
-  libraries: [LibraryEntity!]!
-  stats: StatsModel!
-  title(id: String!): TitleEntity
-  search(query: String!): [TitleEntity!]!
   users: [UserEntity!]!
   user(userId: String!): UserEntity
+  library(id: String!): LibraryEntity
+  libraries: [LibraryEntity!]!
+  title(id: String!): TitleEntity
+  search(query: String!): [TitleEntity!]!
+  file(fileId: String!): FileEntity
+  stats: StatsModel!
 }
 
 type Mutation {
