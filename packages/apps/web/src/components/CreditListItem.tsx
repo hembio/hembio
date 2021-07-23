@@ -4,6 +4,7 @@ import ListItemButton from "@material-ui/core/ListItemButton";
 import ListItemText from "@material-ui/core/ListItemText";
 import Skeleton from "@material-ui/core/Skeleton";
 import PersonIcon from "@material-ui/icons/Person";
+import { Link } from "react-router-dom";
 import { HEMBIO_API_URL } from "~/constants";
 import { CastFragment, CrewFragment } from "~/generated/graphql";
 
@@ -39,7 +40,11 @@ export function CreditListitem({ credit }: CreditListitemProps): JSX.Element {
   );
 
   return (
-    <ListItemButton component="a" sx={{ width: "352px", minHeight: "115px" }}>
+    <ListItemButton
+      component={Link}
+      sx={{ width: "352px", minHeight: "115px" }}
+      to={credit ? `/person/${credit.person.id}` : ""}
+    >
       <ListItemAvatar>
         {!credit && <Skeleton variant="circular">{avatar}</Skeleton>}
         {credit && avatar}

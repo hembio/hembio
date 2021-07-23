@@ -16,6 +16,7 @@ import { TopLoadingBar } from "~/components/TopLoadingBar";
 import { Home } from "~/pages/Home";
 import { Library } from "~/pages/Library";
 import { NotFound } from "~/pages/NotFound";
+import { Person } from "~/pages/Person";
 import { Player } from "~/pages/Player";
 import { Settings } from "~/pages/Settings";
 import { SignIn } from "~/pages/SignIn";
@@ -148,9 +149,9 @@ export const AppContainer = observer(() => {
               <TitleRoutes />
             </ProtectedRoute>
             <ProtectedRoute
-              path="/title/:titleId"
+              path={`/person/:personId`}
               exact
-              render={(props) => <Title key={props.location.key} {...props} />}
+              render={(props) => <Person key={props.location.key} {...props} />}
             />
             <ProtectedRoute
               path="/profile"
