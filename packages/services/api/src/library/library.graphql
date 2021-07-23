@@ -17,3 +17,9 @@ query Library($id: String!) {
     ...Library
   }
 }
+
+mutation CheckLibrary($id: String!) {
+  checkLibrary(id: $id) {
+    id
+  }
+}

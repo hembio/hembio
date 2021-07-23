@@ -174,24 +174,16 @@ type PaginatedTitleResponse {
   totalCount: Int!
 }
 
+type UpdateMutationModel {
+  id: String
+}
+
 type IdentityModel {
   provider: String!
   externalId: String!
   type: String!
   name: String!
   year: String!
-}
-
-type DeleteModel {
-  id: String
-}
-
-type UpdateCreditsModel {
-  id: String
-}
-
-type UpdateMetadataModel {
-  id: String
 }
 
 type StatsModel {
@@ -218,8 +210,8 @@ type Query {
 
 type Mutation {
   addLibrary(name: String!, type: LibraryType!, path: String!): AddLibraryResponse!
-  updateCredits(id: String!): UpdateCreditsModel!
-  updateMetadata(id: String!): UpdateMetadataModel!
-  checkLibrary(id: String!): UpdateMetadataModel!
-  deleteTitle(id: String!): DeleteModel!
+  checkLibrary(id: String!): UpdateMutationModel!
+  updateCredits(id: String!): UpdateMutationModel!
+  updateMetadata(id: String!): UpdateMutationModel!
+  deleteTitle(id: String!): UpdateMutationModel!
 }

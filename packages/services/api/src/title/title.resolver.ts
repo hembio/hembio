@@ -10,9 +10,7 @@ import {
 import { IdentityModel } from "./models/identity.model";
 import { TitleService } from "./title.service";
 import { Auth } from "~/auth/auth.decorator";
-import { DeleteModel } from "~/common/models/delete.model";
-import { UpdateCreditsModel } from "~/common/models/update-credits.model";
-import { UpdateMetadataModel } from "~/common/models/update-metadata.model";
+import { UpdateMutationModel } from "~/common/models/update-mutation.model";
 import { CreditService } from "~/credit/credit.service";
 import { FileService } from "~/file/file.service";
 import { IndexerService } from "~/indexer/indexer.service";
@@ -77,34 +75,26 @@ export class TitleResolver {
     return await this.creditService.getCrew(title.id);
   }
 
-  @Mutation(() => UpdateCreditsModel)
+  @Mutation(() => UpdateMutationModel)
   public async updateCredits(
     @Args({ name: "id", type: () => String }) id: string,
-  ): Promise<UpdateCreditsModel> {
+  ): Promise<UpdateMutationModel> {
     await this.indexerService.updateCredits(id);
     return { id };
   }
 
-  @Mutation(() => UpdateMetadataModel)
+  @Mutation(() => UpdateMutationModel)
   public async updateMetadata(
     @Args({ name: "id", type: () => String }) id: string,
-  ): Promise<UpdateMetadataModel> {
+  ): Promise<UpdateMutationModel> {
     await this.indexerService.updateMetadata(id);
     return { id };
   }
 
-  @Mutation(() => UpdateMetadataModel)
-  public async checkLibrary(
-    @Args({ name: "id", type: () => String }) id: string,
-  ): Promise<UpdateMetadataModel> {
-    await this.indexerService.checkLibrary(id);
-    return { id };
-  }
-
-  @Mutation(() => DeleteModel)
+  @Mutation(() => UpdateMutationModel)
   public async deleteTitle(
     @Args({ name: "id", type: () => String }) id: string,
-  ): Promise<DeleteModel> {
+  ): Promise<UpdateMutationModel> {
     try {
       await this.titleService.deleteOneById(id);
     } catch {

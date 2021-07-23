@@ -38,11 +38,6 @@ export type CreditEntity = {
 };
 
 
-export type DeleteModel = {
-  __typename?: 'DeleteModel';
-  id?: Maybe<Scalars['String']>;
-};
-
 export type FileEntity = {
   __typename?: 'FileEntity';
   id: Scalars['ID'];
@@ -125,10 +120,10 @@ export enum LibraryType {
 export type Mutation = {
   __typename?: 'Mutation';
   addLibrary: AddLibraryResponse;
-  updateCredits: UpdateCreditsModel;
-  updateMetadata: UpdateMetadataModel;
-  checkLibrary: UpdateMetadataModel;
-  deleteTitle: DeleteModel;
+  checkLibrary: UpdateMutationModel;
+  updateCredits: UpdateMutationModel;
+  updateMetadata: UpdateMutationModel;
+  deleteTitle: UpdateMutationModel;
 };
 
 
@@ -139,17 +134,17 @@ export type MutationAddLibraryArgs = {
 };
 
 
+export type MutationCheckLibraryArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationUpdateCreditsArgs = {
   id: Scalars['String'];
 };
 
 
 export type MutationUpdateMetadataArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MutationCheckLibraryArgs = {
   id: Scalars['String'];
 };
 
@@ -310,13 +305,8 @@ export enum TitleType {
   Music = 'MUSIC'
 }
 
-export type UpdateCreditsModel = {
-  __typename?: 'UpdateCreditsModel';
-  id?: Maybe<Scalars['String']>;
-};
-
-export type UpdateMetadataModel = {
-  __typename?: 'UpdateMetadataModel';
+export type UpdateMutationModel = {
+  __typename?: 'UpdateMutationModel';
   id?: Maybe<Scalars['String']>;
 };
 
@@ -383,6 +373,19 @@ export type LibraryQuery = (
     { __typename?: 'LibraryEntity' }
     & LibraryFragment
   )> }
+);
+
+export type CheckLibraryMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type CheckLibraryMutation = (
+  { __typename?: 'Mutation' }
+  & { checkLibrary: (
+    { __typename?: 'UpdateMutationModel' }
+    & Pick<UpdateMutationModel, 'id'>
+  ) }
 );
 
 export type PersonFragment = (
@@ -595,8 +598,8 @@ export type DeleteTitleMutationVariables = Exact<{
 export type DeleteTitleMutation = (
   { __typename?: 'Mutation' }
   & { deleteTitle: (
-    { __typename?: 'DeleteModel' }
-    & Pick<DeleteModel, 'id'>
+    { __typename?: 'UpdateMutationModel' }
+    & Pick<UpdateMutationModel, 'id'>
   ) }
 );
 
@@ -608,8 +611,8 @@ export type UpdateCreditsMutationVariables = Exact<{
 export type UpdateCreditsMutation = (
   { __typename?: 'Mutation' }
   & { updateCredits: (
-    { __typename?: 'UpdateCreditsModel' }
-    & Pick<UpdateCreditsModel, 'id'>
+    { __typename?: 'UpdateMutationModel' }
+    & Pick<UpdateMutationModel, 'id'>
   ) }
 );
 
@@ -621,8 +624,8 @@ export type UpdateMetadataMutationVariables = Exact<{
 export type UpdateMetadataMutation = (
   { __typename?: 'Mutation' }
   & { updateMetadata: (
-    { __typename?: 'UpdateMetadataModel' }
-    & Pick<UpdateMetadataModel, 'id'>
+    { __typename?: 'UpdateMutationModel' }
+    & Pick<UpdateMutationModel, 'id'>
   ) }
 );
 
@@ -917,6 +920,39 @@ export type LibraryQueryResult = Apollo.QueryResult<LibraryQuery, LibraryQueryVa
 export function refetchLibraryQuery(variables?: LibraryQueryVariables) {
       return { query: LibraryDocument, variables: variables }
     }
+export const CheckLibraryDocument = gql`
+    mutation CheckLibrary($id: String!) {
+  checkLibrary(id: $id) {
+    id
+  }
+}
+    `;
+export type CheckLibraryMutationFn = Apollo.MutationFunction<CheckLibraryMutation, CheckLibraryMutationVariables>;
+
+/**
+ * __useCheckLibraryMutation__
+ *
+ * To run a mutation, you first call `useCheckLibraryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCheckLibraryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [checkLibraryMutation, { data, loading, error }] = useCheckLibraryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCheckLibraryMutation(baseOptions?: Apollo.MutationHookOptions<CheckLibraryMutation, CheckLibraryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CheckLibraryMutation, CheckLibraryMutationVariables>(CheckLibraryDocument, options);
+      }
+export type CheckLibraryMutationHookResult = ReturnType<typeof useCheckLibraryMutation>;
+export type CheckLibraryMutationResult = Apollo.MutationResult<CheckLibraryMutation>;
+export type CheckLibraryMutationOptions = Apollo.BaseMutationOptions<CheckLibraryMutation, CheckLibraryMutationVariables>;
 export const PersonDocument = gql`
     query Person($id: String!) {
   person(id: $id) {

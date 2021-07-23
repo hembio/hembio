@@ -3,6 +3,7 @@ import { Module } from "@nestjs/common";
 import { LibraryResolver } from "./library.resolver";
 import { LibraryService } from "./library.service";
 import { AuthModule } from "~/auth/auth.module";
+import { IndexerModule } from "~/indexer/indexer.module";
 import { TitleModule } from "~/title/title.module";
 import { UserModule } from "~/user/user.module";
 
@@ -12,6 +13,7 @@ import { UserModule } from "~/user/user.module";
     AuthModule,
     UserModule,
     TitleModule,
+    IndexerModule,
   ],
   providers: [LibraryResolver, LibraryService],
   exports: [LibraryService],

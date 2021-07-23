@@ -13,6 +13,8 @@ import { AddLibraryResponse } from "./models/add-library-response.model";
 import { PaginatedTitleResponse } from "./models/paginated-title-response.model";
 import { Auth } from "~/auth/auth.decorator";
 import { PaginationArgs } from "~/common/args";
+import { UpdateMutationModel } from "~/common/models/update-mutation.model";
+import { IndexerService } from "~/indexer/indexer.service";
 import { GetTitleArgs } from "~/library/args/get-titles.args";
 import { TitleService } from "~/title/title.service";
 
@@ -22,6 +24,7 @@ export class LibraryResolver {
   public constructor(
     private readonly libraryService: LibraryService,
     private readonly titleService: TitleService,
+    private readonly indexerService: IndexerService,
   ) {}
 
   @Query(() => LibraryEntity, { name: "library", nullable: true })
@@ -81,5 +84,13 @@ export class LibraryResolver {
   ): Promise<LibraryEntity | null> {
     const library = await this.libraryService.addLibrary(name, type, path);
     return library;
+  }
+
+  @Mutation(() => UpdateMutationModel)
+  public async checkLibrary(
+    @Args({ name: "id", type: () => String }) id: string,
+  ): Promise<UpdateMutationModel> {
+    await this.indexerService.checkLibrary(id);
+    return { id };
   }
 }
