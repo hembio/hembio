@@ -10,7 +10,6 @@ import {
   TaskType,
   Times,
   TitleEntity,
-  TitleType,
 } from "@hembio/core";
 import { pathWalker } from "@hembio/fs";
 import { createLogger } from "@hembio/logger";
@@ -210,7 +209,7 @@ export class IndexerService {
     }
     const title = titleRepo.create({
       slug,
-      type: TitleType.MOVIE,
+      type: library.type,
       path: titlePath,
       idImdb: metadata.ids.imdb,
       idTmdb: metadata.ids.tmdb,
