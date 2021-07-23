@@ -10,6 +10,7 @@
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "jsx": "react-jsx",
