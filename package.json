@@ -6,8 +6,7 @@
     "packages/configs/*",
     "packages/libs/*",
     "packages/apps/*",
-    "packages/services/*",
-    "packages/experimental/*"
+    "packages/services/*"
   ],
   "scripts": {
     "clean": "rimraf build && rimraf './packages/**/dist'",
