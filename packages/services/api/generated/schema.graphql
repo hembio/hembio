@@ -19,7 +19,7 @@ type PersonEntity {
   birthday: String
   placeOfBirth: String
   image: String
-  jobs: [CreditEntity!]!
+  credits: [CreditEntity!]!
 }
 
 """
@@ -213,6 +213,7 @@ type Query {
   search(query: String!): [TitleEntity!]!
   file(fileId: String!): FileEntity
   stats: StatsModel!
+  person(id: String!): PersonEntity
 }
 
 type Mutation {

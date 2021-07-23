@@ -177,7 +177,7 @@ export type PersonEntity = {
   birthday?: Maybe<Scalars['String']>;
   placeOfBirth?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['String']>;
-  jobs: Array<CreditEntity>;
+  credits: Array<CreditEntity>;
 };
 
 export type PersonExternalIds = {
@@ -191,6 +191,7 @@ export type Query = {
   file?: Maybe<FileEntity>;
   library?: Maybe<LibraryEntity>;
   libraries: Array<LibraryEntity>;
+  person?: Maybe<PersonEntity>;
   stats: StatsModel;
   title?: Maybe<TitleEntity>;
   search: Array<TitleEntity>;
@@ -205,6 +206,11 @@ export type QueryFileArgs = {
 
 
 export type QueryLibraryArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryPersonArgs = {
   id: Scalars['String'];
 };
 
@@ -376,6 +382,35 @@ export type LibraryQuery = (
   & { library?: Maybe<(
     { __typename?: 'LibraryEntity' }
     & LibraryFragment
+  )> }
+);
+
+export type PersonFragment = (
+  { __typename?: 'PersonEntity' }
+  & Pick<PersonEntity, 'id' | 'createdAt' | 'name' | 'image' | 'bio' | 'birthday' | 'placeOfBirth'>
+  & { credits: Array<(
+    { __typename?: 'CreditEntity' }
+    & Pick<CreditEntity, 'job' | 'character' | 'department'>
+    & { title: (
+      { __typename?: 'TitleEntity' }
+      & Pick<TitleEntity, 'id' | 'name' | 'year' | 'thumb'>
+    ) }
+  )>, externalIds: (
+    { __typename?: 'PersonExternalIds' }
+    & Pick<PersonExternalIds, 'imdb' | 'tmdb'>
+  ) }
+);
+
+export type PersonQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type PersonQuery = (
+  { __typename?: 'Query' }
+  & { person?: Maybe<(
+    { __typename?: 'PersonEntity' }
+    & PersonFragment
   )> }
 );
 
@@ -650,6 +685,32 @@ export const LibraryFragmentDoc = gql`
   createdAt
 }
     `;
+export const PersonFragmentDoc = gql`
+    fragment Person on PersonEntity {
+  id
+  createdAt
+  name
+  image
+  bio
+  birthday
+  placeOfBirth
+  credits {
+    job
+    character
+    department
+    title {
+      id
+      name
+      year
+      thumb
+    }
+  }
+  externalIds {
+    imdb
+    tmdb
+  }
+}
+    `;
 export const CrewFragmentDoc = gql`
     fragment Crew on CreditEntity {
   id
@@ -855,6 +916,44 @@ export type LibraryLazyQueryHookResult = ReturnType<typeof useLibraryLazyQuery>;
 export type LibraryQueryResult = Apollo.QueryResult<LibraryQuery, LibraryQueryVariables>;
 export function refetchLibraryQuery(variables?: LibraryQueryVariables) {
       return { query: LibraryDocument, variables: variables }
+    }
+export const PersonDocument = gql`
+    query Person($id: String!) {
+  person(id: $id) {
+    ...Person
+  }
+}
+    ${PersonFragmentDoc}`;
+
+/**
+ * __usePersonQuery__
+ *
+ * To run a query within a React component, call `usePersonQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePersonQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePersonQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePersonQuery(baseOptions: Apollo.QueryHookOptions<PersonQuery, PersonQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PersonQuery, PersonQueryVariables>(PersonDocument, options);
+      }
+export function usePersonLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PersonQuery, PersonQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PersonQuery, PersonQueryVariables>(PersonDocument, options);
+        }
+export type PersonQueryHookResult = ReturnType<typeof usePersonQuery>;
+export type PersonLazyQueryHookResult = ReturnType<typeof usePersonLazyQuery>;
+export type PersonQueryResult = Apollo.QueryResult<PersonQuery, PersonQueryVariables>;
+export function refetchPersonQuery(variables?: PersonQueryVariables) {
+      return { query: PersonDocument, variables: variables }
     }
 export const StatsDocument = gql`
     query Stats {
