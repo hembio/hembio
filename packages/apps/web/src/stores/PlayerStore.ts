@@ -57,23 +57,7 @@ export class PlayerStore {
   private timer?: number;
 
   public constructor() {
-    makeObservable(this, {
-      setCurrentTime: action.bound,
-      setPending: action.bound,
-      setInFullscreen: action.bound,
-      setPlaying: action.bound,
-      setDuration: action.bound,
-      setTextCues: action.bound,
-      setVolume: action.bound,
-      toggleFullscreen: flow,
-      togglePlayback: action.bound,
-      toggleMute: action.bound,
-      seek: action.bound,
-      load: action.bound,
-      unload: action.bound,
-      init: action.bound,
-      setBuffers: action,
-    });
+    makeObservable(this);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mpv = (window as any).parent.mpv;
