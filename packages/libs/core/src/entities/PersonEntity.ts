@@ -26,7 +26,7 @@ class PersonExternalIds {
 }
 
 @ObjectType()
-@Entity({ tableName: "persons" })
+@Entity({ tableName: "people" })
 export class PersonEntity {
   @Field(() => ID)
   @PrimaryKey()
@@ -93,7 +93,7 @@ export class PersonEntity {
     orphanRemoval: true,
     strategy: LoadStrategy.JOINED,
   })
-  public jobs = new Collection<CreditEntity>(this);
+  public credits = new Collection<CreditEntity>(this);
 
   @OnInit()
   public onInit(): void {
