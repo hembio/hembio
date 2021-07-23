@@ -20,16 +20,27 @@ interface TextCue {
 }
 
 export class PlayerStore {
+  @observable.shallow
   public file?: FileWithTitleFragment;
+  @observable
   public duration = 0;
+  @observable
   public volume = 1;
+  @observable
   public currentTime = 0;
+  @observable
   public isReady = false;
+  @observable
   public isPlaying = false;
+  @observable
   public isPending = false;
+  @observable
   public isMuted = false;
+  @observable
   public inFullscreen = false;
+  @observable.shallow
   public textCues = new Array<TextCue>();
+  @observable
   public buffers = observable.array<[number, number]>();
 
   public directAudio = true;
@@ -47,17 +58,6 @@ export class PlayerStore {
 
   public constructor() {
     makeObservable(this, {
-      file: observable.shallow,
-      duration: observable,
-      volume: observable,
-      currentTime: observable,
-      isReady: observable,
-      isPlaying: observable,
-      isMuted: observable,
-      inFullscreen: observable,
-      textCues: observable.shallow,
-      timeLeft: computed,
-      endsAt: computed,
       setCurrentTime: action.bound,
       setPending: action.bound,
       setInFullscreen: action.bound,
@@ -82,10 +82,12 @@ export class PlayerStore {
     }
   }
 
+  @computed
   public get timeLeft(): number {
     return Math.ceil(this.duration - this.currentTime);
   }
 
+  @computed
   public get endsAt(): string {
     const d = new Date(Date.now() + this.timeLeft * 1000);
     return (
@@ -95,29 +97,36 @@ export class PlayerStore {
     );
   }
 
+  @action
   public setCurrentTime(currentTime: number): void {
     if (this.currentTime !== currentTime) {
       this.currentTime = currentTime;
     }
   }
 
+  @action
   public setPending(isPending = true): void {
     this.isPending = isPending;
   }
 
+  @action
   public setInFullscreen(inFullscreen = true): void {
     this.inFullscreen = inFullscreen;
   }
 
+  @action
   public setPlaying(isPlaying = true): void {
     this.isPlaying = isPlaying;
   }
 
+  @action
   public setDuration(duration: number): void {
     this.duration = duration;
   }
 
-  public *toggleFullscreen(this: PlayerStore): Generator<Promise<void>> {
+  public toggleFullscreen = flow(function* (
+    this: PlayerStore,
+  ): Generator<Promise<void>> {
     if (!document.fullscreenElement) {
       yield document.documentElement.requestFullscreen();
       this.inFullscreen = true;
@@ -127,8 +136,9 @@ export class PlayerStore {
         this.inFullscreen = false;
       }
     }
-  }
+  });
 
+  @action
   public togglePlayback(): void {
     if (this.mpv) {
       if (this.isPlaying) {
@@ -147,6 +157,7 @@ export class PlayerStore {
     }
   }
 
+  @action
   public seek(time: number): void {
     if (this.mpv) {
       this.mpv.currentTime = time;
@@ -157,6 +168,7 @@ export class PlayerStore {
     clearInterval(this.timer);
   }
 
+  @action
   public toggleMute(): void {
     if (this.mpv) {
       this.mpv.muted = !this.mpv.muted;
@@ -169,6 +181,7 @@ export class PlayerStore {
     }
   }
 
+  @action
   public setVolume(volume: number): void {
     if (this.mpv) {
       this.mpv.volume = volume;
@@ -179,6 +192,7 @@ export class PlayerStore {
     }
   }
 
+  @action
   public load(file: FileWithTitleFragment): void {
     if (this.mpv) {
       setTimeout(() => {
@@ -199,6 +213,7 @@ export class PlayerStore {
     }
   }
 
+  @action
   public unload(): void {
     if (this.hls) {
       this.hls.destroy();
@@ -212,14 +227,17 @@ export class PlayerStore {
     this.video = undefined;
   }
 
+  @action
   public setTextCues(cues: TextCue[]): void {
     this.textCues = cues;
   }
 
+  @action
   public setBuffers(buf: Array<[number, number]>): void {
     this.buffers.replace(buf);
   }
 
+  @action
   public init(videoRef: HTMLVideoElement | HTMLEmbedElement): void {
     if (!videoRef) {
       return;

@@ -1,14 +1,21 @@
 import axios, { AxiosInstance } from "axios";
-import { action, computed, observable, makeObservable } from "mobx";
+import { observable, makeObservable, computed, action } from "mobx";
 import { HEMBIO_API_URL } from "~/constants";
 
 export class AuthStore {
+  @observable
   public isReady = false;
+  @observable
   public accessToken?: string;
+  @observable
   public userId?: string;
+  @observable
   public username?: string;
+  @observable
   public error?: Error;
+  @observable
   public qrCode?: string;
+  @observable
   public isTwoFactorNeeded = false;
 
   private client: AxiosInstance;
@@ -31,23 +38,10 @@ export class AuthStore {
     }, 1000 * 60 * 10);
     this.refreshAccessToken();
 
-    makeObservable(this, {
-      isReady: observable,
-      accessToken: observable,
-      qrCode: observable,
-      isTwoFactorNeeded: observable,
-      userId: observable,
-      username: observable,
-      error: observable,
-      isAuthenticated: computed,
-      setAuthenticated: action,
-      setError: action,
-      setQrCode: action,
-      setTwoFactorNeeded: action,
-      setUserId: action,
-    });
+    makeObservable(this);
   }
 
+  @computed
   public get isAuthenticated(): boolean {
     return (
       this.isReady && !!this.accessToken && !!this.userId && !!this.username
@@ -126,22 +120,27 @@ export class AuthStore {
     this.qrCode = undefined;
   }
 
+  @action
   public setUserId(userId: string): void {
     this.userId = userId;
   }
 
+  @action
   public setQrCode(qrCode: string): void {
     this.qrCode = qrCode;
   }
 
+  @action
   public setTwoFactorNeeded(isTwoFactorNeeded: boolean): void {
     this.isTwoFactorNeeded = isTwoFactorNeeded;
   }
 
+  @action
   public setError(e: Error): void {
     this.error = e;
   }
 
+  @action
   public setAuthenticated(data?: Record<string, string>): void {
     if (!data) {
       this.userId = undefined;
