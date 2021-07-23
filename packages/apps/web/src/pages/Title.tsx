@@ -125,7 +125,7 @@ export const Title = (): JSX.Element => {
     return (
       <Container>
         <Alert severity="error">
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>GraphQL Error</AlertTitle>
           {error.message}
           <br />
           <pre style={{ whiteSpace: "pre-wrap" }}>{error.stack}</pre>
