@@ -6,8 +6,13 @@ import { ImagesService } from "./images.service";
 export class ImagesController {
   public constructor(private readonly imagesService: ImagesService) {}
 
-  @MessagePattern({ cmd: "downloadBestVersions" })
-  public async downloadBestVersions({ id }: { id: string }): Promise<unknown> {
-    return this.imagesService.downloadTitleImages(id);
+  @MessagePattern({ cmd: "updateTitleImages" })
+  public async updateTitleImages({ id }: { id: string }): Promise<unknown> {
+    return this.imagesService.queueTitleImagesUpdate(id);
+  }
+
+  @MessagePattern({ cmd: "updatePersonImages" })
+  public async updatePersonImages({ id }: { id: string }): Promise<unknown> {
+    return this.imagesService.queuePersonImageUpdate(id);
   }
 }

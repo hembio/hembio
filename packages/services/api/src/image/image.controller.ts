@@ -13,7 +13,6 @@ import {
   Res,
 } from "@nestjs/common";
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { lastValueFrom } from "rxjs";
 import { ImageService } from "./image.service";
 
 @Controller("images")
@@ -98,36 +97,6 @@ export class ImageController {
     // }
 
     return readStream;
-  }
-
-  @Get("/titles/download")
-  public async downloadAll(
-    @Param() params: { id: string },
-    @Res({ passthrough: true }) res: FastifyReply,
-  ): Promise<unknown> {
-    const result = await lastValueFrom(
-      this.imagesService.downloadImages(params.id),
-    );
-    if (result.error) {
-      res.status(result.code as number);
-      return { error: result.error };
-    }
-    return result;
-  }
-
-  @Get("/titles/download/:id")
-  public async download(
-    @Param() params: { id: string },
-    @Res({ passthrough: true }) res: FastifyReply,
-  ): Promise<unknown> {
-    const result = await lastValueFrom(
-      this.imagesService.downloadImages(params.id),
-    );
-    if (result.error) {
-      res.status(result.code as number);
-      return { error: result.error };
-    }
-    return result;
   }
 
   @Get("/people/:id")

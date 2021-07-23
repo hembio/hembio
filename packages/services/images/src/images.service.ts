@@ -59,7 +59,7 @@ export class ImagesService {
     carryoverConcurrencyCount: true,
   });
 
-  // Stay within the rate limit of assets.fanart.tv
+  // Stay within the rate limit of TMDb
   private readonly personImageFetchQueue = new PQueue({
     concurrency: 6,
     intervalCap: 12,
@@ -68,7 +68,7 @@ export class ImagesService {
   });
 
   private readonly taskQueue = new PQueue({
-    concurrency: 10,
+    concurrency: 20,
   });
 
   // TODO: Use metadata microservice instead
@@ -149,7 +149,7 @@ export class ImagesService {
 
     try {
       if (!tasks) {
-        tasks = await this.tasks.getTasks(TaskType.IMAGES, 10);
+        tasks = await this.tasks.getTasks(TaskType.IMAGES, 20);
       }
 
       if (tasks.length > 0) {
@@ -192,8 +192,6 @@ export class ImagesService {
           }
         }
         await this.taskQueue.onIdle();
-        await this.personImageFetchQueue.onIdle();
-        await this.titleImageFetchQueue.onIdle();
       }
     } catch {
       // Ignore
@@ -446,5 +444,47 @@ export class ImagesService {
       return false;
     });
     return task;
+  }
+
+  public async queueTitleImagesUpdate(titleId: string): Promise<boolean> {
+    const em = this.em.fork(false);
+    const count = await em.count(TitleEntity, titleId);
+    if (count === 0) {
+      throw Error("Title not found");
+    }
+
+    const task = await this.tasks.createTask({
+      type: TaskType.IMAGES,
+      ref: titleId,
+      priority: 10,
+      payload: { type: "title" },
+    });
+
+    if (task) {
+      this.logger.debug(`Queued images update for title(${titleId})`);
+    }
+
+    return !!task;
+  }
+
+  public async queuePersonImageUpdate(personId: string): Promise<boolean> {
+    const em = this.em.fork(false);
+    const count = await em.count(PersonEntity, personId);
+    if (count === 0) {
+      throw Error("Person not found");
+    }
+
+    const task = await this.tasks.createTask({
+      type: TaskType.IMAGES,
+      ref: personId,
+      priority: 10,
+      payload: { type: "person" },
+    });
+
+    if (task) {
+      this.logger.debug(`Queued images update for person(${personId})`);
+    }
+
+    return !!task;
   }
 }

@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { TitleController } from "./title.controller";
 import { TitleResolver } from "./title.resolver";
 import { TitleService } from "./title.service";
 import { AuthModule } from "~/auth/auth.module";
@@ -10,7 +9,6 @@ import { UserModule } from "~/user/user.module";
 
 @Module({
   imports: [AuthModule, UserModule, FileModule, CreditModule, IndexerModule],
-  controllers: [TitleController],
   providers: [TitleService, TitleResolver],
   exports: [TitleService],
 })

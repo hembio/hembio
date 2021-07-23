@@ -14,6 +14,7 @@ import { TMDbProvider, TraktProvider } from "@hembio/metadata";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { Cast, Crew } from "moviedb-promise/dist/request-types";
+import PQueue from "p-queue";
 
 @Injectable()
 export class CreditsService {
@@ -21,6 +22,18 @@ export class CreditsService {
   private trakt = new TraktProvider();
   private tmdb = new TMDbProvider();
   private runners = new Set<string>();
+
+  public taskQueue = new PQueue({
+    concurrency: 4,
+  });
+
+  // Stay within the rate limit of TMDb
+  private readonly creditsFetchQueue = new PQueue({
+    concurrency: 6,
+    intervalCap: 12,
+    interval: 3000,
+    carryoverConcurrencyCount: true,
+  });
 
   public constructor(
     private readonly orm: MikroORM,
@@ -55,25 +68,28 @@ export class CreditsService {
         this.logger.debug(`Running ${tasks.length} credits tasks`);
         for (const task of tasks) {
           const { ref } = task;
-          try {
-            const found = await this.lookupCredits(ref);
-            if (!found) {
-              const waitUntil = new Date(Date.now() + Times.ONE_DAY);
-              await this.tasks.waitUntil(task, waitUntil);
-            } else {
+          this.taskQueue.add(async () => {
+            try {
+              const found = await this.lookupCredits(ref);
+              if (!found) {
+                const waitUntil = new Date(Date.now() + Times.ONE_DAY);
+                await this.tasks.waitUntil(task, waitUntil);
+              } else {
+                await this.tasks.deleteTask(task);
+              }
+            } catch (e) {
+              this.logger.debug(e);
+              this.logger.debug(`Removing broken task(${task.id})`);
               await this.tasks.deleteTask(task);
             }
-          } catch (e) {
-            this.logger.debug(e);
-            this.logger.debug(`Removing broken task(${task.id})`);
-            await this.tasks.deleteTask(task);
-          }
+          });
         }
       }
     } catch (e) {
       this.logger.error(e);
     }
 
+    await this.taskQueue.onIdle();
     this.runners.delete(runnerName);
 
     let nextTasks: TaskEntity[] = [];
@@ -91,9 +107,6 @@ export class CreditsService {
   public async lookupCredits(titleId: string): Promise<boolean> {
     const em = this.em.fork(false);
     const titleRepo = em.getRepository(TitleEntity);
-    const personRepo = em.getRepository(PersonEntity);
-    const creditRepo = em.getRepository(CreditEntity);
-
     const title = await titleRepo.findOne(titleId);
 
     if (!title) {
@@ -118,12 +131,13 @@ export class CreditsService {
     if (data && (data.cast || data.crew)) {
       let updated = false;
 
-      await em.begin();
       try {
         await title.credits.init();
-        title.credits.removeAll();
-        em.persist(title);
-        await em.commit();
+        // For some reason title.credits.removeAll() doesn't work
+        for (const credit of title.credits) {
+          em.remove(credit);
+        }
+        await em.persistAndFlush(title);
         this.logger.debug(
           `Cleared credits(${title.id}): ${title.name} (${title.year})`,
         );
@@ -132,128 +146,115 @@ export class CreditsService {
         this.logger.debug(
           `Failed to clear credits(${title.id}): ${title.name} (${title.year})`,
         );
-        await em.rollback();
         return false;
       }
 
       const castAndCrew = [...(data.cast || []), ...(data.crew || [])].flat();
       for (const cast of castAndCrew) {
-        if (!cast.id) {
-          continue;
-        }
-        // this.logger.debug("Find existing person");
-        let person = await personRepo.findOne({
-          idTmdb: cast.id,
-        });
-        if (!person) {
-          // this.logger.debug("Create new person");
-          const personInfo = await this.tmdb.person(cast.id);
-          if (!personInfo) {
-            this.logger.debug(`No info found for person(${cast.id})`);
-            continue;
+        this.creditsFetchQueue.add(async () => {
+          if (!cast.id) {
+            return;
           }
-          person = personRepo.create({
-            idTmdb: personInfo.id,
-            idImdb: personInfo.imdb_id,
-            name: personInfo.name,
-            birthday: personInfo.birthday,
-            placeOfBirth: personInfo.place_of_birth,
-            bio: personInfo.biography,
+
+          const em = this.em.fork(false);
+          const personRepo = em.getRepository(PersonEntity);
+          const creditRepo = em.getRepository(CreditEntity);
+
+          // this.logger.debug("Find existing person");
+          let person = await personRepo.findOne({
+            idTmdb: cast.id,
           });
-
-          await em.begin();
-          try {
-            em.persist(person);
-            await em.commit();
-            this.logger.debug(`Added person(${person.id}): ${person.name}`);
-          } catch {
-            this.logger.debug(
-              `Failed to add person(${person.id}): ${person.name}`,
-            );
-            await em.rollback();
-            // Person probably already exists
-            person = await personRepo.findOne({
-              idTmdb: cast.id,
-            });
-          }
-        }
-
-        // this.logger.debug({ person });
-        const { character, order } = cast as Cast;
-        const { job } = cast as Crew;
-
-        const department = cast.known_for_department;
-
-        if (person) {
-          const existingCredit = await creditRepo.findOne({
-            title,
-            person,
-            job: job || "Actor",
-            character,
-          });
-          if (existingCredit) {
-            existingCredit.order = order !== undefined ? order : undefined;
-            await em.begin();
-            try {
-              em.persist(existingCredit);
-              await em.commit();
-              updated = true;
-            } catch (e) {
-              await em.rollback();
-              this.logger.error(e);
+          if (!person) {
+            // this.logger.debug("Create new person");
+            const personInfo = await this.tmdb.person(cast.id);
+            if (!personInfo) {
+              this.logger.debug(`No info found for person(${cast.id})`);
+              return;
             }
-            continue;
+            person = personRepo.create({
+              idTmdb: personInfo.id,
+              idImdb: personInfo.imdb_id,
+              name: personInfo.name,
+              birthday: personInfo.birthday,
+              placeOfBirth: personInfo.place_of_birth,
+              bio: personInfo.biography,
+            });
+
+            try {
+              await em.persistAndFlush(person);
+              this.logger.debug(`Added person(${person.id}): ${person.name}`);
+            } catch {
+              this.logger.debug(
+                `Failed to add person(${person.id}): ${person.name}`,
+              );
+              // Person probably already exists
+              person = await personRepo.findOne({
+                idTmdb: cast.id,
+              });
+            }
           }
 
-          const credit = creditRepo.create({
-            title,
-            person,
-            order: order,
-            job: job || "Actor",
-            character,
-            department,
-          });
-          // this.logger.debug({ credit });
-          await em.begin();
-          try {
-            em.persist(credit);
-            title.credits.add(credit);
-            em.persist(title);
-            await em.commit();
-            this.logger.debug(
-              `Added credits(${title.id}): ${person.name} (${credit.job})`,
-            );
-            updated = true;
-          } catch {
-            // Credit probably already exists
-            await em.rollback();
+          // this.logger.debug({ person });
+          const { character, order } = cast as Cast;
+          const { job } = cast as Crew;
+
+          const department = cast.known_for_department;
+
+          if (person) {
+            const existingCredit = await creditRepo.findOne({
+              title,
+              person,
+              job: job || "Actor",
+              character,
+            });
+            if (existingCredit) {
+              existingCredit.order = order !== undefined ? order : undefined;
+              await em.begin();
+              try {
+                await em.persistAndFlush(existingCredit);
+                updated = true;
+              } catch (e) {
+                this.logger.error(e);
+              }
+              return;
+            }
+
+            const credit = creditRepo.create({
+              title,
+              person,
+              order: order,
+              job: job || "Actor",
+              character,
+              department,
+            });
+            try {
+              title.credits.add(credit);
+              await em.persistAndFlush(title);
+              this.logger.debug(
+                `Added credits(${title.id}): ${person.name} (${credit.job})`,
+              );
+              updated = true;
+            } catch {
+              // Credit probably already exists
+            }
           }
-        }
+        });
       }
 
-      try {
-        await em.flush();
-      } catch (e) {
-        this.logger.error(e);
-      }
-
+      await this.creditsFetchQueue.onIdle();
       if (updated) {
         this.logger.debug(
           `Updated credits(${title.id}): ${title.name} (${title.year})`,
         );
       }
-
-      em.clear();
       return updated;
     }
     return false;
   }
 
-  public async updateCredits(titleId: string): Promise<boolean> {
-    const forkedEm = this.em.fork();
-    const titleRepo = forkedEm.getRepository(TitleEntity);
-
-    const count = await titleRepo.count(titleId);
+  public async queueCreditsUpdate(titleId: string): Promise<boolean> {
+    const em = this.em.fork(false);
+    const count = await em.count(TitleEntity, titleId);
     if (count === 0) {
       throw Error("Title not found");
     }
@@ -263,6 +264,10 @@ export class CreditsService {
       ref: titleId,
       priority: 10,
     });
+
+    if (task) {
+      this.logger.debug(`Queued credits update for title(${titleId})`);
+    }
 
     return !!task;
   }

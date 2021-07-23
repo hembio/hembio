@@ -261,11 +261,9 @@ export class MetadataService {
     this.runTasks();
   }
 
-  public async updateMetadata(titleId: string): Promise<boolean> {
-    const forkedEm = this.em.fork();
-    const titleRepo = forkedEm.getRepository(TitleEntity);
-
-    const count = await titleRepo.count(titleId);
+  public async queueMetadataUpdate(titleId: string): Promise<boolean> {
+    const em = this.em.fork(false);
+    const count = await em.count(TitleEntity, titleId);
     if (count === 0) {
       throw Error("Title not found");
     }
@@ -275,6 +273,10 @@ export class MetadataService {
       ref: titleId,
       priority: 10,
     });
+
+    if (task) {
+      this.logger.debug(`Queued metadata update for title(${titleId})`);
+    }
 
     return !!task;
   }

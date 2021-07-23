@@ -54,7 +54,11 @@ export class ImageService {
     return { code: 404, error: "Image not found" };
   }
 
-  public downloadImages(id: string): Observable<Record<string, unknown>> {
-    return this.imagesClient.send({ cmd: "downloadBestVersions" }, { id });
+  public updateTitleImages(id: string): Observable<Record<string, unknown>> {
+    return this.imagesClient.send({ cmd: "updateTitleImages" }, { id });
+  }
+
+  public updatePersonImages(id: string): Observable<Record<string, unknown>> {
+    return this.imagesClient.send({ cmd: "updatePersonImages" }, { id });
   }
 }

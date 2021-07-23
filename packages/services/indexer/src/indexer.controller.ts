@@ -19,11 +19,11 @@ export class IndexerController {
 
   @MessagePattern({ cmd: "updateCredits" })
   public updateCredits({ titleId }: { titleId: string }): Promise<boolean> {
-    return this.creditsService.updateCredits(titleId);
+    return this.creditsService.queueCreditsUpdate(titleId);
   }
 
   @MessagePattern({ cmd: "updateMetadata" })
   public updateMetadata({ titleId }: { titleId: string }): Promise<boolean> {
-    return this.metadataService.updateMetadata(titleId);
+    return this.metadataService.queueMetadataUpdate(titleId);
   }
 }
