@@ -156,7 +156,7 @@ export class CreditsService {
             idTmdb: personInfo.id,
             idImdb: personInfo.imdb_id,
             name: personInfo.name,
-            birthday: personInfo.biography,
+            birthday: personInfo.birthday,
             placeOfBirth: personInfo.place_of_birth,
             bio: personInfo.biography,
           });
