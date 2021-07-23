@@ -180,20 +180,17 @@ async function bootstrap() {
       );
       return;
     }
-    if (req.url?.startsWith("/sockjs-node")) {
-      proxy.ws(
-        req,
-        socket,
-        head,
-        {
-          hostname: "localhost",
-          port: 3000,
-        },
-        defaultWSHandler,
-      );
-      return;
-    }
-    defaultWSHandler(null, req, socket, head);
+    proxy.ws(
+      req,
+      socket,
+      head,
+      {
+        hostname: "localhost",
+        port: 3000,
+      },
+      defaultWSHandler,
+    );
+    return;
   });
 
   server.listen(port, domain, () => {
