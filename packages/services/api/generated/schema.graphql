@@ -1,0 +1,220 @@
+type PersonExternalIds {
+  imdb: String
+  tmdb: Int
+}
+
+type PersonEntity {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  externalIds: PersonExternalIds!
+  idImdb: String
+  idTmdb: String
+  name: String!
+  bio: String
+  birthday: String
+  placeOfBirth: String
+  image: String
+  jobs: [CreditEntity!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type LibraryEntity {
+  id: ID!
+  createdAt: DateTime!
+  slug: String!
+  name: String!
+  type: LibraryType!
+  path: String!
+  watch: Boolean!
+  matcher: String!
+  titles(skip: Int = 0, take: Int = 50, ids: [String!], name: String, year: Int, orderBy: String, orderDirection: String): PaginatedTitleResponse!
+  newlyAdded(skip: Int = 0, take: Int = 50): PaginatedTitleResponse!
+}
+
+enum LibraryType {
+  MOVIES
+  TVSHOWS
+  MUSIC
+  PODCASTS
+  PHOTOS
+}
+
+type FileEntity {
+  id: ID!
+  path: String!
+  edition: String!
+  mediainfo: String!
+  library: LibraryEntity!
+  title: TitleEntity!
+  subtitles: [Subtitle!]!
+  ctime: Int!
+  mtime: Int!
+  files: [FileEntity!]
+}
+
+enum Subtitle {
+  Swedish
+  English
+}
+
+type GenreEntity {
+  id: ID!
+  slug: String!
+  titles: [TitleEntity!]!
+  name: String!
+}
+
+type ImageEntity {
+  id: ID!
+  createdAt: DateTime!
+  path: String!
+  originalUrl: String!
+  title: TitleEntity!
+}
+
+type TitleRatings {
+  imdb: Float
+  tmdb: Float
+  rotten: Float
+  metacritic: Float
+  trakt: Float
+  aggregated: Float
+}
+
+type TitleExternalIds {
+  imdb: String
+  trakt: Int
+  tmdb: Int
+  omdb: Int
+  tvrage: Int
+  tvdb: Int
+}
+
+type TitleEntity {
+  id: ID!
+  type: TitleType!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  slug: String!
+  path: String!
+  externalIds: TitleExternalIds!
+  ratings: TitleRatings!
+  thumb: String
+  dominantColor: String
+  name: String!
+  tagline: String
+  overview: String
+  certification: String
+  year: Int!
+  releaseDate: DateTime
+  runtime: Int
+  genres: [GenreEntity!]!
+  credits: [CreditEntity!]!
+  images: [ImageEntity!]!
+  files: [FileEntity!]!
+  identify: [IdentityModel!]!
+  topBilling: [CreditEntity!]!
+  cast: [CreditEntity!]!
+  crew: [CreditEntity!]!
+}
+
+enum TitleType {
+  MOVIE
+  TVSHOW
+  MUSIC
+}
+
+type CreditEntity {
+  id: ID!
+  order: Int
+  job: String
+  character: String
+  department: String!
+  person: PersonEntity!
+  title: TitleEntity!
+}
+
+type UserEntity {
+  id: ID!
+  createdAt: DateTime!
+  username: String!
+  role: UserRole!
+  refreshTokens: RefreshTokenEntity!
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+type RefreshTokenEntity {
+  id: ID!
+  blacklisted: Boolean!
+  user: UserEntity!
+  expires: Float!
+  device: String!
+  ip: String!
+}
+
+type AddLibraryResponse {
+  library: LibraryEntity
+}
+
+type PaginatedTitleResponse {
+  edges: [TitleEntity!]!
+  totalCount: Int!
+}
+
+type StatsModel {
+  time: Int!
+  uptime: Int!
+  cpuUsage: Int!
+  totalMem: Int!
+  freeMem: Int!
+  totalFiles: Int!
+  totalTitles: Int!
+}
+
+type IdentityModel {
+  provider: String!
+  externalId: String!
+  type: String!
+  name: String!
+  year: String!
+}
+
+type DeleteModel {
+  id: String
+}
+
+type UpdateCreditsModel {
+  id: String
+}
+
+type UpdateMetadataModel {
+  id: String
+}
+
+type Query {
+  file(fileId: String!): FileEntity
+  library(id: String!): LibraryEntity
+  libraries: [LibraryEntity!]!
+  stats: StatsModel!
+  title(id: String!): TitleEntity
+  search(query: String!): [TitleEntity!]!
+  users: [UserEntity!]!
+  user(userId: String!): UserEntity
+}
+
+type Mutation {
+  addLibrary(name: String!, type: LibraryType!, path: String!): AddLibraryResponse!
+  updateCredits(id: String!): UpdateCreditsModel!
+  updateMetadata(id: String!): UpdateMetadataModel!
+  checkLibrary(id: String!): UpdateMetadataModel!
+  deleteTitle(id: String!): DeleteModel!
+}

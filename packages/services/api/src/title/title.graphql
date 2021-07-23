@@ -1,0 +1,179 @@
+fragment Cast on CreditEntity {
+  id
+  department
+  order
+  character
+  person {
+    id
+    name
+    image
+  }
+}
+
+fragment Crew on CreditEntity {
+  id
+  department
+  job
+  person {
+    id
+    name
+    image
+  }
+}
+
+fragment TitleWithFiles on TitleEntity {
+  id
+  createdAt
+  updatedAt
+  type
+  slug
+  thumb
+  dominantColor
+  name
+  tagline
+  overview
+  certification
+  year
+  runtime
+  releaseDate
+  externalIds {
+    imdb
+    trakt
+    omdb
+    tmdb
+    tvrage
+    tvdb
+  }
+  ratings {
+    imdb
+    tmdb
+    trakt
+    rotten
+    metacritic
+    aggregated
+  }
+  topBilling {
+    ...Cast
+  }
+  genres {
+    id
+    slug
+    name
+  }
+  files {
+    id
+    path
+  }
+}
+
+query Title($id: String!) {
+  title(id: $id) {
+    ...TitleWithFiles
+  }
+}
+
+query TitleCredits($id: String!) {
+  title(id: $id) {
+    cast {
+      ...Cast
+    }
+    crew {
+      ...Crew
+    }
+  }
+}
+
+fragment SearchTitle on TitleEntity {
+  id
+  createdAt
+  slug
+  thumb
+  name
+  year
+  releaseDate
+  runtime
+  genres {
+    name
+  }
+}
+
+query SearchTitles($query: String!) {
+  search(query: $query) {
+    ...SearchTitle
+  }
+}
+
+query IdentifyTitle($id: String!) {
+  title(id: $id) {
+    identify {
+      provider
+      externalId
+      type
+      name
+      year
+    }
+  }
+}
+
+fragment Title on TitleEntity {
+  id
+  createdAt
+  slug
+  thumb
+  name
+  year
+  releaseDate
+}
+
+query Titles(
+  $libraryId: String!
+  $skip: Int
+  $take: Int
+  $orderBy: String
+  $orderDirection: String
+) {
+  library(id: $libraryId) {
+    id
+    titles(
+      skip: $skip
+      take: $take
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      edges {
+        ...Title
+      }
+      totalCount
+    }
+  }
+}
+
+query NewlyAddedTitles($libraryId: String!, $skip: Int, $take: Int) {
+  library(id: $libraryId) {
+    id
+    newlyAdded(skip: $skip, take: $take) {
+      edges {
+        ...Title
+      }
+      totalCount
+    }
+  }
+}
+
+mutation DeleteTitle($id: String!) {
+  deleteTitle(id: $id) {
+    id
+  }
+}
+
+mutation UpdateCredits($id: String!) {
+  updateCredits(id: $id) {
+    id
+  }
+}
+
+mutation UpdateMetadata($id: String!) {
+  updateMetadata(id: $id) {
+    id
+  }
+}

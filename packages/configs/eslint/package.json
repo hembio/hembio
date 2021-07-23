@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "@hembio/eslint-config",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "index.js",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-unused-imports": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/eslint": "^7.28.0"
+  },
+  "peerDependencies": {
+    "eslint": ">= 3"
+  }
+}

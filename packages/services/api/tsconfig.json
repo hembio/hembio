@@ -1,0 +1,10 @@
+{
+  "extends": "@hembio/tsconfig/dev",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

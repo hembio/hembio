@@ -1,0 +1,34 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "sideEffects": false,
+  "name": "@hembio/fs",
+  "version": "0.1.0",
+  "description": "Virtual FS supporting multiple adapters",
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@hembio/core": "workspace:packages/libs/core",
+    "axios": "^0.21.1",
+    "gdrive-fs": "^2.0.4",
+    "google-auth-library": "^7.3.0",
+    "googleapis": "^82.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/preset-env": "^7.14.8",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/babel__core": "^7.1.15",
+    "@types/babel__preset-env": "^7.9.2",
+    "@types/jest": "^26.0.24",
+    "jest": "^27.0.6",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "name": "@hembio/tsconfig",
+  "version": "1.0.0",
+  "main": "dev.json",
+  "license": "SEE LICENSE IN LICENSE"
+}

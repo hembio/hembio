@@ -1,0 +1,17 @@
+fragment User on UserEntity {
+  id
+  username
+  role
+}
+
+query User($userId: String!) {
+  user(userId: $userId) {
+    ...User
+  }
+}
+
+query Users {
+  users {
+    ...User
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "npm.packageManager": "yarn",
+  "eslint.format.enable": true,
+  "eslint.packageManager": "yarn",
+  "eslint.validate": ["typescript", "typescriptreact"],
+  "files.autoSave": "onWindowChange",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.prettier": true
+  },
+  "prettier.trailingComma": "all",
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "god.tsconfig": "./tsconfig.json",
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/.hg/store/**": true,
+    ".cache": true,
+    ".db": true,
+    ".images": true,
+    ".transcoding": true,
+    "logs": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    ".cache": true,
+    ".db": true,
+    ".images": true,
+    ".transcoding": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
+}

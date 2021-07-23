@@ -1,0 +1,89 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "all-services",
+      "dependsOn": [
+        "web",
+        "server",
+        "api-gateway",
+        "indexer",
+        "images",
+        "metadata",
+        "transcoder"
+      ],
+      "dependsOrder": "parallel",
+      "isBackground": true,
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "web",
+      "type": "shell",
+      "command": "yarn workspace @hembio/web dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "server",
+      "type": "shell",
+      "command": "yarn workspace @hembio/server dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "api-gateway",
+      "type": "shell",
+      "command": "yarn workspace @hembio/api dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "indexer",
+      "type": "shell",
+      "command": "yarn workspace @hembio/indexer dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "images",
+      "type": "shell",
+      "command": "yarn workspace @hembio/images dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "metadata",
+      "type": "shell",
+      "command": "yarn workspace @hembio/metadata dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "transcoder",
+      "type": "shell",
+      "command": "yarn workspace @hembio/transcoder dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "desktop",
+      "type": "shell",
+      "command": "yarn workspace @hembio/desktop-app dev",
+      "promptOnClose": true,
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

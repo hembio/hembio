@@ -1,0 +1,4 @@
+{
+  "extends": "@hembio/tsconfig/build",
+  "include": ["./src"]
+}

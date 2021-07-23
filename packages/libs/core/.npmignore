@@ -1,0 +1,15 @@
+.swcrc
+*.config.js
+tsconfig.json
+tsconfig.*.json
+src
+.git
+.gitignore
+package.tgz
+coverage
+config.json
+*.tsbuildinfo
+__tests__
+.cache
+.transcoding
+.webpack

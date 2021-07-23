@@ -1,0 +1,67 @@
+import { join } from "path";
+import { getEnv, getPki, internalIp } from "@hembio/core";
+import { createLogger } from "@hembio/logger";
+import { ConfigService } from "@nestjs/config";
+import { NestFactory } from "@nestjs/core";
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from "@nestjs/platform-fastify";
+import { WsAdapter } from "@nestjs/platform-ws";
+import { allowedHeaders } from "./allowedHeaders";
+import { AppModule } from "./app.module";
+
+async function bootstrap() {
+  const env = getEnv();
+  const logger = createLogger("api");
+  const ip = env.HEMBIO_SERVER_IP || (await internalIp.v4()) || "127.0.0.1";
+  const [key, cert] = await getPki("hembio.local", ip);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter({
+      http2: true,
+      https: {
+        allowHTTP1: true,
+        key,
+        cert,
+      },
+    }),
+    {
+      logger,
+    },
+  );
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>("services.api.port") as number;
+
+  app.useWebSocketAdapter(new WsAdapter(app));
+  app.enableCors({
+    origin: true,
+    credentials: true,
+    allowedHeaders,
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // app.register(fastifyCookie as any, {
+  //   secret: "my-secret", // for cookies signature
+  // });
+
+  app.useStaticAssets({
+    root: join(__dirname, "..", "public"),
+  });
+
+  try {
+    await app.listen(port, ip);
+    logger.info(`Application is running on: ${await app.getUrl()}`);
+  } catch (e) {
+    logger.error(e);
+  }
+
+  // webpack hmr support
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const hot = (module as any).hot;
+  if (hot) {
+    hot.accept();
+    hot.dispose(() => app.close());
+  }
+}
+bootstrap();

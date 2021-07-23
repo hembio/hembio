@@ -1,0 +1,10 @@
+{
+  "extends": "./dev.json",
+  "compilerOptions": {
+    "declarationMap": true,
+    "declaration": true,
+    "incremental": false,
+    "outDir": "dist",
+    "sourceMap": true
+  }
+}

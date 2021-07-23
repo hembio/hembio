@@ -1,0 +1,19 @@
+fragment Library on LibraryEntity {
+  id
+  type
+  slug
+  name
+  createdAt
+}
+
+query Libraries {
+  libraries {
+    ...Library
+  }
+}
+
+query Library($id: String!) {
+  library(id: $id) {
+    ...Library
+  }
+}

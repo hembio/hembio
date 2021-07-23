@@ -1,0 +1,10 @@
+import { generateNamespacedUuid } from "./utils/generateUuid";
+const ROOT_UUID = "922067b4-0de5-4b3a-970d-a8654172c86e";
+export const USER_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "user");
+export const LIBRARY_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "library");
+export const TITLE_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "titles");
+export const FILE_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "file");
+export const PERSON_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "person");
+export const GENRE_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "genre");
+export const IMAGE_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "image");
+export const CREDIT_NAMESPACE = generateNamespacedUuid(ROOT_UUID, "credit");

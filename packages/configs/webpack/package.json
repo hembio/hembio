@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "@hembio/webpack-config",
+  "description": "Sharable Webpack Configurations",
+  "dependencies": {
+    "run-script-webpack-plugin": "^0.0.11",
+    "ts-loader": "^9.2.3",
+    "webpack": "^5.46.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/webpack-node-externals": "^2.5.2",
+    "webpack-merge": "^5.8.0"
+  }
+}

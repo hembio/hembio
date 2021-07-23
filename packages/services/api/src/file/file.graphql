@@ -1,0 +1,14 @@
+fragment FileWithTitle on FileEntity {
+  id
+  path
+  subtitles
+  title {
+    ...Title
+  }
+}
+
+query File($fileId: String!) {
+  file(fileId: $fileId) {
+    ...FileWithTitle
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "sideEffects": false,
+  "name": "@hembio/matcher",
+  "version": "0.1.0",
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./dist/index.js"
+  },
+  "author": "Marcus Ekwall <marcus.ekwall@gmail.com>",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/preset-env": "^7.14.8",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/babel__core": "^7.1.15",
+    "@types/babel__preset-env": "^7.9.2",
+    "@types/jest": "^26.0.24",
+    "jest": "^27.0.6",
+    "typescript": "^4.3.5"
+  }
+}
