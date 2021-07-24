@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import coldark from "react-syntax-highlighter/dist/esm/styles/prism/coldark-dark";
 import { GqlLoadingButton } from "~/components/buttons/GqlLoadingButton";
-import { RestLoadingButton } from "~/components/buttons/RestLoadingButton";
 import { IdentifyDialog } from "~/dialogs/IdentifyDialog";
 import {
   DeleteTitleDocument,
@@ -27,6 +26,9 @@ import {
   UpdateMetadataDocument,
   UpdateMetadataMutation,
   UpdateMetadataMutationVariables,
+  UpdateTitleImagesDocument,
+  UpdateTitleImagesMutation,
+  UpdateTitleImagesMutationVariables,
 } from "~/generated/graphql";
 
 interface Props {
@@ -76,12 +78,22 @@ export function TitleDebugBox({ title, reload, refetch }: Props): JSX.Element {
             </Box>
           ))}
           <Box sx={{ mb: 2 }}>
-            <RestLoadingButton
-              path={`/images/titles/download/${titleId}`}
-              onDone={reload}
+            <GqlLoadingButton<
+              UpdateTitleImagesMutation,
+              UpdateTitleImagesMutationVariables
             >
-              Download images
-            </RestLoadingButton>
+              mutation={UpdateTitleImagesDocument}
+              variables={{ id: titleId }}
+              onDone={(error, _data) => {
+                if (error) {
+                  console.error(error);
+                  return;
+                }
+                refetch();
+              }}
+            >
+              Update images
+            </GqlLoadingButton>
           </Box>
           <Box sx={{ mb: 2 }}>
             <GqlLoadingButton<
