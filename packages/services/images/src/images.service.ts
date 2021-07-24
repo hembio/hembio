@@ -55,7 +55,7 @@ export class ImagesService {
   private readonly titleImageFetchQueue = new PQueue({
     concurrency: 6,
     intervalCap: 12,
-    interval: 3000,
+    interval: 1000,
     carryoverConcurrencyCount: true,
   });
 
@@ -63,7 +63,7 @@ export class ImagesService {
   private readonly personImageFetchQueue = new PQueue({
     concurrency: 6,
     intervalCap: 12,
-    interval: 3000,
+    interval: 1000,
     carryoverConcurrencyCount: true,
   });
 
@@ -428,7 +428,9 @@ export class ImagesService {
       if (res && res.profile_path) {
         try {
           const img = `https://www.themoviedb.org/t/p/w1280${res.profile_path}`;
-          this.logger.debug(`Downloading ${person.name} ${img}`);
+          this.logger.debug(
+            `Downloading image for person(${person.id}): ${person.name} - ${img}`,
+          );
           const pres = await this.http.get(img);
           const imageBuffer = pres.data;
           const imageFile = path.join(imgDir, `${person.id}.jpg`);
@@ -439,6 +441,10 @@ export class ImagesService {
         } catch {
           // Ignore
         }
+      }
+      if (!person.name) {
+        // Why are we missing name?
+        this.logger.debug(person);
       }
       this.logger.debug(`No image found(${person.id}): ${person.name}`);
       return false;

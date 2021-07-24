@@ -24,14 +24,14 @@ export class CreditsService {
   private runners = new Set<string>();
 
   public taskQueue = new PQueue({
-    concurrency: 4,
+    concurrency: 3,
   });
 
   // Stay within the rate limit of TMDb
   private readonly creditsFetchQueue = new PQueue({
     concurrency: 6,
     intervalCap: 12,
-    interval: 3000,
+    interval: 1000,
     carryoverConcurrencyCount: true,
   });
 
@@ -62,7 +62,7 @@ export class CreditsService {
 
     try {
       if (!tasks) {
-        tasks = await this.tasks.getTasks(TaskType.CREDITS, 1);
+        tasks = await this.tasks.getTasks(TaskType.CREDITS, 3);
       }
       if (tasks.length > 0) {
         this.logger.debug(`Running ${tasks.length} credits tasks`);
@@ -94,7 +94,7 @@ export class CreditsService {
 
     let nextTasks: TaskEntity[] = [];
     try {
-      nextTasks = await this.tasks.getTasks([TaskType.CREDITS], 1);
+      nextTasks = await this.tasks.getTasks([TaskType.CREDITS], 3);
     } catch (e) {
       this.logger.error(e);
     }
