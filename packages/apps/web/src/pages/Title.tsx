@@ -16,7 +16,6 @@ import { Certification } from "../components/Certification";
 import { CreditsBox } from "../components/CreditsBox";
 import { TitleDebugBox } from "../components/TitleDebugBox";
 import { HEMBIO_API_URL } from "../constants";
-import { isElectron } from "../utils/isElectron";
 import { NotFound } from "./NotFound";
 import { BackgroundPortal } from "~/components/BackgroundPortal";
 import { PosterImage } from "~/components/PosterImage";
@@ -152,10 +151,7 @@ export const Title = (): JSX.Element => {
 
   return (
     <div>
-      <Container
-        className={classes.root}
-        maxWidth={isElectron() ? false : "lg"}
-      >
+      <Container className={classes.root}>
         <Grid
           container
           spacing={2}
@@ -186,17 +182,23 @@ export const Title = (): JSX.Element => {
         ></Box>
         <Container
           className={classes.root}
-          maxWidth={isElectron() ? false : "lg"}
           sx={{ mb: 16, position: "relative" }}
         >
-          <Grid container spacing={2} flexDirection="row">
+          <Grid
+            container
+            spacing={2}
+            flexDirection="row"
+            justifyContent="stretch"
+          >
             <Grid
               item
-              xs
-              flexShrink={4}
+              xs={12}
+              sm={3}
+              flexShrink={0}
               flexGrow={0}
               sx={{
                 transform: "rotate3d(0, -1, 0, -5deg)",
+                minWidth: "360px",
                 ml: 1,
               }}
             >
@@ -211,7 +213,7 @@ export const Title = (): JSX.Element => {
                 }}
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} sm={8}>
               <Grid
                 item
                 container
@@ -292,7 +294,7 @@ export const Title = (): JSX.Element => {
                     )}
                   </Typography>
                 </Grid>
-                <Grid item>
+                <Grid item md={12} lg={10} xl={9}>
                   <Typography variant="body1" align="justify" sx={{ mt: 1 }}>
                     {!title ? (
                       <>
@@ -314,7 +316,6 @@ export const Title = (): JSX.Element => {
 
       <Container
         className={classes.root}
-        maxWidth={isElectron() ? false : "lg"}
         sx={{ position: "relative", zIndex: 1, mt: 2 }}
       >
         <CreditsBox title={title} />

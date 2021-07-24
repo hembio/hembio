@@ -59,7 +59,7 @@ export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
 
   return (
     <Paper>
-      <Container maxWidth="xl">
+      <Container>
         <Box
           sx={{
             p: 4,

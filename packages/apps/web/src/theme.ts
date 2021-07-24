@@ -1,5 +1,6 @@
 import { red } from "@material-ui/core/colors";
 import { createTheme } from "@material-ui/core/styles";
+import { isElectron } from "./utils/isElectron";
 import CocosignumCorsivoItalicoBoldWoff from "$/font.woff";
 import CocosignumCorsivoItalicoBoldWoff2 from "$/font.woff2";
 
@@ -39,6 +40,11 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiContainer: {
+      defaultProps: {
+        maxWidth: isElectron() ? false : "xl",
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {

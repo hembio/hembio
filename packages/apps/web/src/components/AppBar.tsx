@@ -89,7 +89,7 @@ export function AppBar({ open, onDrawerOpen }: Props): JSX.Element {
   return (
     <>
       <MuiAppBarWithOpen position="fixed" open={open} show={show}>
-        <Container maxWidth={isElectron() ? false : "lg"}>
+        <Container>
           <Toolbar className={classes.root}>
             <IconButton
               color="inherit"

@@ -4,7 +4,7 @@ import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useThrottledCallback } from "../hooks/useThrottledCallback";
 import { useVirtualList } from "../hooks/useVirtualList";
 import { TitleCard } from "~/components/TitleCard";
@@ -91,7 +91,7 @@ export function TitleCarousel({
   totalCount,
   titlesPerPage,
   loading,
-  // onTitlesPerPage,
+  onTitlesPerPage,
   onPageChange,
 }: TitleCarouselProps): JSX.Element {
   const classes = useStyles();
@@ -99,19 +99,19 @@ export function TitleCarousel({
   const [titleWidth, setTitleWidth] = useState(200);
   const [titleHeight, setTitleHeight] = useState(360);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  // const titleRef = useCallback(
-  //   (node) => {
-  //     if (node !== null && wrapperRef.current !== null) {
-  //       const boundingRect = node.getBoundingClientRect();
-  //       setTitleHeight(boundingRect.height);
-  //       setTitleWidth(boundingRect.width);
-  //       onTitlesPerPage(
-  //         Math.ceil(wrapperRef.current.clientWidth / boundingRect.width),
-  //       );
-  //     }
-  //   },
-  //   [wrapperRef],
-  // );
+  const titleRef = useCallback(
+    (node) => {
+      if (node !== null && wrapperRef.current !== null) {
+        const boundingRect = node.getBoundingClientRect();
+        setTitleHeight(boundingRect.height);
+        setTitleWidth(boundingRect.width);
+        onTitlesPerPage(
+          Math.ceil(wrapperRef.current.clientWidth / boundingRect.width),
+        );
+      }
+    },
+    [wrapperRef],
+  );
 
   const handlePageChange = useThrottledCallback(
     (nextPage: number) => {
@@ -188,7 +188,7 @@ export function TitleCarousel({
           {list.map((title, idx) => {
             return (
               <TitleCard
-                // ref={idx == 0 ? titleRef : undefined}
+                ref={idx == 0 && page === 0 ? titleRef : undefined}
                 key={title?.id || idx}
                 title={title}
               />

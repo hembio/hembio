@@ -15,7 +15,6 @@ import { SortButton } from "~/components/buttons/SortButton";
 import { useTitlesQuery } from "~/generated/graphql";
 import { useListener } from "~/hooks/useListener";
 import { useQueryStrings } from "~/hooks/useQueryString";
-import { isElectron } from "~/utils/isElectron";
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -175,7 +174,7 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
   };
 
   return (
-    <Container maxWidth={isElectron() ? false : "lg"}>
+    <Container>
       <Grid
         container
         sx={{ pb: 2, pt: 2, height: "64px" }}

@@ -42,7 +42,7 @@ export function CreditListitem({ credit }: CreditListitemProps): JSX.Element {
   return (
     <ListItemButton
       component={Link}
-      sx={{ width: "352px", minHeight: "115px" }}
+      sx={{ minHeight: "115px" }}
       to={credit ? `/person/${credit.person.id}` : ""}
     >
       <ListItemAvatar>

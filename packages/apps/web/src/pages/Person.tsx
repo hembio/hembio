@@ -10,14 +10,11 @@ import Paper from "@material-ui/core/Paper";
 import Skeleton from "@material-ui/core/Skeleton";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles } from "@material-ui/styles";
-import { useHistory } from "react-router";
 import { useParams } from "react-router-dom";
-import { isElectron } from "../utils/isElectron";
 import { NotFound } from "./NotFound";
 import { TitleLogo } from "~/components/TitleLogo";
 import { HEMBIO_API_URL } from "~/constants";
 import { usePersonQuery } from "~/generated/graphql";
-import { useRefresh } from "~/hooks/useRefresh";
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -104,11 +101,8 @@ const useStyles = makeStyles(
 
 export const Person = (): JSX.Element => {
   const classes = useStyles();
-  const history = useHistory();
-  const refresh = useRefresh();
-
   const { personId } = useParams<{ personId: string }>();
-  const { data, error, refetch } = usePersonQuery({
+  const { data, error } = usePersonQuery({
     variables: { id: personId },
   });
 
@@ -137,10 +131,7 @@ export const Person = (): JSX.Element => {
 
   return (
     <div>
-      <Container
-        className={classes.root}
-        maxWidth={isElectron() ? false : "lg"}
-      >
+      <Container className={classes.root}>
         <Grid
           container
           spacing={2}
@@ -164,7 +155,6 @@ export const Person = (): JSX.Element => {
         <Box className={classes.movieCover}></Box>
         <Container
           className={classes.root}
-          maxWidth={isElectron() ? false : "lg"}
           sx={{ mb: 16, position: "relative" }}
         >
           <Grid container spacing={2} flexDirection="row">
@@ -272,7 +262,6 @@ export const Person = (): JSX.Element => {
 
       {/* <Container
         className={classes.root}
-        maxWidth={isElectron() ? false : "lg"}
         sx={{ position: "relative", zIndex: 1, mt: 2 }}
       >
         <CreditsBox title={person} />

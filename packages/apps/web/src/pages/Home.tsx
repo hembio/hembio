@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import moviesCollage from "$/movies_collage.jpg";
 import { NewlyAddedList } from "~/containers/NewlyAddedList";
 import { useLibrariesQuery } from "~/generated/graphql";
-import { isElectron } from "~/utils/isElectron";
 
 export const Home = (): JSX.Element | null => {
   const { loading, error, data } = useLibrariesQuery();
@@ -20,7 +19,7 @@ export const Home = (): JSX.Element | null => {
 
   const { libraries } = data;
   return (
-    <Container maxWidth={isElectron() ? false : "lg"}>
+    <Container>
       <Typography sx={{ mb: 2 }} variant="h5" component="h2">
         Libraries
       </Typography>
