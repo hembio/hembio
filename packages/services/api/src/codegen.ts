@@ -72,7 +72,14 @@ async function generateSchema() {
 
 async function main() {
   const schema = await generateSchema();
-  await writeFile(schemaFile, schema);
+
+  const schemaGenHeader = `# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+`;
+
+  await writeFile(schemaFile, schemaGenHeader + schema);
 
   const header = `
 /***********************************************
