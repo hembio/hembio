@@ -1,15 +1,16 @@
 import { Theme } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import { useCallback, useRef, useState } from "react";
-import { useThrottledCallback } from "../hooks/useThrottledCallback";
-import { useVirtualList } from "../hooks/useVirtualList";
 import { TitleCard } from "~/components/TitleCard";
 import { TitleEntity } from "~/generated/graphql";
 import { useListener } from "~/hooks/useListener";
+import { useThrottledCallback } from "~/hooks/useThrottledCallback";
+import { useVirtualList } from "~/hooks/useVirtualList";
 import { theme } from "~/theme";
 
 const useStyles = makeStyles(
@@ -21,8 +22,7 @@ const useStyles = makeStyles(
         width: "100%",
         overflow: "hidden",
         marginLeft: "-" + theme.spacing(1),
-        marginTop: "-" + theme.spacing(2),
-        paddingTop: theme.spacing(1),
+        marginTop: "-" + theme.spacing(1),
         "&:hover": {
           "& .prev, & .next": {
             display: "block",
@@ -61,7 +61,7 @@ const useStyles = makeStyles(
         },
       },
       container: {
-        display: "flex",
+        padding: theme.spacing(1),
         userSelect: "none",
         "&.animate": {
           transition: theme.transitions.create(["transform"], {
@@ -179,9 +179,12 @@ export function TitleCarousel({
         </Button>
       </div>
       <div className={classes.mask}>
-        <div
+        <Box
           className={clsx(classes.container, { animate: safeToAnimate })}
-          style={{
+          sx={{
+            display: "grid",
+            gap: 2,
+            gridAutoFlow: "column",
             transform: `translate(-${translate}px)`,
           }}
         >
@@ -194,7 +197,7 @@ export function TitleCarousel({
               />
             );
           })}
-        </div>
+        </Box>
       </div>
     </div>
   );

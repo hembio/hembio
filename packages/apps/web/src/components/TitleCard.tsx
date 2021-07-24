@@ -13,11 +13,6 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       container: {
-        flex: "1 0",
-        position: "relative",
-        margin: theme.spacing(1),
-        display: "flex",
-        flexDirection: "column",
         transition: theme.transitions.create("transform", {
           duration: theme.transitions.duration.standard,
           easing: theme.transitions.easing.easeInOut,

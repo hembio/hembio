@@ -1,6 +1,7 @@
 import { Theme } from "@material-ui/core";
 import Alert from "@material-ui/core/Alert";
 import AlertTitle from "@material-ui/core/AlertTitle";
+import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Pagination from "@material-ui/core/Pagination";
@@ -19,15 +20,6 @@ import { useQueryStrings } from "~/hooks/useQueryString";
 const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
-      container: {
-        display: "flex",
-        padding: "0px",
-        margin: `0px -${theme.spacing(1)}`,
-        flexFlow: "wrap",
-        justifyContent: "space-between",
-        // justifyContent: "center",
-        userSelect: "none",
-      },
       spinner: {
         placeSelf: "center",
       },
@@ -177,7 +169,7 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
     <Container>
       <Grid
         container
-        sx={{ pb: 2, pt: 2, height: "64px" }}
+        sx={{ pb: 2, pt: 2 }}
         flexDirection="row"
         flexWrap="wrap"
         alignItems="baseline"
@@ -229,27 +221,28 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        sx={{ mt: 2 }}
+      <Box
+        sx={{
+          display: "grid",
+          gap: 2,
+          gridAutoFlow: "row",
+          gridTemplateColumns: "repeat(auto-fit, 200px)",
+          justifyContent: "space-between",
+          alignContent: "space-between",
+        }}
       >
-        <Grid className={classes.container}>
-          {error && (
-            <div className={classes.container}>
-              <Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                {error.message}
-              </Alert>
-            </div>
-          )}
-          {titles.map((title, idx) => (
-            <TitleCard key={title?.id || idx} title={title} />
-          ))}
-        </Grid>
-      </Grid>
+        {error && (
+          <Box>
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              {error.message}
+            </Alert>
+          </Box>
+        )}
+        {titles.map((title, idx) => (
+          <TitleCard key={title?.id || idx} title={title} />
+        ))}
+      </Box>
       <Grid container sx={{ pb: 4, pt: 4 }}>
         <Pagination
           sx={{ mx: "auto" }}
