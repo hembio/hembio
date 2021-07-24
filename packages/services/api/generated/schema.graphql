@@ -122,7 +122,7 @@ type TitleEntity {
   images: [ImageEntity!]!
   files: [FileEntity!]!
   identify: [IdentityModel!]!
-  topBilling: [CreditEntity!]!
+  topBilling(take: Int): [CreditEntity!]!
   cast: [CreditEntity!]!
   crew: [CreditEntity!]!
 }

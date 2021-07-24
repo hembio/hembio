@@ -6,6 +6,7 @@ import {
   Mutation,
   ResolveField,
   Parent,
+  Int,
 } from "@nestjs/graphql";
 import { IdentityModel } from "./models/identity.model";
 import { TitleService } from "./title.service";
@@ -63,8 +64,9 @@ export class TitleResolver {
   @ResolveField(() => [CreditEntity], { name: "topBilling" })
   public async getTopBilling(
     @Parent() title: TitleEntity,
+    @Args({ name: "take", type: () => Int, nullable: true }) take?: number,
   ): Promise<CreditEntity[]> {
-    return await this.creditService.getTopBilling(title.id);
+    return await this.creditService.getTopBilling(title.id, take);
   }
 
   @ResolveField(() => [CreditEntity], { name: "cast" })

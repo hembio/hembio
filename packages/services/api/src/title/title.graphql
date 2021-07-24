@@ -52,9 +52,6 @@ fragment TitleWithFiles on TitleEntity {
     metacritic
     aggregated
   }
-  topBilling {
-    ...Cast
-  }
   genres {
     id
     slug
@@ -66,9 +63,12 @@ fragment TitleWithFiles on TitleEntity {
   }
 }
 
-query Title($id: String!) {
+query Title($id: String!, $take: Int) {
   title(id: $id) {
     ...TitleWithFiles
+    topBilling(take: $take) {
+      ...Cast
+    }
   }
 }
 

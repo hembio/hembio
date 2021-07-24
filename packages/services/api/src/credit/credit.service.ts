@@ -16,14 +16,17 @@ export class CreditService {
     private readonly indexerClient: ClientProxy,
   ) {}
 
-  public async getTopBilling(titleId: string): Promise<CreditEntity[]> {
+  public async getTopBilling(
+    titleId: string,
+    take = 8,
+  ): Promise<CreditEntity[]> {
     return this.creditRepo.find(
       { title: titleId, order: { $ne: null } },
       ["person"],
       {
         order: QueryOrder.ASC,
       },
-      6,
+      take,
     );
   }
 

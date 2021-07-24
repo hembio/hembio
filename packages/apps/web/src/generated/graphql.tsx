@@ -291,6 +291,11 @@ export type TitleEntity = {
   crew: Array<CreditEntity>;
 };
 
+
+export type TitleEntityTopBillingArgs = {
+  take?: Maybe<Scalars['Int']>;
+};
+
 export type TitleExternalIds = {
   __typename?: 'TitleExternalIds';
   imdb?: Maybe<Scalars['String']>;
@@ -480,10 +485,7 @@ export type TitleWithFilesFragment = (
   ), ratings: (
     { __typename?: 'TitleRatings' }
     & Pick<TitleRatings, 'imdb' | 'tmdb' | 'trakt' | 'rotten' | 'metacritic' | 'aggregated'>
-  ), topBilling: Array<(
-    { __typename?: 'CreditEntity' }
-    & CastFragment
-  )>, genres: Array<(
+  ), genres: Array<(
     { __typename?: 'GenreEntity' }
     & Pick<GenreEntity, 'id' | 'slug' | 'name'>
   )>, files: Array<(
@@ -494,6 +496,7 @@ export type TitleWithFilesFragment = (
 
 export type TitleQueryVariables = Exact<{
   id: Scalars['String'];
+  take?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -501,6 +504,10 @@ export type TitleQuery = (
   { __typename?: 'Query' }
   & { title?: Maybe<(
     { __typename?: 'TitleEntity' }
+    & { topBilling: Array<(
+      { __typename?: 'CreditEntity' }
+      & CastFragment
+    )> }
     & TitleWithFilesFragment
   )> }
 );
@@ -752,11 +759,12 @@ export const PersonFragmentDoc = gql`
   }
 }
     `;
-export const CrewFragmentDoc = gql`
-    fragment Crew on CreditEntity {
+export const CastFragmentDoc = gql`
+    fragment Cast on CreditEntity {
   id
   department
-  job
+  order
+  character
   person {
     id
     name
@@ -764,12 +772,11 @@ export const CrewFragmentDoc = gql`
   }
 }
     `;
-export const CastFragmentDoc = gql`
-    fragment Cast on CreditEntity {
+export const CrewFragmentDoc = gql`
+    fragment Crew on CreditEntity {
   id
   department
-  order
-  character
+  job
   person {
     id
     name
@@ -809,9 +816,6 @@ export const TitleWithFilesFragmentDoc = gql`
     metacritic
     aggregated
   }
-  topBilling {
-    ...Cast
-  }
   genres {
     id
     slug
@@ -822,7 +826,7 @@ export const TitleWithFilesFragmentDoc = gql`
     path
   }
 }
-    ${CastFragmentDoc}`;
+    `;
 export const SearchTitleFragmentDoc = gql`
     fragment SearchTitle on TitleEntity {
   id
@@ -1104,12 +1108,16 @@ export function refetchStatsQuery(variables?: StatsQueryVariables) {
       return { query: StatsDocument, variables: variables }
     }
 export const TitleDocument = gql`
-    query Title($id: String!) {
+    query Title($id: String!, $take: Int) {
   title(id: $id) {
     ...TitleWithFiles
+    topBilling(take: $take) {
+      ...Cast
+    }
   }
 }
-    ${TitleWithFilesFragmentDoc}`;
+    ${TitleWithFilesFragmentDoc}
+${CastFragmentDoc}`;
 
 /**
  * __useTitleQuery__
@@ -1124,6 +1132,7 @@ export const TitleDocument = gql`
  * const { data, loading, error } = useTitleQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      take: // value for 'take'
  *   },
  * });
  */
