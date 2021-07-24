@@ -82,8 +82,8 @@ export class ImagesService {
   ) {
     setTimeout(async () => {
       await this.orm.isConnected();
-      await this.checkMissingImages();
-      await this.runTasks();
+      this.checkMissingImages();
+      this.runTasks();
     }, 1000);
   }
 
@@ -191,12 +191,12 @@ export class ImagesService {
             });
           }
         }
-        await this.taskQueue.onIdle();
       }
     } catch {
       // Ignore
     }
 
+    await this.taskQueue.onIdle();
     this.runners.delete(runnerName);
     const nextTasks = await this.tasks.getTasks(TaskType.IMAGES, 10);
     if (nextTasks.length > 0) {
@@ -304,7 +304,7 @@ export class ImagesService {
   public async downloadTitleImages(
     id: string,
   ): Promise<DownloadTitleImagesResult> {
-    const em = this.em.fork(false);
+    const em = this.em.fork(true);
     const titleRepo = em.getRepository(TitleEntity);
     const imgDir = path.resolve(getCwd(), ".images/titles");
     const title = await titleRepo.findOne(id);
@@ -375,7 +375,9 @@ export class ImagesService {
       if (bestImage) {
         const downloadFile = async () => {
           try {
-            this.logger.debug(`Downloading ${cat} ${bestImage.url}`);
+            this.logger.debug(
+              `Downloading ${cat}(${title.id}): ${title.name} (${title.year}) - ${bestImage.url}`,
+            );
             const pres = await this.http.get(bestImage.url);
             const imageBuffer = pres.data;
             const imageFile = path.join(imgDir, title.id, `${cat}.jpg`);
@@ -415,7 +417,7 @@ export class ImagesService {
   }
 
   public async downloadPersonImages(id: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork(true);
     const personRepo = em.getRepository(PersonEntity);
     const imgDir = path.resolve(getCwd(), ".images/people");
     const person = await personRepo.findOne(id);
