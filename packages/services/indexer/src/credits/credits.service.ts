@@ -23,8 +23,9 @@ export class CreditsService {
   private tmdb = new TMDbProvider();
   private runners = new Set<string>();
 
-  public taskQueue = new PQueue({
-    concurrency: 3,
+  private tasksPerBatch = 1;
+  private taskQueue = new PQueue({
+    concurrency: this.tasksPerBatch,
   });
 
   // Stay within the rate limit of TMDb
@@ -40,18 +41,18 @@ export class CreditsService {
     private readonly em: EntityManager,
     private readonly tasks: TaskService,
   ) {
-    // setTimeout(async () => {
-    //   await this.orm.isConnected();
-    //   await this.checkMissingCredits();
-    //   await this.runTasks();
-    // }, 1000);
+    setTimeout(async () => {
+      await this.orm.isConnected();
+      // await this.checkMissingCredits();
+      await this.runTasks();
+    }, 1000);
   }
 
   public async checkMissingCredits(): Promise<void> {
     // TODO: Implement
   }
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   public async runTasks(tasks?: TaskEntity[]): Promise<void> {
     const runnerName = `runTasks`;
     if (this.runners.has(runnerName)) {
@@ -62,7 +63,7 @@ export class CreditsService {
 
     try {
       if (!tasks) {
-        tasks = await this.tasks.getTasks(TaskType.CREDITS, 3);
+        tasks = await this.tasks.getTasks(TaskType.CREDITS, this.tasksPerBatch);
       }
       if (tasks.length > 0) {
         this.logger.debug(`Running ${tasks.length} credits tasks`);
@@ -94,7 +95,10 @@ export class CreditsService {
 
     let nextTasks: TaskEntity[] = [];
     try {
-      nextTasks = await this.tasks.getTasks([TaskType.CREDITS], 3);
+      nextTasks = await this.tasks.getTasks(
+        TaskType.CREDITS,
+        this.tasksPerBatch,
+      );
     } catch (e) {
       this.logger.error(e);
     }
@@ -183,6 +187,17 @@ export class CreditsService {
             try {
               await em.persistAndFlush(person);
               this.logger.debug(`Added person(${person.id}): ${person.name}`);
+              if (personInfo.profile_path) {
+                await this.tasks.createTask({
+                  type: TaskType.IMAGES,
+                  ref: person.id,
+                  priority: 10,
+                  payload: {
+                    type: "person",
+                    imagePath: personInfo.profile_path,
+                  },
+                });
+              }
             } catch {
               this.logger.debug(
                 `Failed to add person(${person.id}): ${person.name}`,

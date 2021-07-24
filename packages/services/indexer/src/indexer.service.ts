@@ -106,7 +106,7 @@ export class IndexerService {
           depth: 1,
         })) {
           await this.checkPath(library, dirPath);
-          await sleep(50);
+          await sleep(20);
         }
       }
     } catch (e) {

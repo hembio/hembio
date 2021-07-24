@@ -22,10 +22,10 @@ import { getCwd } from "./utils/getCwd";
 type Config = Options<SqliteDriver> &
   MikroOrmModuleSyncOptions & {
     pool: PoolConfig & {
-      createTimeoutMillis: number;
-      destroyTimeoutMillis: number;
-      createRetryIntervalMillis: number;
-      propagateCreateError: boolean;
+      createTimeoutMillis?: number;
+      destroyTimeoutMillis?: number;
+      createRetryIntervalMillis?: number;
+      propagateCreateError?: boolean;
     };
   };
 
@@ -48,14 +48,13 @@ const config: Config = {
   pool: {
     min: 0,
     max: 1000,
-    // refreshIdle: true,
-    acquireTimeoutMillis: 100000,
-    createTimeoutMillis: 100000,
-    destroyTimeoutMillis: 100000,
-    idleTimeoutMillis: 100000,
-    reapIntervalMillis: 3000,
-    createRetryIntervalMillis: 200,
-    propagateCreateError: false,
+    // acquireTimeoutMillis: 100000,
+    // createTimeoutMillis: 100000,
+    // destroyTimeoutMillis: 100000,
+    // idleTimeoutMillis: 100000,
+    // reapIntervalMillis: 3000,
+    // createRetryIntervalMillis: 200,
+    // propagateCreateError: false,
   },
   type: "sqlite",
   charset: "utf-8",

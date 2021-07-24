@@ -67,8 +67,9 @@ export class ImagesService {
     carryoverConcurrencyCount: true,
   });
 
+  private tasksPerBatch = 24;
   private readonly taskQueue = new PQueue({
-    concurrency: 20,
+    concurrency: this.tasksPerBatch,
   });
 
   // TODO: Use metadata microservice instead
@@ -82,7 +83,6 @@ export class ImagesService {
   ) {
     setTimeout(async () => {
       await this.orm.isConnected();
-      this.checkMissingImages();
       this.runTasks();
     }, 1000);
   }
@@ -98,8 +98,8 @@ export class ImagesService {
     try {
       this.logger.debug(`Checking for missing images...`);
       const em = this.em.fork(false);
-      const titleRepo = em.getRepository(TitleEntity);
-      const titles = await titleRepo.find(
+      const titles = await em.find(
+        TitleEntity,
         {
           thumb: null,
           idImdb: { $ne: null },
@@ -118,8 +118,11 @@ export class ImagesService {
         }
       }
 
-      const personRepo = this.em.getRepository(PersonEntity);
-      const people = await personRepo.find({ image: null }, { fields: ["id"] });
+      const people = await this.em.find(
+        PersonEntity,
+        { image: null },
+        { fields: ["id"] },
+      );
       for (const person of people) {
         const task = await this.tasks.createTask({
           type: TaskType.IMAGES,
@@ -149,7 +152,7 @@ export class ImagesService {
 
     try {
       if (!tasks) {
-        tasks = await this.tasks.getTasks(TaskType.IMAGES, 20);
+        tasks = await this.tasks.getTasks(TaskType.IMAGES, this.tasksPerBatch);
       }
 
       if (tasks.length > 0) {
@@ -157,37 +160,40 @@ export class ImagesService {
         for (const task of tasks) {
           if (task.payload.type === "title") {
             this.taskQueue.add(async () => {
-              this.logger.debug(`Downloading images for title(${task.ref})`);
-              const result = await this.downloadTitleImages(task.ref);
-              const missingPoster = (result.data?.poster || []).length === 0;
-              if (missingPoster) {
-                this.logger.debug(`No images found for title(${task.ref})`);
-                // Wait 1 day before running again
-                const waitUntil = new Date(Date.now() + Times.ONE_DAY);
-                await this.tasks.waitUntil(task, waitUntil);
-              } else if (result.error) {
+              try {
+                const result = await this.downloadTitleImages(task.ref);
+                const missingPoster =
+                  !result || (result.data?.poster || []).length === 0;
+                if (missingPoster) {
+                  // Wait 1 day before running again
+                  const waitUntil = new Date(Date.now() + Times.ONE_DAY);
+                  await this.tasks.waitUntil(task, waitUntil);
+                } else {
+                  await this.tasks.deleteTask(task);
+                }
+              } catch (e) {
                 this.logger.debug(
+                  e,
                   `Failed to download images for title(${task.ref})`,
                 );
                 // Wait 30 minutes before trying again
                 const waitUntil = new Date(Date.now() + Times.THIRTY_MINUTES);
                 await this.tasks.waitUntil(task, waitUntil);
-              } else {
-                await this.tasks.deleteTask(task);
               }
             });
           } else if (task.payload.type === "person") {
             this.taskQueue.add(async () => {
-              this.logger.debug(`Downloading images for person(${task.ref})`);
-              const result = await this.downloadPersonImages(task.ref);
+              const result = await this.downloadPersonImages(
+                task.ref,
+                task.payload.imagePath,
+              );
               if (!result) {
-                this.logger.debug(`No images found for person(${task.ref})`);
                 // Wait 1 day before running again
                 const waitUntil = new Date(Date.now() + Times.ONE_WEEK);
                 await this.tasks.waitUntil(task, waitUntil);
-              } else {
-                await this.tasks.deleteTask(task);
+                return;
               }
+              await this.tasks.deleteTask(task);
             });
           }
         }
@@ -198,7 +204,10 @@ export class ImagesService {
 
     await this.taskQueue.onIdle();
     this.runners.delete(runnerName);
-    const nextTasks = await this.tasks.getTasks(TaskType.IMAGES, 10);
+    const nextTasks = await this.tasks.getTasks(
+      TaskType.IMAGES,
+      this.tasksPerBatch,
+    );
     if (nextTasks.length > 0) {
       this.runTasks(nextTasks);
     }
@@ -273,8 +282,13 @@ export class ImagesService {
         }
       }
       let firstColor = colors[0];
+      let tries = 0;
       while (this.isColorTooBright(firstColor)) {
         firstColor = this.darkenByTenth(firstColor);
+        tries++;
+        if (tries === 10) {
+          break;
+        }
       }
       return firstColor;
     } catch {
@@ -303,35 +317,37 @@ export class ImagesService {
 
   public async downloadTitleImages(
     id: string,
-  ): Promise<DownloadTitleImagesResult> {
-    const em = this.em.fork(true);
+  ): Promise<DownloadTitleImagesResult | undefined> {
+    const em = this.em.fork();
     const titleRepo = em.getRepository(TitleEntity);
     const imgDir = path.resolve(getCwd(), ".images/titles");
     const title = await titleRepo.findOne(id);
 
     if (!title) {
-      return { code: 404, error: "Title does not exist" };
+      throw Error("Title not found");
     }
 
-    const { imdb: imdbId } = title.externalIds;
-    if (!imdbId) {
-      return { code: 404, error: "Title is missing iMDb id" };
+    const { imdb: imdbId, tmdb: tmdbId } = title.externalIds;
+    if (!imdbId && !tmdbId) {
+      throw Error("Title must have iMDB or TMDb id");
     }
+
+    this.logger.debug(`Downloading images for title(${id})`);
 
     const [fanartResult, tmdbResult] = await Promise.all([
-      this.fanartProvider.images(imdbId),
-      this.tmdbProvider.images(TitleType.MOVIE, imdbId),
+      imdbId ? this.fanartProvider.images(imdbId) : undefined,
+      tmdbId || imdbId
+        ? this.tmdbProvider.images(
+            TitleType.MOVIE,
+            (tmdbId as number) || (imdbId as string),
+          )
+        : undefined,
     ]);
 
     if (!fanartResult && !tmdbResult) {
-      return { code: 404, error: "Couldn't find any images for title" };
+      this.logger.debug(`No images found for title(${id})`);
+      return undefined;
     }
-
-    // Object.values(tmdbResult?.images || {}).forEach((images) => {
-    //   for (const image of images) {
-    //     image.score = (image.score + 10) * 2;
-    //   }
-    // });
 
     const mergedImages = {
       ...fanartResult?.images,
@@ -352,8 +368,6 @@ export class ImagesService {
     }
 
     const cats = Object.keys(mergedImages) as Array<keyof typeof mergedImages>;
-
-    // this.logger.debug({ mergedImages });
 
     //  ／l、
     // ﾞ（ﾟ､ ｡ ７ meow!
@@ -416,8 +430,11 @@ export class ImagesService {
     return { data: mergedImages };
   }
 
-  public async downloadPersonImages(id: string): Promise<boolean> {
-    const em = this.em.fork(true);
+  public async downloadPersonImages(
+    id: string,
+    imagePath?: string,
+  ): Promise<boolean> {
+    const em = this.em.fork();
     const personRepo = em.getRepository(PersonEntity);
     const imgDir = path.resolve(getCwd(), ".images/people");
     const person = await personRepo.findOne(id);
@@ -426,30 +443,35 @@ export class ImagesService {
       return false;
     }
     const task = this.personImageFetchQueue.add(async () => {
-      const res = await this.tmdbProvider.person(person.idTmdb);
-      if (res && res.profile_path) {
-        try {
-          const img = `https://www.themoviedb.org/t/p/w1280${res.profile_path}`;
-          this.logger.debug(
-            `Downloading image for person(${person.id}): ${person.name} - ${img}`,
-          );
-          const pres = await this.http.get(img);
-          const imageBuffer = pres.data;
-          const imageFile = path.join(imgDir, `${person.id}.jpg`);
-          await writeFile(imageFile, imageBuffer);
-          person.image = `/${person.id}.jpg`;
-          await personRepo.persistAndFlush(person);
-          return true;
-        } catch {
-          // Ignore
+      if (!imagePath) {
+        const res = await this.tmdbProvider.person(person.idTmdb);
+        if (!res || !res.profile_path) {
+          this.logger.debug(`No image found(${person.id}): ${person.name}`);
+          return false;
         }
+        imagePath = res.profile_path;
       }
-      if (!person.name) {
-        // Why are we missing name?
-        this.logger.debug(person);
+
+      const img = `https://www.themoviedb.org/t/p/original${imagePath}`;
+      try {
+        const pres = await this.http.get(img);
+        const imageBuffer = pres.data;
+        const imageFile = path.join(imgDir, `${person.id}.jpg`);
+        await writeFile(imageFile, imageBuffer);
+        person.image = `/${person.id}.jpg`;
+        await personRepo.persistAndFlush(person);
+        this.logger.debug(
+          `Downloading image for person(${person.id}): ${person.name} - ${img}`,
+        );
+        return true;
+      } catch (e) {
+        // Ignore
+        this.logger.debug(
+          e,
+          `Failed to download image(${person.id}): ${person.name} - img`,
+        );
+        return false;
       }
-      this.logger.debug(`No image found(${person.id}): ${person.name}`);
-      return false;
     });
     return task;
   }

@@ -7,12 +7,16 @@ export class ImagesController {
   public constructor(private readonly imagesService: ImagesService) {}
 
   @MessagePattern({ cmd: "updateTitleImages" })
-  public async updateTitleImages({ id }: { id: string }): Promise<unknown> {
-    return this.imagesService.queueTitleImagesUpdate(id);
+  public updateMetadata({ titleId }: { titleId: string }): Promise<boolean> {
+    return this.imagesService.queueTitleImagesUpdate(titleId);
   }
 
   @MessagePattern({ cmd: "updatePersonImages" })
-  public async updatePersonImages({ id }: { id: string }): Promise<unknown> {
-    return this.imagesService.queuePersonImageUpdate(id);
+  public async updatePersonImages({
+    personId,
+  }: {
+    personId: string;
+  }): Promise<unknown> {
+    return this.imagesService.queuePersonImageUpdate(personId);
   }
 }

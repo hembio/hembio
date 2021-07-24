@@ -1,10 +1,4 @@
-import {
-  TaskModule,
-  MikroOrmModule,
-  MikroORMConfig,
-  PersonEntity,
-  TitleEntity,
-} from "@hembio/core";
+import { TaskModule, MikroOrmModule, MikroORMConfig } from "@hembio/core";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
@@ -18,7 +12,6 @@ import { ImagesService } from "./images.service";
       load: [config],
     }),
     MikroOrmModule.forRoot(MikroORMConfig),
-    MikroOrmModule.forFeature([TitleEntity, PersonEntity]),
     ScheduleModule.forRoot(),
     TaskModule,
   ],
