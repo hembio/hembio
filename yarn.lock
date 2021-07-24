@@ -3593,7 +3593,7 @@ __metadata:
     eslint: ^7.31.0
     eslint-plugin-import: ^2.23.4
     file-loader: ^6.2.0
-    fork-ts-checker-webpack-plugin: ^6.2.12
+    fork-ts-checker-webpack-plugin: ^6.2.13
     node-loader: ^2.0.0
     prop-types: ^15.7.2
     react: ^17.0.2
@@ -3959,7 +3959,7 @@ __metadata:
     "@types/react": ^17.0.14
     "@types/react-dom": ^17.0.9
     "@types/react-router": ^5.1.16
-    "@types/react-router-config": ^5
+    "@types/react-router-config": ^5.0.3
     "@types/react-router-dom": ^5.1.8
     "@types/react-syntax-highlighter": ^13.5.2
     "@types/react-transition-group": ^4.4.2
@@ -4008,7 +4008,7 @@ __metadata:
     react-router-config: ^5.1.1
     react-router-dom: ^5.2.0
     react-scripts: 4.0.3
-    react-syntax-highlighter: ^15.4.3
+    react-syntax-highlighter: ^15.4.4
     react-transition-group: ^4.4.2
     react-useanimations: ^2.0.6
     react-virtual: ^2.8.0
@@ -7244,7 +7244,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router-config@npm:^5":
+"@types/react-router-config@npm:^5.0.3":
   version: 5.0.3
   resolution: "@types/react-router-config@npm:5.0.3"
   dependencies:
@@ -16029,7 +16029,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fork-ts-checker-webpack-plugin@npm:6.2.12, fork-ts-checker-webpack-plugin@npm:^6.2.12":
+"fork-ts-checker-webpack-plugin@npm:6.2.12":
   version: 6.2.12
   resolution: "fork-ts-checker-webpack-plugin@npm:6.2.12"
   dependencies:
@@ -16047,6 +16047,27 @@ __metadata:
     semver: ^7.3.2
     tapable: ^1.0.0
   checksum: ae17519010d811d0448d8db9a701168e92059b48fe34ae2775265a54dbea9785fd9863850efee15e2e8a08d527480484a0bd5539b9a7c8a3014ebd142d69aa49
+  languageName: node
+  linkType: hard
+
+"fork-ts-checker-webpack-plugin@npm:^6.2.13":
+  version: 6.2.13
+  resolution: "fork-ts-checker-webpack-plugin@npm:6.2.13"
+  dependencies:
+    "@babel/code-frame": ^7.8.3
+    "@types/json-schema": ^7.0.5
+    chalk: ^4.1.0
+    chokidar: ^3.4.2
+    cosmiconfig: ^6.0.0
+    deepmerge: ^4.2.2
+    fs-extra: ^9.0.0
+    glob: ^7.1.6
+    memfs: ^3.1.2
+    minimatch: ^3.0.4
+    schema-utils: 2.7.0
+    semver: ^7.3.2
+    tapable: ^1.0.0
+  checksum: e7e9551fc4d28c803771d3193634e28a8110b53e8128f9c0dd451b93ca2001bd3055aa0f19bb2d85b88235f0431ff75358bef20148fa9aa08316989af87821a0
   languageName: node
   linkType: hard
 
@@ -26457,9 +26478,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-syntax-highlighter@npm:^15.4.3":
-  version: 15.4.3
-  resolution: "react-syntax-highlighter@npm:15.4.3"
+"react-syntax-highlighter@npm:^15.4.4":
+  version: 15.4.4
+  resolution: "react-syntax-highlighter@npm:15.4.4"
   dependencies:
     "@babel/runtime": ^7.3.1
     highlight.js: ^10.4.1
@@ -26468,7 +26489,7 @@ fsevents@^1.2.7:
     refractor: ^3.2.0
   peerDependencies:
     react: ">= 0.14.0"
-  checksum: 99866d865279aebc93946c07bf9ff471c890adcd6b620ffea84bb57e6efabba3b06c815e47b1064d05e0038f7827e032e47670cd005cbfb4cc96af60950699e6
+  checksum: 7128fcc1eae503e0ef3b02f42e2f0ad36ddc9651c9898f67fe36b892e04361d501cd1846f063d5d12cea71fcac797da741eb5bfe4dec603b10be34311982b6ce
   languageName: node
   linkType: hard
 
