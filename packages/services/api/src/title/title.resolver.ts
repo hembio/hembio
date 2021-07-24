@@ -81,30 +81,36 @@ export class TitleResolver {
   public async updateCredits(
     @Args({ name: "id", type: () => String }) id: string,
   ): Promise<UpdateMutationModel> {
-    if (await this.indexerService.updateCredits(id)) {
-      return { id };
+    try {
+      await this.indexerService.updateCredits(id);
+    } catch {
+      return {};
     }
-    return {};
+    return { id };
   }
 
   @Mutation(() => UpdateMutationModel)
   public async updateMetadata(
     @Args({ name: "id", type: () => String }) id: string,
   ): Promise<UpdateMutationModel> {
-    if (await this.indexerService.updateMetadata(id)) {
-      return { id };
+    try {
+      await this.indexerService.updateMetadata(id);
+    } catch {
+      return {};
     }
-    return {};
+    return { id };
   }
 
   @Mutation(() => UpdateMutationModel)
   public async updateTitleImages(
     @Args({ name: "id", type: () => String }) id: string,
   ): Promise<UpdateMutationModel> {
-    if (await this.imageService.updateTitleImages(id)) {
-      return { id };
+    try {
+      await this.imageService.updateTitleImages(id);
+    } catch {
+      return {};
     }
-    return {};
+    return { id };
   }
 
   @Mutation(() => UpdateMutationModel)

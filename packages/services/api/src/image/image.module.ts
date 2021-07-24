@@ -11,6 +11,6 @@ const ImagesClientProxy = getServiceClientProxy("images");
   imports: [MikroOrmModule.forFeature([TitleEntity])],
   controllers: [ImageController],
   providers: [ImagesClientProxy, ImageService, ImageResolver],
-  exports: [ImagesClientProxy, ImageService],
+  exports: [ImageService],
 })
 export class ImageModule {}

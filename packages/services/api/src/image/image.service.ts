@@ -54,15 +54,15 @@ export class ImageService {
     return { code: 404, error: "Image not found" };
   }
 
-  public async updateTitleImages(id: string): Promise<boolean> {
+  public async updateTitleImages(titleId: string): Promise<boolean> {
     return firstValueFrom(
-      this.imagesClient.send({ cmd: "updateTitleImages" }, { id }),
+      this.imagesClient.send({ cmd: "updateTitleImages" }, { titleId }),
     );
   }
 
-  public async updatePersonImages(id: string): Promise<boolean> {
+  public async updatePersonImages(personId: string): Promise<boolean> {
     return firstValueFrom(
-      this.imagesClient.send({ cmd: "updatePersonImages" }, { id }),
+      this.imagesClient.send({ cmd: "updatePersonImages" }, { personId }),
     );
   }
 }
