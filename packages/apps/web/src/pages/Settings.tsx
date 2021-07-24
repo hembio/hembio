@@ -29,11 +29,6 @@ export function Settings(): JSX.Element {
       <p>
         <RestLoadingButton path={`/indexer/run`}>Run indexer</RestLoadingButton>
       </p>
-      <p>
-        <RestLoadingButton path={`/images/download`}>
-          Download images
-        </RestLoadingButton>
-      </p>
     </Container>
   );
 }
