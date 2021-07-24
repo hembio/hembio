@@ -177,3 +177,9 @@ mutation UpdateMetadata($id: String!) {
     id
   }
 }
+
+mutation UpdateTitleImages($id: String!) {
+  updateTitleImages(id: $id) {
+    id
+  }
+}

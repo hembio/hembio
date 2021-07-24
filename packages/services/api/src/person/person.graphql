@@ -28,3 +28,9 @@ query Person($id: String!) {
     ...Person
   }
 }
+
+mutation UpdatePersonImages($id: String!) {
+  updatePersonImages(id: $id) {
+    id
+  }
+}

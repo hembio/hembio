@@ -9,7 +9,7 @@ import {
 } from "@hembio/core";
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { Observable } from "rxjs";
+import { firstValueFrom } from "rxjs";
 
 interface GetImageResult {
   code?: number;
@@ -54,11 +54,15 @@ export class ImageService {
     return { code: 404, error: "Image not found" };
   }
 
-  public updateTitleImages(id: string): Observable<Record<string, unknown>> {
-    return this.imagesClient.send({ cmd: "updateTitleImages" }, { id });
+  public async updateTitleImages(id: string): Promise<boolean> {
+    return firstValueFrom(
+      this.imagesClient.send({ cmd: "updateTitleImages" }, { id }),
+    );
   }
 
-  public updatePersonImages(id: string): Observable<Record<string, unknown>> {
-    return this.imagesClient.send({ cmd: "updatePersonImages" }, { id });
+  public async updatePersonImages(id: string): Promise<boolean> {
+    return firstValueFrom(
+      this.imagesClient.send({ cmd: "updatePersonImages" }, { id }),
+    );
   }
 }

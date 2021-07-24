@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ImageResolver } from './image.resolver';
+import { Test, TestingModule } from "@nestjs/testing";
+import { ImageResolver } from "../image.resolver";
 
-describe('ImageResolver', () => {
+describe("ImageResolver", () => {
   let resolver: ImageResolver;
 
   beforeEach(async () => {
@@ -12,7 +12,7 @@ describe('ImageResolver', () => {
     resolver = module.get<ImageResolver>(ImageResolver);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(resolver).toBeDefined();
   });
 });

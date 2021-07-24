@@ -178,14 +178,6 @@ type UpdateMutationModel {
   id: String
 }
 
-type IdentityModel {
-  provider: String!
-  externalId: String!
-  type: String!
-  name: String!
-  year: String!
-}
-
 type StatsModel {
   time: Int!
   uptime: Int!
@@ -196,22 +188,32 @@ type StatsModel {
   totalTitles: Int!
 }
 
+type IdentityModel {
+  provider: String!
+  externalId: String!
+  type: String!
+  name: String!
+  year: String!
+}
+
 type Query {
-  users: [UserEntity!]!
-  user(userId: String!): UserEntity
+  file(fileId: String!): FileEntity
   library(id: String!): LibraryEntity
   libraries: [LibraryEntity!]!
+  person(id: String!): PersonEntity
+  stats: StatsModel!
   title(id: String!): TitleEntity
   search(query: String!): [TitleEntity!]!
-  file(fileId: String!): FileEntity
-  stats: StatsModel!
-  person(id: String!): PersonEntity
+  users: [UserEntity!]!
+  user(userId: String!): UserEntity
 }
 
 type Mutation {
   addLibrary(name: String!, type: LibraryType!, path: String!): AddLibraryResponse!
   checkLibrary(id: String!): UpdateMutationModel!
+  updatePersonImages(id: String!): UpdateMutationModel!
   updateCredits(id: String!): UpdateMutationModel!
   updateMetadata(id: String!): UpdateMutationModel!
+  updateTitleImages(id: String!): UpdateMutationModel!
   deleteTitle(id: String!): UpdateMutationModel!
 }

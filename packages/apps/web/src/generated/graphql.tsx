@@ -121,8 +121,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   addLibrary: AddLibraryResponse;
   checkLibrary: UpdateMutationModel;
+  updatePersonImages: UpdateMutationModel;
   updateCredits: UpdateMutationModel;
   updateMetadata: UpdateMutationModel;
+  updateTitleImages: UpdateMutationModel;
   deleteTitle: UpdateMutationModel;
 };
 
@@ -139,12 +141,22 @@ export type MutationCheckLibraryArgs = {
 };
 
 
+export type MutationUpdatePersonImagesArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationUpdateCreditsArgs = {
   id: Scalars['String'];
 };
 
 
 export type MutationUpdateMetadataArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUpdateTitleImagesArgs = {
   id: Scalars['String'];
 };
 
@@ -417,6 +429,19 @@ export type PersonQuery = (
   )> }
 );
 
+export type UpdatePersonImagesMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UpdatePersonImagesMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePersonImages: (
+    { __typename?: 'UpdateMutationModel' }
+    & Pick<UpdateMutationModel, 'id'>
+  ) }
+);
+
 export type StatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -624,6 +649,19 @@ export type UpdateMetadataMutationVariables = Exact<{
 export type UpdateMetadataMutation = (
   { __typename?: 'Mutation' }
   & { updateMetadata: (
+    { __typename?: 'UpdateMutationModel' }
+    & Pick<UpdateMutationModel, 'id'>
+  ) }
+);
+
+export type UpdateTitleImagesMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UpdateTitleImagesMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTitleImages: (
     { __typename?: 'UpdateMutationModel' }
     & Pick<UpdateMutationModel, 'id'>
   ) }
@@ -991,6 +1029,39 @@ export type PersonQueryResult = Apollo.QueryResult<PersonQuery, PersonQueryVaria
 export function refetchPersonQuery(variables?: PersonQueryVariables) {
       return { query: PersonDocument, variables: variables }
     }
+export const UpdatePersonImagesDocument = gql`
+    mutation UpdatePersonImages($id: String!) {
+  updatePersonImages(id: $id) {
+    id
+  }
+}
+    `;
+export type UpdatePersonImagesMutationFn = Apollo.MutationFunction<UpdatePersonImagesMutation, UpdatePersonImagesMutationVariables>;
+
+/**
+ * __useUpdatePersonImagesMutation__
+ *
+ * To run a mutation, you first call `useUpdatePersonImagesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePersonImagesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePersonImagesMutation, { data, loading, error }] = useUpdatePersonImagesMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdatePersonImagesMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePersonImagesMutation, UpdatePersonImagesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePersonImagesMutation, UpdatePersonImagesMutationVariables>(UpdatePersonImagesDocument, options);
+      }
+export type UpdatePersonImagesMutationHookResult = ReturnType<typeof useUpdatePersonImagesMutation>;
+export type UpdatePersonImagesMutationResult = Apollo.MutationResult<UpdatePersonImagesMutation>;
+export type UpdatePersonImagesMutationOptions = Apollo.BaseMutationOptions<UpdatePersonImagesMutation, UpdatePersonImagesMutationVariables>;
 export const StatsDocument = gql`
     query Stats {
   stats {
@@ -1394,6 +1465,39 @@ export function useUpdateMetadataMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateMetadataMutationHookResult = ReturnType<typeof useUpdateMetadataMutation>;
 export type UpdateMetadataMutationResult = Apollo.MutationResult<UpdateMetadataMutation>;
 export type UpdateMetadataMutationOptions = Apollo.BaseMutationOptions<UpdateMetadataMutation, UpdateMetadataMutationVariables>;
+export const UpdateTitleImagesDocument = gql`
+    mutation UpdateTitleImages($id: String!) {
+  updateTitleImages(id: $id) {
+    id
+  }
+}
+    `;
+export type UpdateTitleImagesMutationFn = Apollo.MutationFunction<UpdateTitleImagesMutation, UpdateTitleImagesMutationVariables>;
+
+/**
+ * __useUpdateTitleImagesMutation__
+ *
+ * To run a mutation, you first call `useUpdateTitleImagesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTitleImagesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTitleImagesMutation, { data, loading, error }] = useUpdateTitleImagesMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateTitleImagesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTitleImagesMutation, UpdateTitleImagesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTitleImagesMutation, UpdateTitleImagesMutationVariables>(UpdateTitleImagesDocument, options);
+      }
+export type UpdateTitleImagesMutationHookResult = ReturnType<typeof useUpdateTitleImagesMutation>;
+export type UpdateTitleImagesMutationResult = Apollo.MutationResult<UpdateTitleImagesMutation>;
+export type UpdateTitleImagesMutationOptions = Apollo.BaseMutationOptions<UpdateTitleImagesMutation, UpdateTitleImagesMutationVariables>;
 export const UserDocument = gql`
     query User($userId: String!) {
   user(userId: $userId) {

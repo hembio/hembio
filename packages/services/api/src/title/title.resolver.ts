@@ -13,6 +13,7 @@ import { Auth } from "~/auth/auth.decorator";
 import { UpdateMutationModel } from "~/common/models/update-mutation.model";
 import { CreditService } from "~/credit/credit.service";
 import { FileService } from "~/file/file.service";
+import { ImageService } from "~/image/image.service";
 import { IndexerService } from "~/indexer/indexer.service";
 
 @Auth(UserRole.USER)
@@ -23,6 +24,7 @@ export class TitleResolver {
     private readonly fileService: FileService,
     private readonly creditService: CreditService,
     private readonly indexerService: IndexerService,
+    private readonly imageService: ImageService,
   ) {}
 
   @Query(() => TitleEntity, { name: "title", nullable: true })
@@ -79,16 +81,30 @@ export class TitleResolver {
   public async updateCredits(
     @Args({ name: "id", type: () => String }) id: string,
   ): Promise<UpdateMutationModel> {
-    await this.indexerService.updateCredits(id);
-    return { id };
+    if (await this.indexerService.updateCredits(id)) {
+      return { id };
+    }
+    return {};
   }
 
   @Mutation(() => UpdateMutationModel)
   public async updateMetadata(
     @Args({ name: "id", type: () => String }) id: string,
   ): Promise<UpdateMutationModel> {
-    await this.indexerService.updateMetadata(id);
-    return { id };
+    if (await this.indexerService.updateMetadata(id)) {
+      return { id };
+    }
+    return {};
+  }
+
+  @Mutation(() => UpdateMutationModel)
+  public async updateTitleImages(
+    @Args({ name: "id", type: () => String }) id: string,
+  ): Promise<UpdateMutationModel> {
+    if (await this.imageService.updateTitleImages(id)) {
+      return { id };
+    }
+    return {};
   }
 
   @Mutation(() => UpdateMutationModel)
