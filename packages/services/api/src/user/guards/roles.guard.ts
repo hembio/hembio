@@ -18,8 +18,6 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    // NOTE: contextType is actually private, but we don't give a shit
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (context.getType<GqlContextType>() === "graphql") {
       const ctx = GqlExecutionContext.create(context);
       const user = ctx.getContext().user;
