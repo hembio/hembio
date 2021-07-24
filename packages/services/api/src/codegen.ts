@@ -27,8 +27,6 @@ async function generateSchema() {
   );
   await app.init();
 
-  const useGlob = true;
-
   const resolvers = await requireGlob("./**/*.resolver.ts", {
     reducer: (
       options: any,
