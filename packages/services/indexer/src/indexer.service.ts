@@ -4,12 +4,14 @@ import {
   EntityManager,
   FileEntity,
   LibraryEntity,
+  LibraryType,
   MikroORM,
   TaskEntity,
   TaskService,
   TaskType,
   Times,
   TitleEntity,
+  TitleType,
 } from "@hembio/core";
 import { pathWalker } from "@hembio/fs";
 import { createLogger } from "@hembio/logger";
@@ -207,9 +209,13 @@ export class IndexerService {
       }
       slugExists = false;
     }
+
+    const titleType =
+      library.type === LibraryType.MOVIES ? TitleType.MOVIE : TitleType.TVSHOW;
+
     const title = titleRepo.create({
       slug,
-      type: library.type,
+      type: titleType,
       path: titlePath,
       idImdb: metadata.ids.imdb,
       idTmdb: metadata.ids.tmdb,
