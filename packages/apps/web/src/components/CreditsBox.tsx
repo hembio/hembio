@@ -1,31 +1,45 @@
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import { useState } from "react";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { Fragment, useState } from "react";
 import { CreditListitem } from "./CreditListItem";
 import {
   CrewFragment,
-  TitleWithFilesFragment,
+  TitleQuery,
   useTitleCreditsQuery,
 } from "~/generated/graphql";
 
+const useStyles = makeStyles(
+  createStyles({
+    fixGrid: {
+      "&::after": {
+        content: "''",
+        flex: "auto",
+      },
+    },
+  }),
+  { name: "CreditsBox" },
+);
+
 interface CreditBoxProps {
-  title?: TitleWithFilesFragment | null;
+  title?: TitleQuery["title"];
 }
 
 export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
   const [show, setShow] = useState(false);
+  const classes = useStyles();
 
   const { data } = useTitleCreditsQuery({
     variables: { id: (title && title.id) || "" },
     skip: !show,
   });
 
-  const topBilling = title ? title.topBilling : new Array(6).fill(undefined);
+  const topBilling = title ? title.topBilling : new Array(8).fill(undefined);
 
-  const cast = data?.title?.cast || new Array(12).fill(undefined);
+  const cast = data?.title?.cast || new Array(8).fill(undefined);
   const crew = data?.title?.crew || [];
 
   const departments: Record<string, CrewFragment[]> = {
@@ -45,39 +59,42 @@ export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
 
   return (
     <Paper>
-      <Grid
-        container
-        sx={{ p: 4, pt: 2, mt: 6 }}
-        flexDirection="row"
-        spacing={2}
-      >
-        <Grid item sx={{ mb: 2 }} flexGrow={10}>
-          <Grid container>
-            <Grid item xs flexGrow={6.8}>
-              <Typography variant="h5">Top cast</Typography>
-            </Grid>
-            {title && topBilling.length > 0 && (
-              <Grid item xs>
-                <Button
-                  variant="text"
-                  color="primary"
-                  size="medium"
-                  onClick={() => setShow(!show)}
-                >
-                  {show ? "Only Top Cast" : "All Cast & Crew"}
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-          {!show && (
-            <Grid container flexDirection="row" spacing={2} sx={{ mt: 0 }}>
-              {topBilling.map((credit, idx) => (
-                <Grid item key={!credit ? idx : credit.id}>
-                  <CreditListitem credit={credit} />
-                </Grid>
-              ))}
-            </Grid>
-          )}
+      <Container maxWidth="xl">
+        <Box
+          sx={{
+            p: 4,
+            pl: 2,
+            pr: 2,
+            display: "grid",
+            gap: 2,
+            gridAutoFlow: "row",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            justifyItems: "stretch",
+            alignItems: "center",
+          }}
+        >
+          <Box sx={{ gridColumn: "1 / -1" }}>
+            <Typography variant="h5">
+              Top cast
+              {title && topBilling.length > 0 && (
+                <Box sx={{ float: "right" }}>
+                  <Button
+                    variant="text"
+                    color="primary"
+                    size="medium"
+                    onClick={() => setShow(!show)}
+                  >
+                    {show ? "Only Top Cast" : "All Cast & Crew"}
+                  </Button>
+                </Box>
+              )}
+            </Typography>
+          </Box>
+
+          {!show &&
+            topBilling.map((credit, idx) => (
+              <CreditListitem key={credit ? credit.id : idx} credit={credit} />
+            ))}
           {show &&
             [
               "Cast",
@@ -99,31 +116,23 @@ export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
                 return;
               }
               return (
-                <Box key={depName}>
+                <Fragment key={depName}>
                   {depName !== "Cast" && (
-                    <Grid container>
-                      <Grid item xs flexGrow={7.6}>
-                        <Typography variant="h5">{depName}</Typography>
-                      </Grid>
-                    </Grid>
+                    <Box sx={{ gridColumn: "1 / -1" }}>
+                      <Typography variant="h5">{depName}</Typography>
+                    </Box>
                   )}
-                  <Grid
-                    container
-                    flexDirection="row"
-                    spacing={2}
-                    sx={{ mt: 0 }}
-                  >
-                    {credits.map((credit, idx) => (
-                      <Grid item key={!credit ? idx : credit.id}>
-                        <CreditListitem credit={credit} />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Box>
+                  {credits.map((credit, idx) => (
+                    <CreditListitem
+                      key={credit ? credit.id : idx}
+                      credit={credit}
+                    />
+                  ))}
+                </Fragment>
               );
             })}
-        </Grid>
-      </Grid>
+        </Box>
+      </Container>
     </Paper>
   );
 }
