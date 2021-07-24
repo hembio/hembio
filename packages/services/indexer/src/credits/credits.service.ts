@@ -267,6 +267,7 @@ export class CreditsService {
 
     if (task) {
       this.logger.debug(`Queued credits update for title(${titleId})`);
+      this.runTasks();
     }
 
     return !!task;

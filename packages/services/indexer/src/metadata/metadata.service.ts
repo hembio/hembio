@@ -276,6 +276,7 @@ export class MetadataService {
 
     if (task) {
       this.logger.debug(`Queued metadata update for title(${titleId})`);
+      this.runTasks();
     }
 
     return !!task;

@@ -468,6 +468,7 @@ export class ImagesService {
 
     if (task) {
       this.logger.debug(`Queued images update for title(${titleId})`);
+      this.runTasks();
     }
 
     return !!task;
@@ -489,6 +490,7 @@ export class ImagesService {
 
     if (task) {
       this.logger.debug(`Queued images update for person(${personId})`);
+      this.runTasks();
     }
 
     return !!task;
