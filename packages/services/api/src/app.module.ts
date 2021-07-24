@@ -7,6 +7,7 @@ import {
   UserEntity,
   seedDatabase,
 } from "@hembio/core";
+import { createLogger } from "@hembio/logger";
 import {
   MiddlewareConsumer,
   Module,
@@ -18,7 +19,6 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { CookieModule } from "nest-cookies";
 import { MercuriusModule } from "nestjs-mercurius";
 import { config } from "../../../../config";
-import { createLogger } from "../../../libs/logger/src";
 import { AppController as AppController } from "./app.controller";
 import { AppService as AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
@@ -36,7 +36,7 @@ import { StreamModule } from "./stream/stream.module";
 import { TitleModule } from "./title/title.module";
 import { TranscoderModule } from "./transcoder/transcoder.module";
 import { UserModule } from "./user/user.module";
-import { getServiceProvider } from "./utils/getServiceProvider";
+import { getServiceClientProxy } from "./utils/getServiceClientProxy";
 
 const AppConfigModule = ConfigModule.forRoot({
   load: [config],
@@ -82,7 +82,7 @@ const AppConfigModule = ConfigModule.forRoot({
   providers: [
     AppService,
     ...["indexer", "images", "metadata", "transcoder"].map<Provider>(
-      getServiceProvider,
+      getServiceClientProxy,
     ),
   ],
 })

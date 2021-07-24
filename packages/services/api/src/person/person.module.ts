@@ -3,7 +3,7 @@ import { Module } from "@nestjs/common";
 import { PersonResolver } from "./person.resolver";
 import { PersonService } from "./person.service";
 import { AuthModule } from "~/auth/auth.module";
-import { ImageService } from "~/image/image.service";
+import { ImageModule } from "~/image/image.module";
 import { TitleModule } from "~/title/title.module";
 
 @Module({
@@ -11,7 +11,7 @@ import { TitleModule } from "~/title/title.module";
     MikroOrmModule.forFeature([PersonEntity]),
     AuthModule,
     TitleModule,
-    ImageService,
+    ImageModule,
   ],
   providers: [PersonResolver, PersonService],
 })

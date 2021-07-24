@@ -1,8 +1,15 @@
 import { Provider } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ClientProxyFactory, Transport } from "@nestjs/microservices";
+import {
+  ClientProxy,
+  ClientProxyFactory,
+  Closeable,
+  Transport,
+} from "@nestjs/microservices";
 
-export function getServiceProvider(service: string): Provider {
+export function getServiceClientProxy(
+  service: string,
+): Provider<ClientProxy & Closeable> {
   return {
     provide: `${service.toUpperCase()}_SERVICE`,
     useFactory: (configService: ConfigService) => {

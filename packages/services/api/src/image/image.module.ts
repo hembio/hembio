@@ -3,12 +3,14 @@ import { Module } from "@nestjs/common";
 import { ImageController } from "./image.controller";
 import { ImageResolver } from "./image.resolver";
 import { ImageService } from "./image.service";
-import { getServiceProvider } from "~/utils/getServiceProvider";
+import { getServiceClientProxy } from "~/utils/getServiceClientProxy";
+
+const ImagesClientProxy = getServiceClientProxy("images");
 
 @Module({
   imports: [MikroOrmModule.forFeature([TitleEntity])],
   controllers: [ImageController],
-  providers: [getServiceProvider("images"), ImageService, ImageResolver],
-  exports: [ImageService],
+  providers: [ImagesClientProxy, ImageService, ImageResolver],
+  exports: [ImagesClientProxy, ImageService],
 })
 export class ImageModule {}
