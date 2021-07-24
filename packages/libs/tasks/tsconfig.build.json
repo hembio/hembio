@@ -1,8 +1,0 @@
-{
-  "extends": "@hembio/tsconfig/build",
-  "compilerOptions": {
-    "incremental": false
-  },
-  "exclude": ["./node_modules", "./**/node_modules/*", "./src/**/__tests__/*"],
-  "include": ["src"]
-}
