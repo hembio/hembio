@@ -1,3 +1,4 @@
+import { existsSync } from "fs";
 import { stat } from "fs/promises";
 import path from "path";
 import {
@@ -33,7 +34,12 @@ export class IndexerService {
   private logger = createLogger("indexer");
   private runners = new Set<string>();
 
+  private tasksPerBatch = 10;
   private readonly taskQueue = new PQueue({
+    concurrency: this.tasksPerBatch,
+  });
+
+  private readonly removeQueue = new PQueue({
     concurrency: 5,
   });
 
@@ -45,7 +51,8 @@ export class IndexerService {
   ) {
     setTimeout(async () => {
       await this.orm.isConnected();
-      // this.watchForFileChanges();
+      this.watchForFileChanges();
+      //await this.removeDeletedFilesAndTitles();
       await this.checkAllLibraries();
       await this.runTasks();
       this.metadataService.checkMissingMetadata();
@@ -291,7 +298,10 @@ export class IndexerService {
     this.runners.add(runnerName);
     try {
       if (!tasks) {
-        tasks = await this.tasks.getTasks([TaskType.INDEXER], 10);
+        tasks = await this.tasks.getTasks(
+          [TaskType.INDEXER],
+          this.tasksPerBatch,
+        );
       }
 
       if (tasks.length > 0) {
@@ -388,7 +398,10 @@ export class IndexerService {
 
     let nextTasks: TaskEntity[] = [];
     try {
-      nextTasks = await this.tasks.getTasks([TaskType.INDEXER], 10);
+      nextTasks = await this.tasks.getTasks(
+        [TaskType.INDEXER],
+        this.tasksPerBatch,
+      );
     } catch (e) {
       this.logger.error(e);
     }
@@ -396,6 +409,85 @@ export class IndexerService {
     if (nextTasks.length > 0) {
       this.runTasks(nextTasks);
     }
+  }
+
+  public async removeTitle(titleId: string): Promise<boolean> {
+    const em = this.em.fork(false);
+    const title = await em.findOne(TitleEntity, titleId);
+    if (!title) {
+      return false;
+    }
+    const credits = await title.credits.init();
+    for (const credit of credits) {
+      em.remove(credit);
+    }
+    const files = await title.files.init();
+    for (const file of files) {
+      em.remove(file);
+    }
+    const images = await title.images.init();
+    for (const image of images) {
+      em.remove(image);
+    }
+    try {
+      await em.removeAndFlush(title);
+      this.logger.debug(
+        `Removed title ${title.id}: ${title.name} (${title.year})`,
+      );
+      return true;
+    } catch (e) {
+      this.logger.error(e, "Failed to remove title");
+      return false;
+    }
+  }
+
+  public async removeFile(fileId: string): Promise<boolean> {
+    const em = this.em.fork(false);
+    const file = await em.findOne(FileEntity, fileId);
+    if (!file) {
+      return false;
+    }
+    try {
+      await em.removeAndFlush(file);
+      this.logger.debug(`Removed file ${file.id}: ${file.path}`);
+      return true;
+    } catch (e) {
+      this.logger.error(e, "Failed to remove file");
+      return false;
+    }
+  }
+
+  public async removeDeletedFilesAndTitles(): Promise<void> {
+    const runnerName = "removeDeletedFilesAndTitles";
+    if (this.runners.has(runnerName)) {
+      return;
+    }
+    this.logger.info("Removing deleted filed and titles...");
+    this.runners.add(runnerName);
+    const em = this.em.fork(false);
+    const libraryRepo = em.getRepository(LibraryEntity);
+    const titleRepo = em.getRepository(TitleEntity);
+    const libraries = await libraryRepo.findAll();
+    for (const library of libraries) {
+      const titles = await titleRepo.findAll();
+      for (const title of titles) {
+        const titlePath = path.join(library.path, title.path);
+        if (!existsSync(titlePath)) {
+          this.removeQueue.add(() => this.removeTitle(title.id));
+          continue;
+        }
+        const files = await title.files.init();
+        for (const file of files) {
+          const filePath = path.join(library.path, file.path);
+          if (!existsSync(filePath)) {
+            this.removeQueue.add(() => this.removeFile(file.id));
+            continue;
+          }
+        }
+      }
+    }
+    await this.removeQueue.onIdle();
+    this.runners.delete(runnerName);
   }
 
   public async watchForFileChanges(): Promise<void> {
@@ -427,13 +519,13 @@ export class IndexerService {
           })
           .on("unlink", async (removedFile) => {
             if (library.matcherRegEx.test(removedFile)) {
+              const em = this.em.fork(false);
               this.logger.debug(`File removed: ${removedFile}`);
-              const fileRepo = em.getRepository(FileEntity);
               const relPath = path.relative(library.path, removedFile);
-              const found = await fileRepo.find({ path: relPath });
+              const found = await em.find(FileEntity, { path: relPath });
               if (found) {
                 try {
-                  await fileRepo.removeAndFlush(found);
+                  await em.removeAndFlush(found);
                 } catch {
                   // Ignore
                 }
