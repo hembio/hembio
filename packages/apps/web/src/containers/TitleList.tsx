@@ -9,13 +9,13 @@ import Typography from "@material-ui/core/Typography";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useEffect, useRef, useState } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { TitleCard } from "../components/TitleCard";
-import { FilterButton } from "../components/buttons/FilterButton";
-import { SortButton } from "../components/buttons/SortButton";
-import { useListener } from "../hooks/useListener";
-import { useQueryString } from "../hooks/useQueryString";
-import { isElectron } from "../utils/isElectron";
+import { TitleCard } from "~/components/TitleCard";
+import { FilterButton } from "~/components/buttons/FilterButton";
+import { SortButton } from "~/components/buttons/SortButton";
 import { useTitlesQuery } from "~/generated/graphql";
+import { useListener } from "~/hooks/useListener";
+import { useQueryStrings } from "~/hooks/useQueryString";
+import { isElectron } from "~/utils/isElectron";
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -42,17 +42,56 @@ interface Props {
 
 const titlesPerPage = 10 * 5;
 
+function useSearchParams() {
+  const firstRun = useRef(true);
+  const { p, ob, od } = useQueryStrings(["p", "ob", "od"]);
+  const initialPage = Number(p) > 0 ? Number(p) - 1 : 0;
+  const [orderBy, setOrderBy] = useState(ob || "releaseDate");
+  const [orderDirection, setOrderDirection] = useState(od || "DESC");
+  const [page, setPage] = useState(initialPage);
+
+  useEffect(() => {
+    if (!firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    if (p) {
+      setPage(Number(p) - 1);
+    }
+    if (ob) {
+      setOrderBy(ob);
+    }
+    if (od) {
+      setOrderDirection(od);
+    }
+  }, [p, ob, od]);
+
+  return {
+    orderBy,
+    setOrderBy,
+    orderDirection,
+    setOrderDirection,
+    page,
+    setPage,
+  };
+}
+
 export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
-  const queryStringPage = useQueryString("p");
+
+  const {
+    orderBy,
+    setOrderBy,
+    orderDirection,
+    setOrderDirection,
+    page,
+    setPage,
+  } = useSearchParams();
+
   const rootRef = useRef(document.getElementById("root"));
   const windowRef = useRef(window);
-  const initialPage = queryStringPage ? Number(queryStringPage) - 1 : 0;
-  const [orderBy, setOrderBy] = useState("releaseDate");
-  const [orderDirection, setOrderDirection] = useState("DESC");
-  const [page, setPage] = useState(initialPage);
   const [totalCount, setTotalCount] = useState(0);
   const { data, loading, error } = useTitlesQuery({
     variables: {
@@ -99,15 +138,28 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
     setOrderDirection(direction);
     setPage(0);
     rootRef.current?.scrollTo(0, 0);
+    const params: Record<string, string> = {
+      p: "1",
+    };
+    if (orderBy) {
+      params["ob"] = field;
+    }
+    if (orderDirection) {
+      params["od"] = direction;
+    }
+    history.push({
+      pathname: location.pathname,
+      search: new URLSearchParams(params).toString(),
+      state: {},
+    });
   };
 
   const handlePagination = (nextPage: number) => {
     setPage(nextPage);
     rootRef.current?.scrollTo(0, 0);
-
     const params: Record<string, string> = {};
     if (nextPage > 0) {
-      params["p"] = nextPage.toString();
+      params["p"] = (nextPage + 1).toString();
     }
     if (orderBy) {
       params["ob"] = orderBy;
@@ -115,7 +167,6 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
     if (orderDirection) {
       params["od"] = orderDirection;
     }
-
     history.push({
       pathname: location.pathname,
       search: new URLSearchParams(params).toString(),
