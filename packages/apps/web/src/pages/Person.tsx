@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Skeleton from "@material-ui/core/Skeleton";
 import Typography from "@material-ui/core/Typography";
+import PersonIcon from "@material-ui/icons/Person";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
@@ -169,15 +170,24 @@ export const Person = (): JSX.Element => {
                   marginBottom: "-75px",
                   width: "360px",
                   height: "540px",
+                  display: "grid",
+                  justifyContent: "stretch",
+                  alignContent: "stretch",
                 }}
               >
-                {person && (
-                  <CardMedia
-                    title={person.name}
-                    image={image}
-                    sx={{ height: "100%", width: "100%" }}
+                {person && !image && (
+                  <PersonIcon
+                    sx={{
+                      mt: 8,
+                      alignSelf: "center",
+                      justifySelf: "center",
+                      opacity: 0.5,
+                      width: "256px",
+                      height: "256px",
+                    }}
                   />
                 )}
+                {person && <CardMedia title={person.name} image={image} />}
               </Card>
             </Grid>
             <Grid item xs>
