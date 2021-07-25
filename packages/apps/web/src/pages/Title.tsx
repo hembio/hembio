@@ -32,7 +32,7 @@ const useStyles = makeStyles(
       },
       logo: {
         maxWidth: "340px",
-        height: "112px",
+        height: "96px",
       },
       cover: {
         position: "relative",
@@ -149,7 +149,7 @@ export const Title = (): JSX.Element => {
 
   return (
     <div>
-      <Container sx={{ mt: -1 }}>
+      <Container sx={{ mt: 1 }}>
         <Box sx={{ display: "grid", mr: 2 }}>
           <Box className={classes.logo} sx={{ justifySelf: "end" }}>
             {title && <TitleLogo id={title.id} name={title.name} />}
