@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useEffect, useRef, useState } from "react";
 
 interface Options {
@@ -14,10 +12,16 @@ interface Options {
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-export function useVirtualList<T extends Array<any>>(
+interface VirtualList<T extends readonly unknown[]> {
+  list: Array<ArrayElement<T>>;
+  offsetPages: number;
+  safeToAnimate: boolean;
+}
+
+export function useVirtualList<T extends readonly unknown[]>(
   items: T,
   options: Options,
-) {
+): VirtualList<T> {
   const {
     totalItems,
     itemsPerPage,
@@ -33,7 +37,7 @@ export function useVirtualList<T extends Array<any>>(
 
   useEffect(() => {
     setSafeToAnimate(false);
-    setList(items.slice(skip, take));
+    setList(items.slice(skip, take) as ArrayElement<T>[]);
     setOffsetPages(Math.ceil(skip / itemsPerPage));
     setTimeout(() => {
       setSafeToAnimate(true);
@@ -43,7 +47,7 @@ export function useVirtualList<T extends Array<any>>(
   useEffect(() => {
     setSafeToAnimate(true);
     if (delay > 0) {
-      setList(items.slice(skip));
+      setList(items.slice(skip) as ArrayElement<T>[]);
       clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
         setCut([
