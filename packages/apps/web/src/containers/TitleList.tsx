@@ -169,16 +169,16 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
     <Container>
       <Grid
         container
-        sx={{ pb: 2, pt: 2 }}
+        sx={{ pb: 2, pt: 2, mt: 0 }}
         flexDirection="row"
         flexWrap="wrap"
-        alignItems="baseline"
+        alignItems="center"
         alignContent="center"
         justifyContent="space-between"
       >
         <Grid item xs={12} md lg>
           {totalCount > 0 ? (
-            <Typography sx={{ mb: 2, mt: 0 }}>
+            <Typography>
               Showing {(page * titlesPerPage + 1).toLocaleString()}
               {" - "}
               {((page + 1) * titlesPerPage).toLocaleString()} of{" "}
