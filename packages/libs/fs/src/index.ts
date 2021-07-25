@@ -24,3 +24,4 @@ export function createFS(
 }
 
 export * from "./pathwalker";
+export * from "./copyDir";
