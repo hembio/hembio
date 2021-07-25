@@ -6,14 +6,16 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { useEffect, useState } from "react";
-import { useStores } from "../stores";
+import { useStores } from "~/stores";
 
 interface AppMenuProps {
   anchorEl: null | HTMLElement;
+  onClose?: () => void;
 }
 
 export function ProfileMenu({
   anchorEl: anchorElFromProps,
+  onClose,
 }: AppMenuProps): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -33,6 +35,9 @@ export function ProfileMenu({
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+    if (onClose) {
+      onClose();
+    }
   };
 
   const handleMenuClose = () => {

@@ -74,17 +74,12 @@ export function AppBar({ open, onDrawerOpen }: Props): JSX.Element {
   }, []);
 
   const handleProfileMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
-    console.log("handleProfileMenuOpen", e.currentTarget);
     setMenuAnchorEl(e.currentTarget);
   };
 
-  // const handleMobileMenuClose = () => {
-  //   setMobileMoreAnchorEl(null);
-  // };
-
-  // const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-  //   setMobileMoreAnchorEl(event.currentTarget);
-  // };
+  const handleProfileMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
 
   return (
     <>
@@ -142,7 +137,7 @@ export function AppBar({ open, onDrawerOpen }: Props): JSX.Element {
           </Toolbar>
         </Container>
       </MuiAppBarWithOpen>
-      <ProfileMenu anchorEl={menuAnchorEl} />
+      <ProfileMenu anchorEl={menuAnchorEl} onClose={handleProfileMenuClose} />
     </>
   );
 }
