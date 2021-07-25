@@ -84,7 +84,7 @@ const useStyles = makeStyles(
 );
 
 interface Props {
-  title?: TitleFragment;
+  title?: Pick<TitleFragment, "id" | "thumb" | "name" | "year">;
   skeleton?: boolean;
   setRef?: React.Dispatch<HTMLDivElement>;
 }
