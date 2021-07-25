@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       transform: "rotate3d(0, -1, 0, 5deg)",
       position: "absolute",
       right: "5px",
-      bottom: "-60px",
+      bottom: "-50px",
       marginRight: "60px",
     },
     button: {

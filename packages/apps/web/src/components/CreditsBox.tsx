@@ -63,8 +63,6 @@ export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
         <Box
           sx={{
             p: 4,
-            pl: 2,
-            pr: 2,
             display: "grid",
             gap: 2,
             gridAutoFlow: "row",

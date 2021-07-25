@@ -32,8 +32,8 @@ const useStyles = makeStyles(
         perspective: "1000px",
       },
       logo: {
-        maxWidth: "440px",
-        height: "180px",
+        maxWidth: "340px",
+        height: "112px",
       },
       cover: {
         position: "relative",
@@ -75,7 +75,7 @@ const useStyles = makeStyles(
         backgroundPosition: "50% 50%",
       },
       actionBox: {
-        transform: "rotate3d(0, -1, 0, 5deg)",
+        // transform: "rotate3d(0, -1, 0, 5deg)",
         position: "absolute",
         right: "5px",
         bottom: "-60px",
@@ -151,17 +151,12 @@ export const Title = (): JSX.Element => {
 
   return (
     <div>
-      <Container className={classes.root}>
-        <Grid
-          container
-          spacing={2}
-          flexDirection="row"
-          justifyContent="flex-end"
-        >
-          <Grid item xs className={classes.logo}>
+      <Container sx={{ mt: -1 }}>
+        <Box sx={{ display: "grid", mr: 2 }}>
+          <Box className={classes.logo} sx={{ justifySelf: "end" }}>
             {title && <TitleLogo id={title.id} name={title.name} />}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Container>
 
       <Paper
@@ -169,7 +164,7 @@ export const Title = (): JSX.Element => {
         sx={{
           ml: -2,
           mr: -2,
-          mt: 4,
+          mt: 3,
         }}
       >
         <Box
@@ -182,7 +177,7 @@ export const Title = (): JSX.Element => {
         ></Box>
         <Container
           className={classes.root}
-          sx={{ mb: 16, position: "relative" }}
+          sx={{ mb: 14, position: "relative" }}
         >
           <Grid
             container
@@ -219,9 +214,9 @@ export const Title = (): JSX.Element => {
                 container
                 flexDirection="column"
                 sx={{
-                  ml: 0,
-                  mt: 0,
-                  p: 5,
+                  p: 4,
+                  pl: 6,
+                  pr: 6,
                   userSelect: "text",
                 }}
               >
@@ -314,12 +309,11 @@ export const Title = (): JSX.Element => {
         </Container>
       </Paper>
 
-      <Container
-        className={classes.root}
-        sx={{ position: "relative", zIndex: 1, mt: 2 }}
-      >
+      <Container>
         <CreditsBox title={title} />
+      </Container>
 
+      <Container sx={{ position: "relative", zIndex: 1, mt: 2 }}>
         {title && (
           <TitleDebugBox title={title} reload={reload} refetch={refetch} />
         )}
