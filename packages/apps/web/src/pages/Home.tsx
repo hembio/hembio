@@ -19,7 +19,7 @@ export const Home = (): JSX.Element | null => {
 
   const { libraries } = data;
   return (
-    <Container>
+    <Container sx={{ mt: 3 }}>
       <Typography sx={{ mb: 2 }} variant="h5" component="h2">
         Libraries
       </Typography>

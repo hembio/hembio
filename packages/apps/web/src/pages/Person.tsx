@@ -143,8 +143,6 @@ export const Person = (): JSX.Element => {
       <Paper
         className={classes.cover}
         sx={{
-          ml: -2,
-          mr: -2,
           mt: 16,
         }}
       >
@@ -154,15 +152,7 @@ export const Person = (): JSX.Element => {
           sx={{ mb: 14, position: "relative" }}
         >
           <Grid container spacing={2} flexDirection="row">
-            <Grid
-              item
-              xs
-              flexShrink={4}
-              flexGrow={0}
-              sx={{
-                ml: 1,
-              }}
-            >
+            <Grid item xs flexShrink={4} flexGrow={0}>
               <Card
                 sx={{
                   boxShadow: "-4px 4px 24px rgba(0,0,0,.4)",

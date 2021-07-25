@@ -67,11 +67,11 @@ const Main = styled("main", {
   open?: boolean;
   isAuthenticated?: boolean;
   isPlayer?: boolean;
-}>(({ theme, open, isAuthenticated, isPlayer }) => ({
+}>(({ theme, open, isAuthenticated }) => ({
   flexGrow: 1,
   width: "100%",
   height: "100%",
-  padding: !isAuthenticated || isPlayer ? undefined : theme.spacing(2),
+  padding: 0,
   transition: !isAuthenticated
     ? undefined
     : theme.transitions.create("margin", {

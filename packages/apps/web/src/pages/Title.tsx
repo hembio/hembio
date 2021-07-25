@@ -29,7 +29,6 @@ const useStyles = makeStyles(
     createStyles({
       root: {
         flexGrow: 1,
-        perspective: "1000px",
       },
       logo: {
         maxWidth: "340px",
@@ -75,7 +74,6 @@ const useStyles = makeStyles(
         backgroundPosition: "50% 50%",
       },
       actionBox: {
-        // transform: "rotate3d(0, -1, 0, 5deg)",
         position: "absolute",
         right: "5px",
         bottom: "-60px",
@@ -162,8 +160,6 @@ export const Title = (): JSX.Element => {
       <Paper
         className={classes.cover}
         sx={{
-          ml: -2,
-          mr: -2,
           mt: 3,
         }}
       >
@@ -184,6 +180,7 @@ export const Title = (): JSX.Element => {
             spacing={2}
             flexDirection="row"
             justifyContent="stretch"
+            flexWrap="nowrap"
           >
             <Grid
               item
@@ -192,9 +189,7 @@ export const Title = (): JSX.Element => {
               flexShrink={0}
               flexGrow={0}
               sx={{
-                transform: "rotate3d(0, -1, 0, -5deg)",
                 minWidth: "360px",
-                ml: 1,
               }}
             >
               <PosterImage
@@ -208,15 +203,15 @@ export const Title = (): JSX.Element => {
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid sm={8}>
               <Grid
                 item
                 container
                 flexDirection="column"
                 sx={{
-                  p: 4,
-                  pl: 6,
-                  pr: 6,
+                  p: 6,
+                  pl: 8,
+                  pr: 8,
                   userSelect: "text",
                 }}
               >
@@ -289,7 +284,7 @@ export const Title = (): JSX.Element => {
                     )}
                   </Typography>
                 </Grid>
-                <Grid item md={12} lg={10} xl={9}>
+                <Grid item lg={10} xl={9}>
                   <Typography variant="body1" align="justify" sx={{ mt: 1 }}>
                     {!title ? (
                       <>

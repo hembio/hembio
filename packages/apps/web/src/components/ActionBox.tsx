@@ -18,8 +18,8 @@ const useStyles = makeStyles(
       transform: "rotate3d(0, -1, 0, 5deg)",
       position: "absolute",
       right: "5px",
-      bottom: "-50px",
-      marginRight: "60px",
+      bottom: "-60px",
+      marginRight: "20px",
     },
     button: {
       boxShadow: "2px 0px 24px rgba(0,0,0,.4), 0px 0px 1px rgba(0,0,0,.4)",

@@ -29,7 +29,7 @@ export const theme = createTheme({
       main: red.A400,
     },
     background: {
-      paper: "rgba(28, 31, 49, .98)",
+      paper: "rgba(28, 31, 49, .95)",
       default: "#1C1F2C",
     },
     text: {
