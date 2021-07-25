@@ -1,6 +1,6 @@
 import { Theme } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { createStyles, makeStyles } from "@material-ui/styles";
@@ -78,7 +78,10 @@ const useStyles = makeStyles(
 );
 
 interface TitleCarouselProps {
-  titles: Array<TitleEntity | undefined>;
+  titles: Array<
+    Pick<TitleEntity, "id" | "thumb" | "name" | "year"> | undefined
+  >;
+  page: number;
   totalCount: number;
   titlesPerPage: number;
   loading: boolean;
@@ -87,6 +90,7 @@ interface TitleCarouselProps {
 }
 
 export function TitleCarousel({
+  page,
   titles,
   totalCount,
   titlesPerPage,
@@ -95,23 +99,30 @@ export function TitleCarousel({
   onPageChange,
 }: TitleCarouselProps): JSX.Element {
   const classes = useStyles();
-  const [page, setPage] = useState(0);
   const [titleWidth, setTitleWidth] = useState(200);
   const [titleHeight, setTitleHeight] = useState(360);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const windowRef = useRef<Window>(window);
   const titleRef = useCallback(
     (node) => {
       if (node !== null && wrapperRef.current !== null) {
         const boundingRect = node.getBoundingClientRect();
         setTitleHeight(boundingRect.height);
         setTitleWidth(boundingRect.width);
-        onTitlesPerPage(
-          Math.floor(wrapperRef.current.clientWidth / boundingRect.width),
-        );
+        calculateTitlesPerPage();
       }
     },
     [wrapperRef],
   );
+
+  const calculateTitlesPerPage = () => {
+    if (wrapperRef.current) {
+      const nextTitlesPerPage = Math.floor(
+        wrapperRef.current.clientWidth / titleWidth,
+      );
+      onTitlesPerPage(nextTitlesPerPage);
+    }
+  };
 
   const handlePageChange = useThrottledCallback(
     (nextPage: number) => {
@@ -120,11 +131,19 @@ export function TitleCarousel({
         nextPage < Math.ceil(totalCount / titlesPerPage) &&
         nextPage >= 0
       ) {
-        setPage(nextPage);
         onPageChange(nextPage);
       }
     },
     [page, loading, onPageChange],
+    300,
+  );
+
+  useListener<MouseEvent>(
+    windowRef,
+    "resize",
+    () => {
+      calculateTitlesPerPage();
+    },
     300,
   );
 
@@ -179,25 +198,27 @@ export function TitleCarousel({
         </Button>
       </div>
       <div className={classes.mask}>
-        <Box
+        <Grid
+          container
           className={clsx(classes.container, { animate: safeToAnimate })}
           sx={{
-            display: "grid",
-            gap: 2,
-            gridAutoFlow: "column",
             transform: `translate(-${translate}px)`,
+            flexWrap: "nowrap",
           }}
         >
           {list.map((title, idx) => {
             return (
-              <TitleCard
-                ref={idx == 0 && page === 0 ? titleRef : undefined}
+              <Grid
+                item
                 key={title?.id || idx}
-                title={title}
-              />
+                ref={idx == 0 && page === 0 ? titleRef : undefined}
+                sx={{ mr: 2 }}
+              >
+                <TitleCard title={title} />
+              </Grid>
             );
           })}
-        </Box>
+        </Grid>
       </div>
     </div>
   );
