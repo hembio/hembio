@@ -17,6 +17,7 @@
   "dependencies": {
     "@cospired/i18n-iso-languages": "^3.0.0",
     "@hembio/core": "workspace:packages/libs/core",
+    "@hembio/ffmpeg": "workspace:packages/libs/ffmpeg",
     "@hembio/fs": "workspace:packages/libs/fs",
     "@hembio/logger": "workspace:packages/libs/logger",
     "@nestjs/common": "^7.6.18",
