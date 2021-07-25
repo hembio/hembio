@@ -1,34 +1,33 @@
+import { Theme } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import { memo } from "react";
-import type { TitleFragment } from "../generated/graphql";
 import { TitleLogo } from "./TitleLogo";
+import type { TitleFragment } from "~/generated/graphql";
 
 const useStyles = makeStyles(
-  createStyles({
-    container: {
-      display: "flex",
-      height: "190px",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      zIndex: 100,
-      // background:
-      //   "linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 65%, rgba(0,0,0,0.85) 100%)",
-      transition: "opacity .2s ease",
-      transitionTimingFunction: "ease-in",
-      pointerEvents: "all",
-    },
-    hide: {
-      opacity: 0,
-      transitionTimingFunction: "ease-out",
-    },
-    section: {
-      padding: "20px",
-    },
-    logo: {
-      textAlign: "right",
-    },
-  }),
+  (theme: Theme) =>
+    createStyles({
+      container: {
+        height: "190px",
+        zIndex: 100,
+        background:
+          "linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 65%, rgba(0,0,0,0.85) 100%)",
+        transition: theme.transitions.create("opacity", {
+          easing: "ease",
+          duration: "200ms",
+        }),
+        pointerEvents: "all",
+      },
+      hide: {
+        opacity: 0,
+        transitionTimingFunction: "ease-out",
+      },
+      section: {
+        padding: "20px",
+      },
+    }),
   {
     name: "TopBar",
   },
@@ -42,11 +41,12 @@ interface Props {
 export const TopBar = memo(({ title, show }: Props) => {
   const classes = useStyles();
   return (
-    <div className={clsx(classes.container, { [classes.hide]: !show })}>
-      <div className={classes.section}></div>
-      <div className={clsx(classes.section, classes.logo)}>
-        {title && <TitleLogo id={title.id} name={title.name + " logo"} />}
-      </div>
-    </div>
+    <Box className={clsx(classes.container, { [classes.hide]: !show })}>
+      <Box sx={{ display: "grid", mt: 2, ml: 6, mr: 6 }}>
+        <Box sx={{ justifySelf: "end", height: "150px" }}>
+          {title && <TitleLogo id={title.id} name={title.name + " logo"} />}
+        </Box>
+      </Box>
+    </Box>
   );
 });
