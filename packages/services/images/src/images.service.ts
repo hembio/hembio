@@ -67,7 +67,7 @@ export class ImagesService {
     carryoverConcurrencyCount: true,
   });
 
-  private tasksPerBatch = 24;
+  private tasksPerBatch = 12;
   private readonly taskQueue = new PQueue({
     concurrency: this.tasksPerBatch,
   });
@@ -87,7 +87,7 @@ export class ImagesService {
     }, 1000);
   }
 
-  @Cron(CronExpression.EVERY_12_HOURS)
+  @Cron(CronExpression.EVERY_DAY_AT_3PM)
   public async checkMissingImages(): Promise<void> {
     const runnerName = "checkMissingImages";
     if (this.runners.has(runnerName)) {
