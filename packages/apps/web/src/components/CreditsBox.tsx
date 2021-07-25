@@ -3,7 +3,6 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import { createStyles, makeStyles } from "@material-ui/styles";
 import { Fragment, useState } from "react";
 import { CreditListitem } from "./CreditListItem";
 import {
@@ -12,25 +11,12 @@ import {
   useTitleCreditsQuery,
 } from "~/generated/graphql";
 
-const useStyles = makeStyles(
-  createStyles({
-    fixGrid: {
-      "&::after": {
-        content: "''",
-        flex: "auto",
-      },
-    },
-  }),
-  { name: "CreditsBox" },
-);
-
 interface CreditBoxProps {
   title?: TitleQuery["title"];
 }
 
 export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
   const [show, setShow] = useState(false);
-  const classes = useStyles();
 
   const { data } = useTitleCreditsQuery({
     variables: { id: (title && title.id) || "" },
@@ -46,6 +32,7 @@ export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
     Cast: cast,
     Crew: [],
   };
+
   crew.forEach((crew) => {
     if (crew && crew.department) {
       if (!departments[crew.department]) {
@@ -63,6 +50,8 @@ export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
         <Box
           sx={{
             p: 4,
+            pl: 1,
+            pr: 1,
             display: "grid",
             gap: 2,
             gridAutoFlow: "row",
@@ -71,22 +60,28 @@ export function CreditsBox({ title }: CreditBoxProps): JSX.Element {
             alignItems: "center",
           }}
         >
-          <Box sx={{ gridColumn: "1 / -1" }}>
-            <Typography variant="h5">
-              Top cast
-              {title && topBilling.length > 0 && (
-                <Box sx={{ float: "right" }}>
-                  <Button
-                    variant="text"
-                    color="primary"
-                    size="medium"
-                    onClick={() => setShow(!show)}
-                  >
-                    {show ? "Only Top Cast" : "All Cast & Crew"}
-                  </Button>
-                </Box>
-              )}
-            </Typography>
+          <Box
+            sx={{
+              gridColumn: "1 / -1",
+              display: "grid",
+              gridAutoFlow: "column",
+            }}
+          >
+            <Box>
+              <Typography variant="h5">Top cast</Typography>
+            </Box>
+            {title && topBilling.length > 0 && (
+              <Box sx={{ justifySelf: "end" }}>
+                <Button
+                  variant="text"
+                  color="primary"
+                  size="medium"
+                  onClick={() => setShow(!show)}
+                >
+                  {show ? "Only Top Cast" : "All Cast & Crew"}
+                </Button>
+              </Box>
+            )}
           </Box>
 
           {!show &&
