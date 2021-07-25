@@ -1,5 +1,4 @@
 import { remote } from "electron";
-import { MPVMediaElement } from "./mpv";
 import "./index.css";
 
 const currentWindow = remote.getCurrentWindow();
@@ -7,8 +6,6 @@ const iframe = document.getElementById("iframe");
 const minBtn = document.getElementById("min-btn");
 const maxBtn = document.getElementById("max-btn");
 const closeBtn = document.getElementById("close-btn");
-
-(window as any).mpv = new MPVMediaElement();
 
 minBtn.onclick = () => {
   currentWindow.minimize();

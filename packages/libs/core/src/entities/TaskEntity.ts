@@ -56,6 +56,7 @@ export class TaskEntity {
 
   @Field(() => Object)
   @Property({ type: JsonType, nullable: false })
+  // TODO: Improve typings
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public payload: Record<string, any> = {};
 

@@ -7,6 +7,7 @@ import {
   OnInit,
   Enum,
   LoadStrategy,
+  JsonType,
 } from "@mikro-orm/core";
 import { Field, ID, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { LibraryEntity } from "./LibraryEntity";
@@ -40,8 +41,10 @@ export class FileEntity {
   public edition?: string;
 
   @Field(() => String)
-  @Property({ nullable: true })
-  public mediainfo?: string;
+  @Property({ type: JsonType, nullable: false })
+  // TODO: Improve typings
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public mediainfo?: Record<string, any>;
 
   @Field(() => LibraryEntity)
   @ManyToOne({

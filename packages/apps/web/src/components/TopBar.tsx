@@ -11,7 +11,7 @@ const useStyles = makeStyles(
     createStyles({
       container: {
         height: "190px",
-        zIndex: 100,
+        zIndex: 1000,
         background:
           "linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 65%, rgba(0,0,0,0.85) 100%)",
         transition: theme.transitions.create("opacity", {
@@ -34,7 +34,7 @@ const useStyles = makeStyles(
 );
 
 interface Props {
-  title?: TitleFragment;
+  title?: Pick<TitleFragment, "id" | "name">;
   show?: boolean;
 }
 

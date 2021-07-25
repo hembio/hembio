@@ -123,9 +123,9 @@ app.on("activate", () => {
 const pluginDir = path.join(__dirname, "../../bin/", process.platform);
 
 // See pitfalls section of mpv.js for details
-if (process.platform !== "linux") {
-  process.chdir(pluginDir);
-}
+// if (process.platform !== "linux") {
+//   process.chdir(pluginDir);
+// }
 
 // Fix for latest Electron to work with mpv
 app.commandLine.appendSwitch("no-sandbox");

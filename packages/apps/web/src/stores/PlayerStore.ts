@@ -2,6 +2,8 @@ import Hls from "hls.js";
 import { makeObservable, action, computed, flow, observable } from "mobx";
 import type { FileWithTitleFragment } from "../generated/graphql";
 import { HEMBIO_API_URL } from "~/constants";
+import { MPVMediaElement } from "~/lib/MPVMediaElement";
+import { isElectron } from "~/utils/isElectron";
 
 // const ve = document.createElement("video");
 // const h264 = ve.canPlayType('video/webm; codecs="avc1.640029"') === "probably";
@@ -51,18 +53,15 @@ export class PlayerStore {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public mpv?: any;
   public hls?: Hls;
+  public mpv?: MPVMediaElement;
   public video?: HTMLVideoElement;
   private timer?: number;
 
   public constructor() {
     makeObservable(this);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mpv = (window as any).parent.mpv;
-    if (mpv) {
-      this.mpv = mpv;
+    if (isElectron()) {
+      this.mpv = new MPVMediaElement();
     }
   }
 
@@ -179,8 +178,9 @@ export class PlayerStore {
   @action
   public load(file: FileWithTitleFragment): void {
     if (this.mpv) {
+      this.file = file;
       setTimeout(() => {
-        this.mpv.command("loadfile", `${HEMBIO_API_URL}/stream/${file.id}`);
+        this.mpv?.command("loadfile", `${HEMBIO_API_URL}/stream/${file.id}`);
       }, 500);
       return;
     }
@@ -232,7 +232,7 @@ export class PlayerStore {
     });
 
     if (this.mpv) {
-      this.mpv.setRef(videoRef);
+      this.mpv.setRef(videoRef as HTMLEmbedElement);
 
       this.mpv.on("play", () => {
         this.setPending(false);
@@ -244,11 +244,15 @@ export class PlayerStore {
       });
 
       this.mpv.on("durationchange", () => {
-        this.setDuration(this.mpv.duration);
+        if (this.mpv) {
+          this.setDuration(this.mpv.duration);
+        }
       });
 
       this.mpv.on("timeupdate", () => {
-        this.setCurrentTime(Math.floor(this.mpv.currentTime));
+        if (this.mpv) {
+          this.setCurrentTime(Math.floor(this.mpv.currentTime));
+        }
       });
 
       // this.mpv.on("volumechange", () => {

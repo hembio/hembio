@@ -131,6 +131,8 @@ export const PlayerOverlay = observer(() => {
     }
   });
 
+  console.log(playerStore.file?.title);
+
   const reallyShowUI = showUI || !playerStore.isPlaying;
   return (
     <div
