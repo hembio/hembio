@@ -16,61 +16,19 @@
     "name": "Marcus Ekwall",
     "email": "marcus.ekwall@gmail.com"
   },
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "desktop2"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./src/index.html",
-                  "js": "./src/renderer.ts",
-                  "name": "main_window"
-                }
-              ]
-            },
-            "port": 3010,
-            "loggerPort": 9010
-          }
-        ]
-      ]
-    }
+    "forge": "forge.config.js"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.58",
     "@electron-forge/maker-deb": "^6.0.0-beta.58",
     "@electron-forge/maker-rpm": "^6.0.0-beta.58",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.58",
+    "@electron-forge/maker-wix": "^6.0.0-beta.58",
     "@electron-forge/maker-zip": "^6.0.0-beta.58",
     "@electron-forge/plugin-webpack": "6.0.0-beta.58",
+    "@electron-forge/shared-types": "^6.0.0-beta.58",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@types/eslint": "^7.28.0",
     "@types/prop-types": "^15.7.4",
@@ -82,6 +40,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "electron": "^13.1.7",
+    "electron-wix-msi": "^3.2.0",
     "eslint": "^7.31.0",
     "eslint-plugin-import": "^2.23.4",
     "file-loader": "^6.2.0",
@@ -96,7 +55,8 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "exe-icon-extractor": "^1.0.8"
   },
   "installConfig": {
     "hoistingLimits": "dependencies"

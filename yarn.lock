@@ -2041,6 +2041,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bitdisaster/exe-icon-extractor@npm:^1.0.10":
+  version: 1.0.10
+  resolution: "@bitdisaster/exe-icon-extractor@npm:1.0.10"
+  dependencies:
+    node-gyp: latest
+  checksum: 1b699e7d8df008593a72a4d1caf23959c3757d552937268ef042e4197990c21555add979cf240d284949c5b6a8c2a8fde1261cc472e9c17cc78eb2c17a6c86b0
+  languageName: node
+  linkType: hard
+
 "@calebboyd/semaphore@npm:^1.3.1":
   version: 1.3.1
   resolution: "@calebboyd/semaphore@npm:1.3.1"
@@ -2382,6 +2391,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron-forge/maker-wix@npm:^6.0.0-beta.58":
+  version: 6.0.0-beta.58
+  resolution: "@electron-forge/maker-wix@npm:6.0.0-beta.58"
+  dependencies:
+    "@electron-forge/maker-base": 6.0.0-beta.58
+    "@electron-forge/shared-types": 6.0.0-beta.58
+    colors: ^1.4.0
+    electron-wix-msi: ^3.0.6
+    log-symbols: ^4.0.0
+    parse-author: ^2.0.0
+  checksum: 64141e4604856ea5b86fd19ad06e083c934aec3810697d7e039bd0dc9078e06ac8177a2f5ba1d7c13b344f971d7455cae4cc81de7315beea21c45adb9cf1a256
+  languageName: node
+  linkType: hard
+
 "@electron-forge/maker-zip@npm:^6.0.0-beta.58":
   version: 6.0.0-beta.58
   resolution: "@electron-forge/maker-zip@npm:6.0.0-beta.58"
@@ -2431,7 +2454,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron-forge/shared-types@npm:6.0.0-beta.58":
+"@electron-forge/shared-types@npm:6.0.0-beta.58, @electron-forge/shared-types@npm:^6.0.0-beta.58":
   version: 6.0.0-beta.58
   resolution: "@electron-forge/shared-types@npm:6.0.0-beta.58"
   dependencies:
@@ -3542,8 +3565,10 @@ __metadata:
     "@electron-forge/maker-deb": ^6.0.0-beta.58
     "@electron-forge/maker-rpm": ^6.0.0-beta.58
     "@electron-forge/maker-squirrel": ^6.0.0-beta.58
+    "@electron-forge/maker-wix": ^6.0.0-beta.58
     "@electron-forge/maker-zip": ^6.0.0-beta.58
     "@electron-forge/plugin-webpack": 6.0.0-beta.58
+    "@electron-forge/shared-types": ^6.0.0-beta.58
     "@marshallofsound/webpack-asset-relocator-loader": ^0.5.0
     "@types/eslint": ^7.28.0
     "@types/prop-types": ^15.7.4
@@ -3556,8 +3581,10 @@ __metadata:
     css-loader: ^6.2.0
     electron: ^13.1.7
     electron-squirrel-startup: ^1.0.0
+    electron-wix-msi: ^3.2.0
     eslint: ^7.31.0
     eslint-plugin-import: ^2.23.4
+    exe-icon-extractor: ^1.0.8
     file-loader: ^6.2.0
     fork-ts-checker-webpack-plugin: ^6.2.13
     node-loader: ^2.0.0
@@ -13426,6 +13453,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"electron-wix-msi@npm:^3.0.6, electron-wix-msi@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "electron-wix-msi@npm:3.2.0"
+  dependencies:
+    "@bitdisaster/exe-icon-extractor": ^1.0.10
+    debug: ^4.1.1
+    fs-extra: ^8.1.0
+    klaw: ^3.0.0
+    lodash: ^4.17.15
+    rcedit: ^2.1.0
+    rcinfo: ^0.1.3
+    semver: ^6.3.0
+    uuid: ^3.3.3
+  dependenciesMeta:
+    "@bitdisaster/exe-icon-extractor":
+      optional: true
+  checksum: 1fc1ea6042f7a5361df3e624dd28c1af2ae2107b3978d75185c4ef7b3d83743b9d9700e2dd62441a48587bf7d5c0a1c804b24ae291818bf5c01a74e7cbadb9c6
+  languageName: node
+  linkType: hard
+
 "electron@npm:^13.1.7":
   version: 13.1.7
   resolution: "electron@npm:13.1.7"
@@ -14429,6 +14476,15 @@ __metadata:
     node-gyp: latest
     safe-buffer: ^5.1.1
   checksum: ad4e1577f1a6b721c7800dcc7c733fe01f6c310732bb5bf2240245c2a5b45a38518b91d8be2c610611623160b9d1c0e91f1ce96d639f8b53e8894625cf20fa45
+  languageName: node
+  linkType: hard
+
+"exe-icon-extractor@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "exe-icon-extractor@npm:1.0.8"
+  dependencies:
+    node-gyp: latest
+  checksum: e00da08f8a95048253632798d4c265b52f9fa0416477ff09ae3f02d63272972ef22e08d46ad314f35dd2c9171d4702bd024ba59a0d2149695166697a213ae5c4
   languageName: node
   linkType: hard
 
@@ -16527,7 +16583,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.1.10, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.3, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6":
+"graceful-fs@npm:^4.1.10, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.3, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6":
   version: 4.2.6
   resolution: "graceful-fs@npm:4.2.6"
   checksum: 792e64aafda05a151289f83eaa16aff34ef259658cefd65393883d959409f5a2389b0ec9ebf28f3d21f1b0ddc8f594a1162ae9b18e2b507a6799a70706ec573d
@@ -20375,6 +20431,15 @@ fsevents@^1.2.7:
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
   checksum: 3ab01e7b1d440b22fe4c31f23d8d38b4d9b91d9f291df683476576493d5dfd2e03848a8b05813dd0c3f0e835bc63f433007ddeceb71f05cb25c45ae1b19c6d3b
+  languageName: node
+  linkType: hard
+
+"klaw@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "klaw@npm:3.0.0"
+  dependencies:
+    graceful-fs: ^4.1.9
+  checksum: 1bf9de22392c80d28de8a2babd6f0de29fa52fcdc1654838fd35174b3641c168ec32b8b03022191e3c190efd535c31fce23f85e29cb260245571da7263ef418e
   languageName: node
   linkType: hard
 
@@ -25609,12 +25674,26 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"rcedit@npm:^2.1.0":
+  version: 2.3.0
+  resolution: "rcedit@npm:2.3.0"
+  checksum: 56758bdac7275af4fe7c5bb6c320307748700caf847878dac362537173e2d24bc57226a4c5c845e5739c0bb96ab8cbe8d43734bcd35c76bd5b042a4f1d598a37
+  languageName: node
+  linkType: hard
+
 "rcedit@npm:^3.0.1":
   version: 3.0.1
   resolution: "rcedit@npm:3.0.1"
   dependencies:
     cross-spawn-windows-exe: ^1.1.0
   checksum: 73332443aa9e5c70bcd4e8a2f5195f5591a03ef08bf1fe477c116f2525e0d525ced0ad5c32c23dcadc27550aec297559e1f944676f833d25d549c7d27b95e165
+  languageName: node
+  linkType: hard
+
+"rcinfo@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "rcinfo@npm:0.1.3"
+  checksum: c1e10ba828fc9519f5925c0cd6087e1098a7a559688b4d5e0a07f1bf0c8c6c704f746bcd150991aa09be448fec5142190c5e3486147ba018ae34143b3eb56a1a
   languageName: node
   linkType: hard
 
@@ -30294,7 +30373,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"uuid@npm:^3.1.0, uuid@npm:^3.3.2, uuid@npm:^3.4.0":
+"uuid@npm:^3.1.0, uuid@npm:^3.3.2, uuid@npm:^3.3.3, uuid@npm:^3.4.0":
   version: 3.4.0
   resolution: "uuid@npm:3.4.0"
   bin:

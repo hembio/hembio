@@ -120,7 +120,10 @@ app.on("activate", () => {
 });
 
 // Absolute path to the plugin directory.
-const pluginDir = path.join(__dirname, "../../bin/", process.platform);
+const pluginDir =
+  process.env.ELECTRON_ENV === "development"
+    ? path.join(__dirname, "../../bin/mpv", process.platform)
+    : path.resolve(process.cwd());
 
 // See pitfalls section of mpv.js for details
 // if (process.platform !== "linux") {
