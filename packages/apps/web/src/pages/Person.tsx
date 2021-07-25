@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
-import { TitleLogo } from "~/components/TitleLogo";
+import { TitleCard } from "~/components/TitleCard";
 import { HEMBIO_API_URL } from "~/constants";
 import { usePersonQuery } from "~/generated/graphql";
 
@@ -44,7 +44,6 @@ const useStyles = makeStyles(
         left: 0,
         top: 0,
         right: 0,
-        bottom: 0,
         opacity: "0",
         borderRadius: "0",
         transition: theme.transitions.create("opacity", {
@@ -67,7 +66,6 @@ const useStyles = makeStyles(
         backgroundPosition: "50% 50%",
       },
       actionBox: {
-        transform: "rotate3d(0, -1, 0, 5deg)",
         position: "absolute",
         right: "5px",
         bottom: "-60px",
@@ -124,38 +122,35 @@ export const Person = (): JSX.Element => {
 
   const person = data?.person;
 
+  console.log(person?.credits);
+
   const image =
     person && person.image
       ? `${HEMBIO_API_URL}/images/people${person.image}`
       : undefined;
 
-  return (
-    <div>
-      <Container className={classes.root}>
-        <Grid
-          container
-          spacing={2}
-          flexDirection="row"
-          justifyContent="flex-end"
-        >
-          <Grid item xs className={classes.logo}>
-            {person && <TitleLogo id={person.id} name={person.name} />}
-          </Grid>
-        </Grid>
-      </Container>
+  const directing =
+    person?.credits.filter((c) => c.job === "Director") ||
+    new Array(4).fill(undefined);
 
+  const acting =
+    person?.credits.filter((c) => c.job === "Actor") ||
+    new Array(4).fill(undefined);
+
+  return (
+    <>
       <Paper
         className={classes.cover}
         sx={{
           ml: -2,
           mr: -2,
-          mt: 4,
+          mt: 16,
         }}
       >
         <Box className={classes.movieCover}></Box>
         <Container
           className={classes.root}
-          sx={{ mb: 16, position: "relative" }}
+          sx={{ mb: 14, position: "relative" }}
         >
           <Grid container spacing={2} flexDirection="row">
             <Grid
@@ -164,7 +159,6 @@ export const Person = (): JSX.Element => {
               flexShrink={4}
               flexGrow={0}
               sx={{
-                transform: "rotate3d(0, -1, 0, -5deg)",
                 ml: 1,
               }}
             >
@@ -192,9 +186,9 @@ export const Person = (): JSX.Element => {
                 container
                 flexDirection="column"
                 sx={{
-                  ml: 0,
-                  mt: 0,
-                  p: 5,
+                  p: 4,
+                  pl: 6,
+                  pr: 6,
                   userSelect: "text",
                 }}
               >
@@ -242,7 +236,11 @@ export const Person = (): JSX.Element => {
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1" align="justify" sx={{ mt: 1 }}>
+                  <Typography
+                    variant="body1"
+                    align="justify"
+                    sx={{ mt: 1, mb: 2 }}
+                  >
                     {!person ? (
                       <>
                         <Skeleton variant="text" />
@@ -259,6 +257,48 @@ export const Person = (): JSX.Element => {
           </Grid>
         </Container>
       </Paper>
+
+      <Container>
+        <Paper>
+          <Box
+            sx={{
+              p: 4,
+              display: "grid",
+              gap: 2,
+              gridAutoFlow: "row",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              // justifyItems: "stretch",
+              alignItems: "center",
+            }}
+          >
+            {directing.length > 0 && (
+              <>
+                <Box sx={{ gridColumn: "1 / -1" }}>
+                  <Typography variant="h5" color="body1">
+                    Directing
+                  </Typography>
+                </Box>
+                {directing.map((credit, idx) => (
+                  <TitleCard key={credit?.id || idx} title={credit?.title} />
+                ))}
+              </>
+            )}
+            {acting.length > 0 && (
+              <>
+                <Box sx={{ gridColumn: "1 / -1" }}>
+                  <Typography variant="h5" color="body1">
+                    Starring
+                  </Typography>
+                </Box>
+                {acting.map((credit, idx) => (
+                  <TitleCard key={credit?.id || idx} title={credit?.title} />
+                ))}
+              </>
+            )}
+          </Box>
+        </Paper>
+        <Box sx={{ pt: 6 }} />
+      </Container>
 
       {/* <Container
         className={classes.root}
@@ -278,6 +318,6 @@ export const Person = (): JSX.Element => {
           />
         )}
       </Container> */}
-    </div>
+    </>
   );
 };

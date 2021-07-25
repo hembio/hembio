@@ -410,7 +410,7 @@ export type PersonFragment = (
   & Pick<PersonEntity, 'id' | 'createdAt' | 'name' | 'image' | 'bio' | 'birthday' | 'placeOfBirth'>
   & { credits: Array<(
     { __typename?: 'CreditEntity' }
-    & Pick<CreditEntity, 'job' | 'character' | 'department'>
+    & Pick<CreditEntity, 'id' | 'job' | 'character' | 'department'>
     & { title: (
       { __typename?: 'TitleEntity' }
       & Pick<TitleEntity, 'id' | 'name' | 'year' | 'thumb'>
@@ -743,6 +743,7 @@ export const PersonFragmentDoc = gql`
   birthday
   placeOfBirth
   credits {
+    id
     job
     character
     department
