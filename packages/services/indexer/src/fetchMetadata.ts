@@ -1,5 +1,5 @@
+import { aggregatedSearch, MetadataResult } from "@hembio/indexer";
 import { createLogger } from "@hembio/logger";
-import { aggregatedSearch, MetadataResult } from "@hembio/metadata";
 import PQueue from "p-queue";
 import { matchTitleYear } from "./utils/matchTitleYear";
 

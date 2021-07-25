@@ -13,8 +13,8 @@ import {
   MikroORM,
   TaskEntity,
 } from "@hembio/core";
+import { FanartProvider, ImagesResult, TMDbProvider } from "@hembio/indexer";
 import { createLogger } from "@hembio/logger";
-import { FanartProvider, ImagesResult, TMDbProvider } from "@hembio/metadata";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import axios from "axios";

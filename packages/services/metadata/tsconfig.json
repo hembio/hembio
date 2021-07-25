@@ -1,4 +1,0 @@
-{
-  "extends": "@hembio/tsconfig/dev",
-  "include": ["src"]
-}

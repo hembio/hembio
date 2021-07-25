@@ -14,7 +14,7 @@
     "test": "jest",
     "build": "tsc",
     "start": "ts-node --transpile-only ./src/cli.ts",
-    "dev": "ts-node-dev --transpile-only ./src/cli.ts"
+    "dev": "ts-node --transpile-only ./src/cli.ts"
   },
   "dependencies": {
     "@hembio/core": "workspace:packages/libs/core",

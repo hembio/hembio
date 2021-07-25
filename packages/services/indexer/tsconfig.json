@@ -2,7 +2,10 @@
   "extends": "@hembio/tsconfig/dev",
   "compilerOptions": {
     "baseUrl": ".",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "paths": {
+      "~/*": ["src/*"]
+    }
   },
   "include": ["env.d.ts", "src"]
 }

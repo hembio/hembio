@@ -5,7 +5,7 @@ import {
   OMDbProvider,
   TMDbProvider,
   TraktProvider,
-} from "./providers";
+} from "../providers";
 
 // Register all providers
 const providers = [

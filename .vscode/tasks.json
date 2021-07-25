@@ -62,14 +62,6 @@
       "problemMatcher": []
     },
     {
-      "label": "metadata",
-      "type": "shell",
-      "command": "yarn workspace @hembio/metadata dev",
-      "promptOnClose": true,
-      "isBackground": true,
-      "problemMatcher": []
-    },
-    {
       "label": "transcoder",
       "type": "shell",
       "command": "yarn workspace @hembio/transcoder dev",

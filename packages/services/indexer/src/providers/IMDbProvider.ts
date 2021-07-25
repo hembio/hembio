@@ -1,15 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios from "axios";
-// @ts-ignore-line
-import httpAdapter from "axios/lib/adapters/http";
 import { remove as removeDiacritics } from "diacritics";
 import { parse } from "node-html-parser";
 import { BaseProvider, SearchResult } from "./BaseProvider";
 
 const client = axios.create({
   timeout: 10000,
-  adapter: httpAdapter,
   headers: {
     "User-Agent":
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43",

@@ -4,9 +4,9 @@
   "sideEffects": false,
   "name": "@hembio/indexer",
   "version": "0.1.0",
-  "main": "./src/main.ts",
+  "main": "./src/index.ts",
   "publishConfig": {
-    "main": "./dist/main.js"
+    "main": "./dist/index.js"
   },
   "scripts": {
     "start": "node ./dist/main.js",
@@ -19,21 +19,25 @@
     "@hembio/core": "workspace:packages/libs/core",
     "@hembio/fs": "workspace:packages/libs/fs",
     "@hembio/logger": "workspace:packages/libs/logger",
-    "@hembio/mediainfo": "workspace:packages/libs/mediainfo",
-    "@hembio/metadata": "workspace:packages/services/metadata",
     "@nestjs/common": "^7.6.18",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^7.6.18",
     "@nestjs/microservices": "^7.6.18",
     "@nestjs/schedule": "^1.0.0",
     "chokidar": "^3.5.2",
+    "diacritics": "^1.3.0",
     "eventemitter3": "^4.0.7",
     "mobx": "^6.3.2",
     "mobx-utils": "^6.0.4",
+    "moviedb-promise": "^3.1.9",
+    "omdbapi": "^3.0.0",
     "p-queue": "^6.6.2",
+    "reflect-metadata": "^0.1.13",
+    "romanizr": "^1.0.2",
     "rxjs": "^7.2.0",
     "slug": "^5.1.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "~": "link:src"
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
@@ -42,13 +46,16 @@
     "@types/babel__core": "^7.1.15",
     "@types/babel__preset-env": "^7.9.2",
     "@types/cli-progress": "^3.9.2",
+    "@types/diacritics": "^1.3.1",
     "@types/jest": "^26.0.24",
-    "@types/node": "^16.4.1",
+    "@types/node": "^16.4.2",
     "@types/slug": "^5.0.2",
     "@types/uuid": "^8.3.1",
     "jest": "^27.0.6",
+    "node-html-parser": "^4.1.0",
+    "trakt.tv": "^8.0.0",
+    "trakt.tv-matcher": "^8.0.2",
     "ts-node": "^10.1.0",
-    "ts-node-dev": "^1.1.8",
     "typescript": "^4.3.5"
   }
 }

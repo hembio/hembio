@@ -10,11 +10,11 @@ import {
   CreditEntity,
 } from "@hembio/core";
 import { createLogger } from "@hembio/logger";
-import { TMDbProvider, TraktProvider } from "@hembio/metadata";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { Cast, Crew } from "moviedb-promise/dist/request-types";
 import PQueue from "p-queue";
+import { TMDbProvider, TraktProvider } from "~/providers";
 
 @Injectable()
 export class CreditsService {

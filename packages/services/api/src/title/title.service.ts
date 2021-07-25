@@ -6,7 +6,7 @@ import {
   EntityManager,
   MikroORM,
 } from "@hembio/core";
-import { IMDbProvider, SearchResult } from "@hembio/metadata";
+import { IMDbProvider, SearchResult } from "@hembio/indexer";
 import { Injectable } from "@nestjs/common";
 import MiniSearch from "minisearch";
 import { createLogger } from "../../../../libs/logger/src";
