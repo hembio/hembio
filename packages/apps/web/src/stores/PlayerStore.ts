@@ -57,6 +57,7 @@ export class PlayerStore {
   public mpv?: MPVMediaElement;
   public video?: HTMLVideoElement;
   private timer?: number;
+  private previousVolume = 1;
 
   public constructor() {
     makeObservable(this);
@@ -155,8 +156,13 @@ export class PlayerStore {
   public toggleMute(): void {
     if (this.mpv) {
       this.mpv.muted = !this.mpv.muted;
-      this.isMuted = this.mpv.muted;
-      this.volume = this.isMuted ? 0 : this.mpv.volume;
+      this.isMuted = !this.isMuted;
+      if (this.isMuted) {
+        this.previousVolume = this.mpv.volume;
+        this.mpv.volume = 0;
+      } else {
+        this.mpv.volume = this.previousVolume;
+      }
     } else if (this.video) {
       this.video.muted = !this.video.muted;
       this.isMuted = this.video.muted;
