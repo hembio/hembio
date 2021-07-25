@@ -57,6 +57,6 @@ export async function createService(name: string, module: any): Promise<void> {
       Error.stackTraceLimit = Infinity;
     }
   } catch (e) {
-    console.error("Failed to create service", e);
+    console.error("Uncaught exception in service", e);
   }
 }
