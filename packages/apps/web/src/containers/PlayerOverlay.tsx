@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
-import { observer } from "mobx-react-lite";
-import { useRef, useEffect, useState } from "react";
+import { observer, useObserver } from "mobx-react-lite";
+import { useRef, useState } from "react";
 import { useHistory } from "react-router";
 import { TopBar } from "~/components/TopBar";
 import { BottomBar } from "~/components/player/BottomBar";
@@ -46,37 +46,46 @@ const useStyles = makeStyles(
   { name: "PlayerOverlay" },
 );
 
-let hideUITimer: NodeJS.Timer;
-
 export const PlayerOverlay = observer(() => {
   const classes = useStyles();
   const overlayRef = useRef<HTMLDivElement>(null);
+  const hideUITimer = useRef<NodeJS.Timeout>();
   const windowRef = useRef(window);
   const { playerStore } = useStores();
   const [showUI, setShowUI] = useState(true);
   const history = useHistory();
 
+  const startHideTimer = () => {
+    if (hideUITimer.current) {
+      clearTimeout(hideUITimer.current);
+    }
+    hideUITimer.current = setTimeout(() => {
+      setShowUI(false);
+    }, 3000);
+  };
+
   const handleInteraction = () => {
-    if (hideUITimer) {
-      clearTimeout(hideUITimer);
-    }
-    if (playerStore.isPlaying) {
-      hideUITimer = setTimeout(() => {
-        setShowUI(false);
-      }, 2000);
-    }
+    startHideTimer();
     if (!showUI) {
       setShowUI(true);
     }
   };
 
+  useObserver(() => {
+    if (playerStore.isPlaying) {
+      startHideTimer();
+    }
+  });
+
   useDoubleClick(overlayRef, {
     latency: 250,
     onSingleClick: (_e) => {
       playerStore.togglePlayback();
+      handleInteraction();
     },
     onDoubleClick: (_e) => {
       playerStore.toggleFullscreen();
+      handleInteraction();
     },
   });
 
@@ -84,45 +93,43 @@ export const PlayerOverlay = observer(() => {
 
   useListener<KeyboardEvent>(windowRef, "keydown", (e) => {
     const { key } = e;
+    let handled = false;
     switch (key) {
       case "Backspace":
         history.go(-1);
-        e.preventDefault();
+        handled = true;
         break;
       case "ArrowRight":
         playerStore.seek(playerStore.currentTime + 10);
-        e.preventDefault();
+        handled = true;
         break;
       case "ArrowLeft":
         playerStore.seek(playerStore.currentTime - 10);
-        e.preventDefault();
+        handled = true;
         break;
       case "F11":
       case "f":
         playerStore.toggleFullscreen();
-        e.preventDefault();
+        handled = true;
         break;
       case "Escape":
         if (playerStore.inFullscreen) {
-          e.preventDefault();
+          handled = true;
           playerStore.toggleFullscreen();
         }
         break;
       case "k":
       case " ":
         playerStore.togglePlayback();
-        e.preventDefault();
+        handled = true;
         break;
     }
-  });
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (playerStore.isPlaying) {
-        setShowUI(false);
-      }
-    }, 2000);
-  }, []);
+    if (handled) {
+      handleInteraction();
+      e.preventDefault();
+    }
+  });
 
   const reallyShowUI = showUI || !playerStore.isPlaying;
   return (

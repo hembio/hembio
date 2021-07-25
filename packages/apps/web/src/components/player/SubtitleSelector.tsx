@@ -67,7 +67,11 @@ export const SubtitleSelector = memo(({ showUI }: Props) => {
               horizontal: "left",
             }}
           >
-            <MenuList>
+            <MenuList
+              sx={{
+                minWidth: "180px",
+              }}
+            >
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
                   <Check />
