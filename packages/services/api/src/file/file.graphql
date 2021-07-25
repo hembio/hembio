@@ -12,3 +12,9 @@ query File($fileId: String!) {
     ...FileWithTitle
   }
 }
+
+query ProbeFile($fileId: String!) {
+  file(fileId: $fileId) {
+    probe
+  }
+}

@@ -50,6 +50,7 @@ export type FileEntity = {
   ctime: Scalars['Int'];
   mtime: Scalars['Int'];
   files?: Maybe<Array<FileEntity>>;
+  probe?: Maybe<Scalars['Boolean']>;
 };
 
 export type GenreEntity = {
@@ -360,6 +361,19 @@ export type FileQuery = (
   & { file?: Maybe<(
     { __typename?: 'FileEntity' }
     & FileWithTitleFragment
+  )> }
+);
+
+export type ProbeFileQueryVariables = Exact<{
+  fileId: Scalars['String'];
+}>;
+
+
+export type ProbeFileQuery = (
+  { __typename?: 'Query' }
+  & { file?: Maybe<(
+    { __typename?: 'FileEntity' }
+    & Pick<FileEntity, 'probe'>
   )> }
 );
 
@@ -887,6 +901,44 @@ export type FileLazyQueryHookResult = ReturnType<typeof useFileLazyQuery>;
 export type FileQueryResult = Apollo.QueryResult<FileQuery, FileQueryVariables>;
 export function refetchFileQuery(variables?: FileQueryVariables) {
       return { query: FileDocument, variables: variables }
+    }
+export const ProbeFileDocument = gql`
+    query ProbeFile($fileId: String!) {
+  file(fileId: $fileId) {
+    probe
+  }
+}
+    `;
+
+/**
+ * __useProbeFileQuery__
+ *
+ * To run a query within a React component, call `useProbeFileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProbeFileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProbeFileQuery({
+ *   variables: {
+ *      fileId: // value for 'fileId'
+ *   },
+ * });
+ */
+export function useProbeFileQuery(baseOptions: Apollo.QueryHookOptions<ProbeFileQuery, ProbeFileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProbeFileQuery, ProbeFileQueryVariables>(ProbeFileDocument, options);
+      }
+export function useProbeFileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProbeFileQuery, ProbeFileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProbeFileQuery, ProbeFileQueryVariables>(ProbeFileDocument, options);
+        }
+export type ProbeFileQueryHookResult = ReturnType<typeof useProbeFileQuery>;
+export type ProbeFileLazyQueryHookResult = ReturnType<typeof useProbeFileLazyQuery>;
+export type ProbeFileQueryResult = Apollo.QueryResult<ProbeFileQuery, ProbeFileQueryVariables>;
+export function refetchProbeFileQuery(variables?: ProbeFileQueryVariables) {
+      return { query: ProbeFileDocument, variables: variables }
     }
 export const LibrariesDocument = gql`
     query Libraries {

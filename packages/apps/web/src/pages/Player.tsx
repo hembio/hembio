@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
 import { Video } from "~/components/Video";
 import { PlayerOverlay } from "~/containers/PlayerOverlay";
-import { useFileQuery } from "~/generated/graphql";
+import { useFileQuery, useProbeFileQuery } from "~/generated/graphql";
 import { useStores } from "~/stores";
 
 const useStyles = makeStyles(
@@ -43,6 +43,8 @@ export const Player = observer(() => {
   const classes = useStyles();
 
   const { data, loading, error } = useFileQuery({ variables: { fileId } });
+
+  const { data: probeData } = useProbeFileQuery({ variables: { fileId } });
 
   if (loading) {
     return (

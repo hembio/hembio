@@ -1,14 +1,13 @@
 import path from "path";
 import execa from "execa";
+import { FFprobeResult } from "./types/probeTypes";
 
-const FFPROBE_BIN = path.resolve(__dirname, "../../bin/win64/ffprobe.exe");
+const FFPROBE_BIN = path.resolve(
+  __dirname,
+  "../../../../bin/win64/ffmpeg/ffprobe.exe",
+);
 
-export interface ProbeResult {
-  streams: Record<string, any>[];
-  format: Record<string, any>;
-}
-
-export async function probe(filePath: string): Promise<ProbeResult> {
+export async function probe(filePath: string): Promise<FFprobeResult> {
   const args = [
     "-hide_banner",
     "-show_format",
@@ -21,7 +20,7 @@ export async function probe(filePath: string): Promise<ProbeResult> {
   ];
 
   const { stdout } = await execa(FFPROBE_BIN, args);
-  const result: ProbeResult = JSON.parse(stdout);
+  const result: FFprobeResult = JSON.parse(stdout);
   if (!result.format) {
     throw Error("Failed to probe");
   }

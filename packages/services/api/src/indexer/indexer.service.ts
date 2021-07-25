@@ -1,8 +1,9 @@
 import { EntityManager } from "@hembio/core";
+import type { FFprobeResult } from "@hembio/ffmpeg";
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { SchedulerRegistry } from "@nestjs/schedule";
-import { firstValueFrom, Observable } from "rxjs";
+import { firstValueFrom, Observable, throwError, timeout } from "rxjs";
 import { EventService } from "~/event/event.service";
 
 @Injectable()
@@ -37,5 +38,18 @@ export class IndexerService {
     return firstValueFrom(
       this.indexerClient.send({ cmd: "updateMetadata" }, { titleId }),
     );
+  }
+
+  public async probeFile(fileId: string) {
+    const result: FFprobeResult | undefined = await firstValueFrom(
+      this.indexerClient.send({ cmd: "probeFile" }, { fileId }).pipe(
+        timeout({
+          each: 30000,
+          with: () => throwError(() => new Error("Request timed out")),
+        }),
+      ),
+    );
+    console.log(result);
+    return true;
   }
 }

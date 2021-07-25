@@ -59,6 +59,7 @@ type FileEntity {
   ctime: Int!
   mtime: Int!
   files: [FileEntity!]
+  probe: Boolean
 }
 
 enum Subtitle {
