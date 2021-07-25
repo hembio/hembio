@@ -7,12 +7,13 @@ export class PersonService {
 
   public async findOneById(id: string): Promise<PersonEntity | null> {
     const em = this.em.fork(true);
-    const person = await em.findOne(PersonEntity, id, [
-      "credits",
-      "credits.title",
-    ]);
+    const person = await em.findOne(PersonEntity, id, {
+      populate: ["credits", "credits.title"],
+    });
     if (person) {
-      await person.credits.init();
+      await person.credits.init({
+        orderBy: { title: { releaseDate: "DESC", year: "DESC" } },
+      });
       return person;
     }
     return null;
