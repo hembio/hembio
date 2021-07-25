@@ -106,7 +106,7 @@ export function TitleCarousel({
         setTitleHeight(boundingRect.height);
         setTitleWidth(boundingRect.width);
         onTitlesPerPage(
-          Math.ceil(wrapperRef.current.clientWidth / boundingRect.width),
+          Math.floor(wrapperRef.current.clientWidth / boundingRect.width),
         );
       }
     },
