@@ -53,7 +53,7 @@
     "@types/slug": "^5.0.2",
     "@types/uuid": "^8.3.1",
     "jest": "^27.0.6",
-    "node-html-parser": "^4.1.0",
+    "node-html-parser": "^4.1.1",
     "trakt.tv": "^8.0.0",
     "trakt.tv-matcher": "^8.0.2",
     "ts-node": "^10.1.0",
