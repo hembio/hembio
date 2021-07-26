@@ -81,6 +81,7 @@ export class PersonEntity {
   public placeOfBirth?: string;
 
   @Field(() => String, { nullable: true })
+  @Index()
   @Property()
   public image?: string;
 
