@@ -2734,6 +2734,174 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffmpeg-installer/darwin-arm64@npm:4.1.5":
+  version: 4.1.5
+  resolution: "@ffmpeg-installer/darwin-arm64@npm:4.1.5"
+  checksum: e196ac95e95ca98820492f3a8269dad15d91bbe28684e16aaf5e4817c19ef0efd6d2e67f75d62ecda2756351d0c1ad3f5f03222d39610ad9a9533658a6579041
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/darwin-x64@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffmpeg-installer/darwin-x64@npm:4.1.0"
+  checksum: 2e25a3ed3d79d53d796101b0b4cdb5506a6c5983b49d9409238d6e4d3b66822213811453193ef3e2224cf6a767cfefcd2d45e978bab23c9b865ee54c416c88c8
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/ffmpeg@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ffmpeg-installer/ffmpeg@npm:1.1.0"
+  dependencies:
+    "@ffmpeg-installer/darwin-arm64": 4.1.5
+    "@ffmpeg-installer/darwin-x64": 4.1.0
+    "@ffmpeg-installer/linux-arm": 4.1.3
+    "@ffmpeg-installer/linux-arm64": 4.1.4
+    "@ffmpeg-installer/linux-ia32": 4.1.0
+    "@ffmpeg-installer/linux-x64": 4.1.0
+    "@ffmpeg-installer/win32-ia32": 4.1.0
+    "@ffmpeg-installer/win32-x64": 4.1.0
+  dependenciesMeta:
+    "@ffmpeg-installer/darwin-arm64":
+      optional: true
+    "@ffmpeg-installer/darwin-x64":
+      optional: true
+    "@ffmpeg-installer/linux-arm":
+      optional: true
+    "@ffmpeg-installer/linux-arm64":
+      optional: true
+    "@ffmpeg-installer/linux-ia32":
+      optional: true
+    "@ffmpeg-installer/linux-x64":
+      optional: true
+    "@ffmpeg-installer/win32-ia32":
+      optional: true
+    "@ffmpeg-installer/win32-x64":
+      optional: true
+  checksum: 9725b2ae23a705204ac3f2f21ae796c06150d7f1c757583b664523a305be91bd8276859c25717a0d55cc4d2d6afde6d25acb5515050dc0d2d69bcf77c7c59aa4
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/linux-arm64@npm:4.1.4":
+  version: 4.1.4
+  resolution: "@ffmpeg-installer/linux-arm64@npm:4.1.4"
+  checksum: a0a37efd4263a851daa86000e910eaafee9f4992a6928375e799fc8ca0648f01cb7ebbe6c2b7b6231516e7f95affaff0442fa9d5d47b522b0a44328623241d27
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/linux-arm@npm:4.1.3":
+  version: 4.1.3
+  resolution: "@ffmpeg-installer/linux-arm@npm:4.1.3"
+  checksum: 2b5612696067bdc07a7582ec9b799aa2e41342f90c9de38163cc29cb7e253fab2046b8f74b1ce7800d195766abd894dc723696115e20d77750babb39af383661
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/linux-ia32@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffmpeg-installer/linux-ia32@npm:4.1.0"
+  checksum: 9fb668942936297da9a85cd66fbf4ee0e7e6380c48fd419fcc4f07f9c1619d4806b9d45062abdd52b809ab73fab9a0fc46d289779b7a847e6ab0bf2e95ec7e36
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/linux-x64@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffmpeg-installer/linux-x64@npm:4.1.0"
+  checksum: 6ffc6bd3ec36d87ecc7c7692af30b767a52bd742a9c93ba9dbddd765099056a889fdb4b9cd39ede178723bf68c103cbcc8a4ddc9e98e6b3e1a6d50f242d222f5
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/win32-ia32@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffmpeg-installer/win32-ia32@npm:4.1.0"
+  checksum: 46e1140b4a675c90dc0e7bc8b4adc9aa20718d1b558c8289dc8f54e130555590799b179d15fdcb44f96bb01d54ff41fe6fc9d254e88510d0aac82fe1cdf52b4b
+  languageName: node
+  linkType: hard
+
+"@ffmpeg-installer/win32-x64@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffmpeg-installer/win32-x64@npm:4.1.0"
+  checksum: df9ed94a716d1b372cc778e50734f25a682245e1cc2b9f693571bc56c19d89ac0a2361e2dbbe0548a92da03ba54565156ef75c3c09758a5123031c3e227f0386
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/darwin-x64@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffprobe-installer/darwin-x64@npm:4.1.0"
+  checksum: e114396ea51fe2ea7dd6f048e156f61536d8227994d12ac6174016bf3c0f5d958d13d94713c9bb083f0b89b18f7aafba299520034e72623dd2f374cadc155f0a
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/ffprobe@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ffprobe-installer/ffprobe@npm:1.1.0"
+  dependencies:
+    "@ffprobe-installer/darwin-x64": 4.1.0
+    "@ffprobe-installer/linux-arm": 4.3.2
+    "@ffprobe-installer/linux-arm64": 4.3.2
+    "@ffprobe-installer/linux-ia32": 4.1.0
+    "@ffprobe-installer/linux-x64": 4.1.0
+    "@ffprobe-installer/win32-ia32": 4.1.0
+    "@ffprobe-installer/win32-x64": 4.1.0
+  dependenciesMeta:
+    "@ffprobe-installer/darwin-x64":
+      optional: true
+    "@ffprobe-installer/linux-arm":
+      optional: true
+    "@ffprobe-installer/linux-arm64":
+      optional: true
+    "@ffprobe-installer/linux-ia32":
+      optional: true
+    "@ffprobe-installer/linux-x64":
+      optional: true
+    "@ffprobe-installer/win32-ia32":
+      optional: true
+    "@ffprobe-installer/win32-x64":
+      optional: true
+  checksum: dbe70787c64bce0acf237be844f1c6e08e91aab0ac129cb1d4df84c17aff36e02a03390974c0649a908e87763db5c5c32b1ba2b17932a9afc55a8c08b98df630
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/linux-arm64@npm:4.3.2":
+  version: 4.3.2
+  resolution: "@ffprobe-installer/linux-arm64@npm:4.3.2"
+  checksum: 75bd576de1e6731d865a4deedfb4f5b78a9fde70be88396253df26600ea5173f37e9f81b5a1ad29957b91aff2cb1ccca5af4c16064c1256521ab757bbdf7bd0d
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/linux-arm@npm:4.3.2":
+  version: 4.3.2
+  resolution: "@ffprobe-installer/linux-arm@npm:4.3.2"
+  checksum: 487760ae99146f79b24090ddf911f3f78dd4e4a2e86383641192161157e2ac375bf8e36987995ad041489c31bb218dcd193d1a8d66ba1d48d0bc448b47c1be88
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/linux-ia32@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffprobe-installer/linux-ia32@npm:4.1.0"
+  checksum: ccea010a7243f546bca81f45fbc8b48b558efc2c416e890b8f43d47d981bfef3bb6f6dc9d61cd69ff08af4ada67d86469f8b49815370c45cd68693907d3d006e
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/linux-x64@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffprobe-installer/linux-x64@npm:4.1.0"
+  checksum: 1d366c82b7e3ae2c3c91e6b24b3706df97e2715c58607e46798dc66ea8fa752c24480cb41fa4ec6754069fa03915967cd4dc602a73a00359e9de490bb61ffaaf
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/win32-ia32@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffprobe-installer/win32-ia32@npm:4.1.0"
+  checksum: dbef48c86cec25dcce2f16e934f85d41ab4a43e65715b375988abb36cec9d2eee9c9dc5acc409aa60b22a047b3b8e32e603a5b2080d6fc0bf58d66b3347421d7
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/win32-x64@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@ffprobe-installer/win32-x64@npm:4.1.0"
+  checksum: 4b80c9afef071addabe734feffc23ebd09064625d6a157cdb857bb9f22c7eb33a8e00ab32076a027d938c737da10041e542b427ec4e3ce48563a60d920972f0b
+  languageName: node
+  linkType: hard
+
 "@graphql-codegen/add@npm:^2.0.2":
   version: 2.0.2
   resolution: "@graphql-codegen/add@npm:2.0.2"
@@ -3399,7 +3567,6 @@ __metadata:
     "@hapi/accept": ^5.0.2
     "@hembio/core": "workspace:packages/libs/core"
     "@hembio/discovery": "workspace:packages/libs/discovery"
-    "@hembio/ffmpeg": "workspace:packages/libs/ffmpeg"
     "@hembio/indexer": "workspace:packages/services/indexer"
     "@hembio/logger": "workspace:packages/libs/logger"
     "@hembio/transcoder": "workspace:packages/services/transcoder"
@@ -3449,6 +3616,7 @@ __metadata:
     fastify-jwt: ^3.0.0
     fastify-rate-limit: ^5.6.0
     fastify-websocket: ^3.2.0
+    ffmpeggy: ^1.0.0
     file-loader: ^6.2.0
     graphql: ^15.5.1
     graphql-tools: ^7.0.5
@@ -3632,16 +3800,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@hembio/ffmpeg@workspace:packages/libs/ffmpeg":
-  version: 0.0.0-use.local
-  resolution: "@hembio/ffmpeg@workspace:packages/libs/ffmpeg"
-  dependencies:
-    "@hembio/tsconfig": "workspace:packages/configs/typescript"
-    eventemitter3: ^4.0.7
-    execa: ^5.1.1
-  languageName: unknown
-  linkType: soft
-
 "@hembio/fs@workspace:packages/libs/fs":
   version: 0.0.0-use.local
   resolution: "@hembio/fs@workspace:packages/libs/fs"
@@ -3695,7 +3853,6 @@ __metadata:
     "@babel/preset-typescript": ^7.14.5
     "@cospired/i18n-iso-languages": ^3.0.0
     "@hembio/core": "workspace:packages/libs/core"
-    "@hembio/ffmpeg": "workspace:packages/libs/ffmpeg"
     "@hembio/fs": "workspace:packages/libs/fs"
     "@hembio/logger": "workspace:packages/libs/logger"
     "@nestjs/common": ^7.6.18
@@ -3714,6 +3871,7 @@ __metadata:
     chokidar: ^3.5.2
     diacritics: ^1.3.0
     eventemitter3: ^4.0.7
+    ffmpeggy: ^1.0.0
     jest: ^27.0.6
     mobx: ^6.3.2
     mobx-utils: ^6.0.4
@@ -3839,7 +3997,6 @@ __metadata:
   resolution: "@hembio/transcoder@workspace:packages/services/transcoder"
   dependencies:
     "@hembio/core": "workspace:packages/libs/core"
-    "@hembio/ffmpeg": "workspace:packages/libs/ffmpeg"
     "@hembio/fs": "workspace:packages/libs/fs"
     "@hembio/logger": "workspace:packages/libs/logger"
     "@hembio/tsconfig": "workspace:packages/configs/typescript"
@@ -3850,6 +4007,7 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/rimraf": ^3.0.1
     execa: ^5.1.1
+    ffmpeggy: ^1.0.0
     jest: ^27.0.6
     mobx: ^6.3.2
     mobx-utils: ^6.0.4
@@ -15180,6 +15338,23 @@ __metadata:
   dependencies:
     chalk: ~0.3.0
   checksum: a7f10e41a83435768aad327ef83ac9cf69c4613b35d7ebc4bc0be53b4ea3dc420828170c66224d90f0a58084e33686e8f0a3b519b5080a1971d212c300beb088
+  languageName: node
+  linkType: hard
+
+"ffmpeggy@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "ffmpeggy@npm:1.0.0"
+  dependencies:
+    "@ffmpeg-installer/ffmpeg": ^1.1.0
+    "@ffprobe-installer/ffprobe": ^1.1.0
+    debug: ^4.3.2
+    execa: ^5.1.1
+  dependenciesMeta:
+    "@ffmpeg-installer/ffmpeg":
+      optional: true
+    "@ffprobe-installer/ffprobe":
+      optional: true
+  checksum: dd5e35026859e2f49bfc4f185e5379d4bdfcc65d0ef8ba0997ce37e9aa1a438e8ffe617a3b9ff738c0f8fda7b9f401397a15f12c215f341136a6af9454262cc1
   languageName: node
   linkType: hard
 

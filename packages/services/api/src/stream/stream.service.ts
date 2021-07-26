@@ -17,22 +17,47 @@ export class StreamService {
   private readonly logger = createLogger("stream");
   public constructor(private readonly em: EntityManager) {}
 
-  public async getFile(fileId: string): Promise<[string, Stats]> {
-    const em = this.em.fork();
-    const file = await em.findOne(FileEntity, fileId, {
+  public async getVideoStream(fileId: string, offset = 0): Promise<any> {
+    const em = this.em.fork(false);
+    const file = await em.findOneOrFail(FileEntity, fileId, {
       fields: ["id", "library", "path"],
+      populate: ["library"],
     });
+    console.log(`Getting video stream for ${file.path}`);
+    return;
+  }
 
-    if (!file) {
-      throw new NotFoundException("File not found");
-    }
+  public async getAudioStream(fileId: string, offset = 0): Promise<any> {
+    const em = this.em.fork(false);
+    const file = await em.findOneOrFail(FileEntity, fileId, {
+      fields: ["id", "library", "path"],
+      populate: ["library"],
+    });
+    console.log(`Getting audio stream for ${file.path}`);
+    return;
+  }
 
-    const library = await em.findOne(LibraryEntity, file.library);
-    if (!library) {
+  public async statFile(fileId: string): Promise<Stats> {
+    const em = this.em.fork(false);
+    const file = await em.findOneOrFail(FileEntity, fileId, {
+      fields: ["id", "library", "path"],
+      populate: ["library"],
+    });
+    if (!file.library) {
       throw new InternalServerErrorException(
         "File is not connected to a library",
       );
     }
+    const filePath = path.join(file.library.path, file.path);
+    return await stat(filePath);
+  }
+
+  public async getFile(fileId: string): Promise<[string, Stats]> {
+    const em = this.em.fork();
+    const file = await em.findOneOrFail(FileEntity, fileId, {
+      fields: ["id", "library", "path"],
+    });
+    const library = await em.findOneOrFail(LibraryEntity, file.library);
 
     const filePath = path.join(library.path, file.path);
     try {
@@ -49,13 +74,9 @@ export class StreamService {
     external = true,
   ): Promise<Transform | ReadStream> {
     const em = this.em.fork(false);
-    const file = await em.findOne(FileEntity, fileId, {
+    const file = await em.findOneOrFail(FileEntity, fileId, {
       fields: ["id", "library.path", "path"],
     });
-
-    if (!file) {
-      throw new NotFoundException("File not found");
-    }
 
     if (!file.library) {
       throw new InternalServerErrorException(

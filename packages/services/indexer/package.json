@@ -17,7 +17,6 @@
   "dependencies": {
     "@cospired/i18n-iso-languages": "^3.0.0",
     "@hembio/core": "workspace:packages/libs/core",
-    "@hembio/ffmpeg": "workspace:packages/libs/ffmpeg",
     "@hembio/fs": "workspace:packages/libs/fs",
     "@hembio/logger": "workspace:packages/libs/logger",
     "@nestjs/common": "^7.6.18",
@@ -28,6 +27,7 @@
     "chokidar": "^3.5.2",
     "diacritics": "^1.3.0",
     "eventemitter3": "^4.0.7",
+    "ffmpeggy": "^1.0.0",
     "mobx": "^6.3.2",
     "mobx-utils": "^6.0.4",
     "moviedb-promise": "^3.1.9",

@@ -1,8 +1,8 @@
 import { EntityManager } from "@hembio/core";
-import type { FFprobeResult } from "@hembio/ffmpeg";
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { SchedulerRegistry } from "@nestjs/schedule";
+import type { FFprobeResult } from "ffmpeggy";
 import { firstValueFrom, Observable, throwError, timeout } from "rxjs";
 import { EventService } from "~/event/event.service";
 
@@ -40,7 +40,7 @@ export class IndexerService {
     );
   }
 
-  public async probeFile(fileId: string) {
+  public async probeFile(fileId: string): Promise<any> {
     const result: FFprobeResult | undefined = await firstValueFrom(
       this.indexerClient.send({ cmd: "probeFile" }, { fileId }).pipe(
         timeout({

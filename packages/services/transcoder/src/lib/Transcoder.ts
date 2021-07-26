@@ -1,11 +1,10 @@
 import fs from "fs";
 import path from "path";
+import { FileEntity, getCwd } from "@hembio/core";
+import { createLogger } from "@hembio/logger";
+import { FFmpeg, secsToTimer } from "ffmpeggy";
 import { action, makeObservable, observable, reaction, when } from "mobx";
 import { now } from "mobx-utils";
-import { createLogger } from "@hembio/logger";
-import { FFmpeg, secondsToTime } from "@hembio/ffmpeg";
-import { FileEntity } from "@hembio/core";
-import { getCwd } from "@hembio/core";
 import { waitForFile } from "../utils/waitForFile";
 
 const logger = createLogger("transcoder");
@@ -409,7 +408,7 @@ export class Transcoder {
     let inputOptions = ["-f matroska,webm"];
 
     if (startSegment > 0) {
-      const ss = secondsToTime(startSegment * 10);
+      const ss = secsToTimer(startSegment * 10);
       logger.debug(`Start time: ${ss}`, { id: this.file.id });
       inputOptions.push(`-ss ${ss}`);
     }
