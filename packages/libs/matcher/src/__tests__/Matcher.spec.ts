@@ -263,14 +263,8 @@ describe("Matcher", () => {
     randomShows.forEach((s) => {
       const m = new Matcher(s);
       expect(m).toBeInstanceOf(Matcher);
-      if (m.category !== "show") {
-        console.log(m);
-      }
       expect(m.category).toBe("show");
       expect(m.title).toBeDefined();
-      if (!m.codec) {
-        console.log(m);
-      }
       expect(m.codec).toBeDefined();
       expect(m.type).toBeDefined();
     });

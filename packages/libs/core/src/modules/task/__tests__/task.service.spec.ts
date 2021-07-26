@@ -8,7 +8,6 @@ describe("TaskService", () => {
   let tasks: TaskService;
 
   beforeEach(async () => {
-    console.log(MikroORMConfig);
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         MikroOrmModule.forRoot(MikroORMConfig),

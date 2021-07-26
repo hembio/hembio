@@ -146,12 +146,10 @@ export class AuthController {
     @Req() req: NestCookieRequest<FastifyRequest>,
     @Body() payload: TwoFactorDto,
   ): Promise<AccessTokenResult> {
-    console.log("/tfa payload", payload);
     const authResults = this.authService.getPendingTfaAuth(
       payload.userId,
       payload.tfaCode,
     );
-    console.log("Auth results", authResults);
     if (!authResults) {
       throw new ForbiddenException();
     }

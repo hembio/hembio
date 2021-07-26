@@ -56,7 +56,6 @@ export const PlayStateIndicator = observer(() => {
   `;
 
   useEffect(() => {
-    console.log("Toggled play state");
     if (playerStore.isPlaying) {
       setIndicator("play");
     } else {

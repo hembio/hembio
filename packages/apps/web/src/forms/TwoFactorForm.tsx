@@ -35,7 +35,6 @@ export const TwoFactorForm = observer(() => {
   const focusIndex = tfaCode.indexOf("");
 
   useEffect(() => {
-    console.log(focusIndex);
     if (focusIndex === -1 && submitBtn.current) {
       submitBtn.current.focus();
       return;

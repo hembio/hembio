@@ -23,7 +23,6 @@ maxBtn.onclick = () => {
 
 closeBtn.onclick = () => {
   const win = remote.BrowserWindow.getFocusedWindow();
-  console.log("close btn clicked", win, currentWindow);
   win.close();
   currentWindow.close();
 };

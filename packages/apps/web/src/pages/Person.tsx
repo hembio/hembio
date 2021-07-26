@@ -123,8 +123,6 @@ export const Person = (): JSX.Element => {
 
   const person = data?.person;
 
-  console.log(person?.credits);
-
   const image =
     person && person.image
       ? `${HEMBIO_API_URL}/images/people${person.image}`

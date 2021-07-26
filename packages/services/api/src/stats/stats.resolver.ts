@@ -9,7 +9,6 @@ export class StatsResolver {
   @Query(() => StatsModel, { name: "stats" })
   public async getStats(): Promise<StatsModel> {
     const stats = await this.statsService.getStats();
-    console.log(stats);
     return stats;
   }
 }
