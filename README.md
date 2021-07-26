@@ -39,7 +39,6 @@ packages
    ├── libs
    |    ├── core        // Core functionality and data entities
    |    ├── discovery   // Network zero-config
-   |    ├── ffmpeg      // FFmpeg wrapper
    |    ├── fs          // Experimental FS wrapper
    |    ├── matcher     // Filename matcher
    |    ├── mediainfo   // Mediainfo wrapper
@@ -49,7 +48,6 @@ packages
         ├── api         // API gateway
         ├── images      // Images microservice
         ├── indexer     // Indexer microservice
-        ├── metadata    // Metadata microservice
         └── transcoder  // Transcoder microservice
 ```
 
