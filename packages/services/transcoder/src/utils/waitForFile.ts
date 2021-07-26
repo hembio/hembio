@@ -24,9 +24,7 @@ export async function waitForFile(
         watcher.close();
       }
       reject(
-        new Error(
-          "File did not exists and was not created during the timeout.",
-        ),
+        new Error("File did not exists and was not created before timeout."),
       );
     }, timeout);
 
