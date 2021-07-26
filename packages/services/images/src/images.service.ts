@@ -42,12 +42,11 @@ export class ImagesService {
   private readonly logger = createLogger("images");
   private readonly http = axios.create({
     timeout: 10000,
-    // adapter: httpAdapter,
     responseType: "arraybuffer",
-    // headers: {
-    //   "User-Agent":
-    //     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43",
-    // },
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43",
+    },
   });
   private runners = new Set<string>();
 
@@ -83,6 +82,7 @@ export class ImagesService {
   ) {
     setTimeout(async () => {
       await this.orm.isConnected();
+      await this.checkMissingImages();
       this.runTasks();
     }, 1000);
   }
