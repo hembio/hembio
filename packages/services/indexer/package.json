@@ -11,7 +11,7 @@
   "scripts": {
     "start": "node ./dist/main.js",
     "dev": "ts-node --transpile-only ./src/main.ts",
-    "test": "yarn jest",
+    "test": "jest",
     "build": "tsc"
   },
   "dependencies": {
