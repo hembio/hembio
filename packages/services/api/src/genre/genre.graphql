@@ -1,0 +1,11 @@
+fragment Genre on GenreEntity {
+  id
+  slug
+  name
+}
+
+query Genres {
+  genres {
+    ...Genre
+  }
+}

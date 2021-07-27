@@ -197,6 +197,7 @@ export type PersonExternalIds = {
 export type Query = {
   __typename?: 'Query';
   file?: Maybe<FileEntity>;
+  genres: Array<GenreEntity>;
   library?: Maybe<LibraryEntity>;
   libraries: Array<LibraryEntity>;
   person?: Maybe<PersonEntity>;
@@ -374,6 +375,22 @@ export type ProbeFileQuery = (
   & { file?: Maybe<(
     { __typename?: 'FileEntity' }
     & Pick<FileEntity, 'probe'>
+  )> }
+);
+
+export type GenreFragment = (
+  { __typename?: 'GenreEntity' }
+  & Pick<GenreEntity, 'id' | 'slug' | 'name'>
+);
+
+export type GenresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenresQuery = (
+  { __typename?: 'Query' }
+  & { genres: Array<(
+    { __typename?: 'GenreEntity' }
+    & GenreFragment
   )> }
 );
 
@@ -738,6 +755,13 @@ export const FileWithTitleFragmentDoc = gql`
   }
 }
     ${TitleFragmentDoc}`;
+export const GenreFragmentDoc = gql`
+    fragment Genre on GenreEntity {
+  id
+  slug
+  name
+}
+    `;
 export const LibraryFragmentDoc = gql`
     fragment Library on LibraryEntity {
   id
@@ -939,6 +963,43 @@ export type ProbeFileLazyQueryHookResult = ReturnType<typeof useProbeFileLazyQue
 export type ProbeFileQueryResult = Apollo.QueryResult<ProbeFileQuery, ProbeFileQueryVariables>;
 export function refetchProbeFileQuery(variables?: ProbeFileQueryVariables) {
       return { query: ProbeFileDocument, variables: variables }
+    }
+export const GenresDocument = gql`
+    query Genres {
+  genres {
+    ...Genre
+  }
+}
+    ${GenreFragmentDoc}`;
+
+/**
+ * __useGenresQuery__
+ *
+ * To run a query within a React component, call `useGenresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGenresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGenresQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGenresQuery(baseOptions?: Apollo.QueryHookOptions<GenresQuery, GenresQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GenresQuery, GenresQueryVariables>(GenresDocument, options);
+      }
+export function useGenresLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenresQuery, GenresQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GenresQuery, GenresQueryVariables>(GenresDocument, options);
+        }
+export type GenresQueryHookResult = ReturnType<typeof useGenresQuery>;
+export type GenresLazyQueryHookResult = ReturnType<typeof useGenresLazyQuery>;
+export type GenresQueryResult = Apollo.QueryResult<GenresQuery, GenresQueryVariables>;
+export function refetchGenresQuery(variables?: GenresQueryVariables) {
+      return { query: GenresDocument, variables: variables }
     }
 export const LibrariesDocument = gql`
     query Libraries {

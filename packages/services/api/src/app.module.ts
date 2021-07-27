@@ -37,6 +37,7 @@ import { TitleModule } from "./title/title.module";
 import { TranscoderModule } from "./transcoder/transcoder.module";
 import { UserModule } from "./user/user.module";
 import { getServiceClientProxy } from "./utils/getServiceClientProxy";
+import { GenreModule } from './genre/genre.module';
 
 const AppConfigModule = ConfigModule.forRoot({
   load: [config],
@@ -77,6 +78,7 @@ const AppConfigModule = ConfigModule.forRoot({
     StatsModule,
     CreditModule,
     PersonModule,
+    GenreModule,
   ],
   controllers: [AppController],
   providers: [

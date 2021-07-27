@@ -6,6 +6,7 @@ import {
   OnInit,
   ManyToMany,
   Collection,
+  LoadStrategy,
 } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { TitleEntity } from "./TitleEntity";
@@ -25,7 +26,11 @@ export class GenreEntity {
   public slug!: string;
 
   @Field(() => [TitleEntity])
-  @ManyToMany({ entity: () => TitleEntity, lazy: true })
+  @ManyToMany({
+    entity: () => TitleEntity,
+    lazy: true,
+    strategy: LoadStrategy.JOINED,
+  })
   public titles = new Collection<TitleEntity>(this);
 
   @Field(() => String)
