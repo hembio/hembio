@@ -9,7 +9,7 @@ export class GenreService {
     return this.em.find(
       GenreEntity,
       {},
-      { cache: true, orderBy: { name: "DESC" } },
+      { cache: true, orderBy: { name: "ASC" } },
     );
   }
 }
