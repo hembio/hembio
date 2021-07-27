@@ -20,6 +20,7 @@ export const TitleLogo = ({ id, name }: Props): JSX.Element | null => {
         maxWidth: "100%",
         maxHeight: "100%",
         filter: "drop-shadow(2px 2px 2px rgba(0,0,0,.4))",
+        pointerEvents: "none",
       }}
     />
   );
