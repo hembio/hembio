@@ -50,7 +50,7 @@ const createWindow = async (): Promise<void> => {
       responseHeaders: {
         ...details.responseHeaders,
         "Access-Control-Allow-Origin": "*",
-        "Content-Security-Policy": "'self' *",
+        "Content-Security-Policy": cspHeaders,
       },
     });
   });
