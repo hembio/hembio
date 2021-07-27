@@ -4,7 +4,8 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   esbuild: {
-    jsxInject: `import React from 'react'`,
+    jsxFactory: `jsx`,
+    jsxInject: `import { jsx } from "@emotion/react"; import React from "react";`,
   },
   plugins: [reactRefresh()],
   root: path.resolve(__dirname),
