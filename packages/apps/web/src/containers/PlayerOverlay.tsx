@@ -50,6 +50,8 @@ export const PlayerOverlay = observer(() => {
   const classes = useStyles();
   const overlayRef = useRef<HTMLDivElement>(null);
   const hideUITimer = useRef<NodeJS.Timeout>();
+  const seekMultiplier = useRef(1);
+  const lastSeek = useRef(0);
   const windowRef = useRef(window);
   const { playerStore } = useStores();
   const [showUI, setShowUI] = useState(true);
@@ -91,45 +93,77 @@ export const PlayerOverlay = observer(() => {
 
   useListener(windowRef, "mousemove", handleInteraction);
 
-  useListener<KeyboardEvent>(windowRef, "keydown", (e) => {
-    const { key } = e;
-    let handled = false;
-    switch (key) {
-      case "Backspace":
-        history.go(-1);
-        handled = true;
-        break;
-      case "ArrowRight":
-        playerStore.seek(playerStore.currentTime + 10);
-        handled = true;
-        break;
-      case "ArrowLeft":
-        playerStore.seek(playerStore.currentTime - 10);
-        handled = true;
-        break;
-      case "F11":
-      case "f":
-        playerStore.toggleFullscreen();
-        handled = true;
-        break;
-      case "Escape":
-        if (playerStore.inFullscreen) {
+  useListener<KeyboardEvent>(
+    windowRef,
+    "keydown",
+    (e) => {
+      const { key } = e;
+      let handled = false;
+      let seeked = false;
+      switch (key) {
+        case "Backspace":
+          history.go(-1);
           handled = true;
+          break;
+        case "l":
+        case "ArrowRight":
+          if (Date.now() - lastSeek.current > 140) {
+            seekMultiplier.current = 1;
+          }
+          playerStore.seek(
+            playerStore.currentTime + 10 * seekMultiplier.current,
+          );
+          seeked = true;
+          handled = true;
+          break;
+        case "j":
+        case "ArrowLeft":
+          if (Date.now() - lastSeek.current > 140) {
+            seekMultiplier.current = 1;
+          }
+          playerStore.seek(
+            playerStore.currentTime - 10 * seekMultiplier.current,
+          );
+          seeked = true;
+          handled = true;
+          break;
+        case "F11":
+        case "f":
           playerStore.toggleFullscreen();
-        }
-        break;
-      case "k":
-      case " ":
-        playerStore.togglePlayback();
-        handled = true;
-        break;
-    }
+          handled = true;
+          break;
+        case "Escape":
+          if (playerStore.inFullscreen) {
+            handled = true;
+            playerStore.toggleFullscreen();
+          }
+          break;
+        case "k":
+        case " ":
+          playerStore.togglePlayback();
+          handled = true;
+          break;
+        case "m":
+          playerStore.toggleMute();
+          handled = true;
+          break;
+      }
 
-    if (handled) {
-      handleInteraction();
-      e.preventDefault();
-    }
-  });
+      if (seeked) {
+        lastSeek.current = Date.now();
+        seekMultiplier.current = Math.min(
+          50,
+          seekMultiplier.current + seekMultiplier.current * 0.25,
+        );
+      }
+
+      if (handled) {
+        handleInteraction();
+        e.preventDefault();
+      }
+    },
+    100,
+  );
 
   const reallyShowUI = showUI || !playerStore.isPlaying;
   return (
