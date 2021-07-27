@@ -96,44 +96,61 @@ export class ImagesService {
     this.runners.add(runnerName);
 
     try {
+      const startTime = 0;
       this.logger.debug(`Checking for missing images...`);
-      const em = this.em.fork(false);
-      const titles = await em.find(
-        TitleEntity,
-        {
-          thumb: null,
-          idImdb: { $ne: null },
-        },
-        { fields: ["id"] },
-      );
+
+      const conn = this.em.getConnection();
+      const titles = await conn.execute(`
+        SELECT e.id
+        FROM titles e
+          LEFT JOIN task_queue t ON t.type = "images" AND t.ref = e.id
+        WHERE t.ref IS NULL AND e.thumb IS NULL AND e.id_imdb != NULL
+      `);
+
+      let newTitles = 0;
       for (const title of titles) {
-        const task = await this.tasks.createTask({
-          type: TaskType.IMAGES,
-          ref: title.id,
-          priority: 2,
-          payload: { type: "title" },
-        });
+        const task = await this.tasks.createTask(
+          {
+            type: TaskType.IMAGES,
+            ref: title.id,
+            priority: 2,
+            payload: { type: "title" },
+          },
+          true,
+        );
         if (task) {
+          newTitles++;
           this.logger.debug(`Created download task for title(${title.id})`);
         }
       }
 
-      const people = await this.em.find(
-        PersonEntity,
-        { image: null },
-        { fields: ["id"] },
-      );
+      const people = await conn.execute(`
+        SELECT p.id
+        FROM people p
+          LEFT JOIN task_queue t ON t.type = "images" AND t.ref = p.id
+        WHERE t.ref IS NULL
+      `);
+      let newPeople = 0;
       for (const person of people) {
-        const task = await this.tasks.createTask({
-          type: TaskType.IMAGES,
-          ref: person.id,
-          priority: 1,
-          payload: { type: "person" },
-        });
+        const task = await this.tasks.createTask(
+          {
+            type: TaskType.IMAGES,
+            ref: person.id,
+            priority: 1,
+            payload: { type: "person" },
+          },
+          true,
+        );
         if (task) {
+          newPeople++;
           this.logger.debug(`Created download task for person ${person.id}`);
         }
       }
+      this.logger.debug(
+        `Found ${newTitles} new titles and ${newPeople} new people in ${Math.round(
+          (Date.now() - startTime) / 1000,
+        )} secs`,
+      );
     } catch {
       // Ignore
     }
@@ -143,7 +160,10 @@ export class ImagesService {
   @Cron(CronExpression.EVERY_10_SECONDS)
   public async runTasks(tasks?: TaskEntity[]): Promise<void> {
     const runnerName = "runTasks";
-    if (this.runners.has(runnerName)) {
+    if (
+      this.runners.has(runnerName) ||
+      this.runners.has("checkMissingImages")
+    ) {
       // this.logger.debug("Tasks are already running");
       return;
     }
