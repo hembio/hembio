@@ -1,5 +1,3 @@
-const path = require("path");
-
 // babel.config.js
 module.exports = {
   presets: [
