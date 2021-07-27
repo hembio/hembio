@@ -52,7 +52,7 @@ export class ImagesService {
 
   // Stay within the rate limit of assets.fanart.tv
   private readonly titleImageFetchQueue = new PQueue({
-    concurrency: 6,
+    concurrency: 12,
     intervalCap: 12,
     interval: 1000,
     carryoverConcurrencyCount: true,
@@ -60,7 +60,7 @@ export class ImagesService {
 
   // Stay within the rate limit of TMDb
   private readonly personImageFetchQueue = new PQueue({
-    concurrency: 6,
+    concurrency: 12,
     intervalCap: 12,
     interval: 1000,
     carryoverConcurrencyCount: true,
