@@ -63,23 +63,28 @@ export class TaskService {
     }
   }
 
-  public async createTask(data: CreateTask): Promise<TaskEntity | undefined> {
+  public async createTask(
+    data: CreateTask,
+    noCheck = false,
+  ): Promise<TaskEntity | undefined> {
     const em = this.orm.em.fork(false);
     const taskRepo = em.getRepository(TaskEntity);
     try {
-      const existingTasks = await this.getTasksForRef(data.type, data.ref);
-      if (existingTasks.length > 0) {
-        if (data.priority) {
-          for (const existingTask of existingTasks) {
-            if (existingTask.priority !== data.priority) {
-              existingTask.priority = data.priority;
-              await taskRepo.persistAndFlush(existingTask);
-              return existingTask;
+      if (!noCheck) {
+        const existingTasks = await this.getTasksForRef(data.type, data.ref);
+        if (existingTasks.length > 0) {
+          if (data.priority) {
+            for (const existingTask of existingTasks) {
+              if (existingTask.priority !== data.priority) {
+                existingTask.priority = data.priority;
+                await taskRepo.persistAndFlush(existingTask);
+                return existingTask;
+              }
             }
           }
+          // Task is already in queue for ref
+          return;
         }
-        // Task is already in queue for ref
-        return;
       }
       const task = taskRepo.create(data);
       await taskRepo.persistAndFlush(task);
