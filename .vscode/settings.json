@@ -9,7 +9,8 @@
   "files.autoSave": "onWindowChange",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
-    "source.fixAll.prettier": true
+    "source.fixAll.prettier": true,
+    "source.organizeImports": false
   },
   "prettier.trailingComma": "all",
   "search.exclude": {
