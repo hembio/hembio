@@ -149,8 +149,22 @@ export const Person = (): JSX.Element => {
           className={classes.root}
           sx={{ mb: 14, position: "relative" }}
         >
-          <Grid container spacing={2} flexDirection="row">
-            <Grid item xs flexShrink={4} flexGrow={0}>
+          <Grid
+            container
+            spacing={2}
+            flexDirection="row"
+            justifyContent="stretch"
+            flexWrap="nowrap"
+          >
+            <Grid
+              item
+              xs={12}
+              sm={3}
+              sx={{
+                minWidth: "360px",
+                maxWidth: "360px",
+              }}
+            >
               <Card
                 sx={{
                   boxShadow: "-4px 4px 24px rgba(0,0,0,.4)",
@@ -178,15 +192,17 @@ export const Person = (): JSX.Element => {
                 {person && <CardMedia title={person.name} image={image} />}
               </Card>
             </Grid>
-            <Grid item xs>
+            <Grid>
               <Grid
                 item
+                flexGrow={0}
+                flexShrink={0}
                 container
                 flexDirection="column"
                 sx={{
-                  p: 4,
-                  pl: 6,
-                  pr: 6,
+                  p: 6,
+                  pl: 8,
+                  pr: 8,
                   userSelect: "text",
                 }}
               >
@@ -237,7 +253,13 @@ export const Person = (): JSX.Element => {
                   <Typography
                     variant="body1"
                     align="justify"
-                    sx={{ mt: 1, mb: 2 }}
+                    sx={{
+                      mt: 1,
+                      mb: 2,
+                      maxHeight: "200px",
+                      pr: 1,
+                      overflow: "auto",
+                    }}
                   >
                     {!person ? (
                       <>
@@ -295,7 +317,7 @@ export const Person = (): JSX.Element => {
             )}
           </Box>
         </Paper>
-        <Box sx={{ pt: 6 }} />
+        <Box sx={{ pt: 3 }} />
       </Container>
 
       {/* <Container

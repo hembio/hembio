@@ -186,10 +186,9 @@ export const Title = (): JSX.Element => {
               item
               xs={12}
               sm={3}
-              flexShrink={0}
-              flexGrow={0}
               sx={{
                 minWidth: "360px",
+                maxWidth: "360px",
               }}
             >
               <PosterImage
@@ -203,9 +202,11 @@ export const Title = (): JSX.Element => {
                 }}
               />
             </Grid>
-            <Grid sm={8}>
+            <Grid>
               <Grid
                 item
+                flexGrow={0}
+                flexShrink={0}
                 container
                 flexDirection="column"
                 sx={{
@@ -284,7 +285,7 @@ export const Title = (): JSX.Element => {
                     )}
                   </Typography>
                 </Grid>
-                <Grid item lg={10} xl={9}>
+                <Grid item>
                   <Typography variant="body1" align="justify" sx={{ mt: 1 }}>
                     {!title ? (
                       <>
@@ -312,15 +313,14 @@ export const Title = (): JSX.Element => {
         {title && (
           <TitleDebugBox title={title} reload={reload} refetch={refetch} />
         )}
-        <Box sx={{ pt: 4 }} />
-
-        {title && (
-          <BackgroundPortal
-            src={`${HEMBIO_API_URL}/images/titles/${title.id}/background`}
-            opacity={0.4}
-          />
-        )}
+        <Box sx={{ pt: 1 }} />
       </Container>
+      {title && (
+        <BackgroundPortal
+          src={`${HEMBIO_API_URL}/images/titles/${title.id}/background`}
+          opacity={0.4}
+        />
+      )}
     </div>
   );
 };

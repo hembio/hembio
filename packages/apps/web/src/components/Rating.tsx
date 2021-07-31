@@ -10,6 +10,8 @@ export function Rating({ rating = 0 }: { rating?: number }): JSX.Element {
         display: "flex",
         alignItems: "center",
         mt: 0.6,
+        mr: -7,
+        ml: 2,
       }}
     >
       <MuiRating
