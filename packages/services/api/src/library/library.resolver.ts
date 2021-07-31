@@ -49,13 +49,14 @@ export class LibraryResolver {
       year,
       orderBy = "releaseDate",
       orderDirection = "DESC",
+      filter,
     }: GetTitleArgs,
   ): Promise<PaginatedTitleResponse> {
     const [edges, totalCount] = await this.titleService.findAll({
       ids,
       libraryId: library.id,
       name,
-      year,
+      year: filter?.year ? filter.year : year,
       skip,
       take,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

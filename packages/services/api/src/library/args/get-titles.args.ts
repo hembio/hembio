@@ -11,6 +11,9 @@ export class GenreFilterInput {
 
 @InputType()
 export class FilterInput {
+  @Field(() => [Int, Int])
+  public year?: [number, number];
+
   @Field(() => [GenreFilterInput])
   public genre?: GenreFilterInput[];
 }
