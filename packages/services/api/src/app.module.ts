@@ -25,6 +25,7 @@ import { AuthModule } from "./auth/auth.module";
 import { CreditModule } from "./credit/credit.module";
 import { EventModule } from "./event/event.module";
 import { FileModule } from "./file/file.module";
+import { GenreModule } from "./genre/genre.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { IndexerModule } from "./indexer/indexer.module";
@@ -37,7 +38,6 @@ import { TitleModule } from "./title/title.module";
 import { TranscoderModule } from "./transcoder/transcoder.module";
 import { UserModule } from "./user/user.module";
 import { getServiceClientProxy } from "./utils/getServiceClientProxy";
-import { GenreModule } from './genre/genre.module';
 
 const AppConfigModule = ConfigModule.forRoot({
   load: [config],
