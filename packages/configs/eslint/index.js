@@ -7,20 +7,71 @@ const config = {
   },
   overrides: [
     {
-      files: ["*.js"],
-      extends: ["eslint:recommended", "prettier"],
-      rules: {
-        "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-      },
-    },
-    {
       files: ["*.json"],
       extends: ["plugin:json/recommended"],
     },
     {
-      files: ["*.{js,jsx,ts,tsx}"],
+      files: ["*.{js,jsx}"],
       plugins: ["unused-imports", "workspaces"],
-      extends: ["plugin:import/recommended"],
+      extends: ["eslint:recommended", "plugin:import/recommended", "prettier"],
+      settings: {
+        react: {
+          version: "detect",
+        },
+      },
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+          modules: true,
+        },
+      },
+      rules: {
+        "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+        "no-empty": "warn",
+        "import/no-unresolved": "error",
+        "import/order": [
+          "warn",
+          {
+            "newlines-between": "never",
+            groups: [
+              "builtin",
+              "external",
+              "internal",
+              "object",
+              "parent",
+              "sibling",
+              "index",
+            ],
+            alphabetize: {
+              order: "asc",
+            },
+          },
+        ],
+        "unused-imports/no-unused-imports": "warn",
+        "unused-imports/no-unused-vars": "off",
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
+        "react/display-name": "off",
+        "@emotion/jsx-import": "error",
+        "@emotion/no-vanilla": "error",
+        "@emotion/import-from-emotion": "error",
+        "@emotion/styled-import": "error",
+      },
+    },
+    {
+      files: ["*.{ts,tsx}"],
+      plugins: ["unused-imports", "workspaces", "@emotion"],
+      parser: "@typescript-eslint/parser",
+      extends: [
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
+        "prettier",
+      ],
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: "module",
@@ -66,32 +117,6 @@ const config = {
         ],
         "unused-imports/no-unused-imports": "warn",
         "unused-imports/no-unused-vars": "off",
-      },
-    },
-    {
-      files: ["*.{ts,tsx}"],
-      plugins: ["unused-imports", "workspaces"],
-      parser: "@typescript-eslint/parser",
-      extends: [
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:import/recommended",
-        "plugin:import/typescript",
-        "prettier",
-      ],
-      rules: {
-        "@typescript-eslint/explicit-member-accessibility": ["warn"],
-        "@typescript-eslint/no-unused-vars": [
-          "warn",
-          { argsIgnorePattern: "^_" },
-        ],
-      },
-    },
-    {
-      files: ["*.{jsx,tsx}"],
-      plugins: ["@emotion"],
-      extends: ["plugin:react/recommended"],
-      rules: {
         "react/react-in-jsx-scope": "off",
         "react/prop-types": "off",
         "react/display-name": "off",
@@ -99,6 +124,11 @@ const config = {
         "@emotion/no-vanilla": "error",
         "@emotion/import-from-emotion": "error",
         "@emotion/styled-import": "error",
+        "@typescript-eslint/explicit-member-accessibility": ["warn"],
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
+          { argsIgnorePattern: "^_" },
+        ],
       },
     },
     {
