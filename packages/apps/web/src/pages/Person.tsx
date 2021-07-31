@@ -192,21 +192,14 @@ export const Person = (): JSX.Element => {
                 {person && <CardMedia title={person.name} image={image} />}
               </Card>
             </Grid>
-            <Grid>
-              <Grid
-                item
-                flexGrow={0}
-                flexShrink={0}
-                container
-                flexDirection="column"
+            <Grid item flexGrow={10}>
+              <Box
                 sx={{
-                  p: 6,
-                  pl: 8,
-                  pr: 8,
+                  p: 4,
                   userSelect: "text",
                 }}
               >
-                <Grid item>
+                <Box>
                   <Grid
                     container
                     flexDirection="row"
@@ -230,8 +223,8 @@ export const Person = (): JSX.Element => {
                       </Typography>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item>
+                </Box>
+                <Box>
                   <Grid
                     container
                     flexDirection="row"
@@ -248,31 +241,41 @@ export const Person = (): JSX.Element => {
                       </Typography>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item>
-                  <Typography
-                    variant="body1"
-                    align="justify"
-                    sx={{
-                      mt: 1,
-                      mb: 2,
-                      maxHeight: "200px",
-                      pr: 1,
-                      overflow: "auto",
-                    }}
-                  >
-                    {!person ? (
-                      <>
-                        <Skeleton variant="text" />
-                        <Skeleton variant="text" />
-                        <Skeleton variant="text" />
-                      </>
-                    ) : (
-                      person.bio
-                    )}
-                  </Typography>
-                </Grid>
-              </Grid>
+                </Box>
+                <Box
+                  sx={{
+                    maxHeight: "200px",
+                    pr: 1,
+                    overflow: "auto",
+                  }}
+                >
+                  {!person ? (
+                    <Typography
+                      variant="body1"
+                      align="justify"
+                      sx={{
+                        maxHeight: "200px",
+                        pr: 1,
+                        overflow: "auto",
+                      }}
+                    >
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                    </Typography>
+                  ) : (
+                    person.bio?.split("\n").map((line: string, idx) => (
+                      <Typography
+                        variant="body1"
+                        key={`bio-${idx}`}
+                        sx={{ mt: 1, mb: 2 }}
+                      >
+                        {line}
+                      </Typography>
+                    ))
+                  )}
+                </Box>
+              </Box>
             </Grid>
           </Grid>
         </Container>

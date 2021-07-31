@@ -202,21 +202,14 @@ export const Title = (): JSX.Element => {
                 }}
               />
             </Grid>
-            <Grid>
-              <Grid
-                item
-                flexGrow={0}
-                flexShrink={0}
-                container
-                flexDirection="column"
+            <Grid item flexGrow={10}>
+              <Box
                 sx={{
-                  p: 6,
-                  pl: 8,
-                  pr: 8,
+                  p: 4,
                   userSelect: "text",
                 }}
               >
-                <Grid item>
+                <Box>
                   <Grid
                     container
                     flexDirection="row"
@@ -245,8 +238,8 @@ export const Title = (): JSX.Element => {
                       </Grid>
                     )}
                   </Grid>
-                </Grid>
-                <Grid item>
+                </Box>
+                <Box>
                   <Grid
                     container
                     flexDirection="row"
@@ -275,8 +268,8 @@ export const Title = (): JSX.Element => {
                       </Typography>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item>
+                </Box>
+                <Box>
                   <Typography variant="h6" sx={{ mt: 0.4 }} fontStyle="italic">
                     {!title ? (
                       <Skeleton variant="text" sx={{ width: "70%" }} />
@@ -284,21 +277,28 @@ export const Title = (): JSX.Element => {
                       title.tagline
                     )}
                   </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body1" align="justify" sx={{ mt: 1 }}>
-                    {!title ? (
-                      <>
-                        <Skeleton variant="text" />
-                        <Skeleton variant="text" />
-                        <Skeleton variant="text" />
-                      </>
-                    ) : (
-                      title.overview
-                    )}
-                  </Typography>
-                </Grid>
-              </Grid>
+                </Box>
+                <Box sx={{ mt: 1 }}>
+                  {!title ? (
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                    </Typography>
+                  ) : (
+                    title.overview?.split("\n").map((line: string, idx) => (
+                      <Typography
+                        variant="body1"
+                        align="justify"
+                        key={`overview-${idx}`}
+                        sx={{ mb: 2 }}
+                      >
+                        {line}
+                      </Typography>
+                    ))
+                  )}
+                </Box>
+              </Box>
               <ActionBox title={title as TitleWithFilesFragment} />
             </Grid>
           </Grid>
