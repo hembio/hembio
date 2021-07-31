@@ -18,7 +18,7 @@ import { TMDbProvider, TraktProvider } from "~/providers";
 
 @Injectable()
 export class CreditsService {
-  private logger = createLogger("credits");
+  private logger = createLogger("credit");
   private trakt = new TraktProvider();
   private tmdb = new TMDbProvider();
   private runners = new Set<string>();

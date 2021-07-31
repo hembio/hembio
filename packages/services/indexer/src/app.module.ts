@@ -1,13 +1,15 @@
-import { MikroORMConfig, MikroOrmModule, TaskModule } from "@hembio/core";
+import { MikroORMConfig, MikroOrmModule } from "@hembio/core";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { ScheduleModule } from "@nestjs/schedule";
 import { config } from "../../../../config";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { CheckerModule } from "./checker/checker.module";
 import { CreditsModule } from "./credits/credits.module";
-import { IndexerController } from "./indexer.controller";
-import { IndexerService } from "./indexer.service";
+import { LibraryModule } from "./library/library.module";
 import { MetadataModule } from "./metadata/metadata.module";
 import { ProbeModule } from "./probe/probe.module";
+import { WatcherModule } from "./watcher/watcher.module";
 
 @Module({
   imports: [
@@ -15,13 +17,14 @@ import { ProbeModule } from "./probe/probe.module";
       load: [config],
     }),
     MikroOrmModule.forRoot(MikroORMConfig),
-    ScheduleModule.forRoot(),
-    TaskModule,
     MetadataModule,
     CreditsModule,
     ProbeModule,
+    WatcherModule,
+    CheckerModule,
+    LibraryModule,
   ],
-  controllers: [IndexerController],
-  providers: [IndexerService],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class IndexerModule {}
+export class AppModule {}

@@ -1,14 +1,15 @@
 import { Controller } from "@nestjs/common";
 import { MessagePattern } from "@nestjs/microservices";
+import { FFprobeResult } from "ffmpeggy/cjs";
+import { AppService } from "./app.service";
 import { CreditsService } from "./credits/credits.service";
-import { IndexerService } from "./indexer.service";
 import { MetadataService } from "./metadata/metadata.service";
 import { ProbeService } from "./probe/probe.service";
 
-@Controller("indexer")
-export class IndexerController {
+@Controller()
+export class AppController {
   public constructor(
-    private readonly indexerService: IndexerService,
+    private readonly indexerService: AppService,
     private readonly creditsService: CreditsService,
     private readonly metadataService: MetadataService,
     private readonly probeService: ProbeService,
@@ -30,8 +31,7 @@ export class IndexerController {
   }
 
   @MessagePattern({ cmd: "probeFile" })
-  public probeFile({ fileId }: { fileId: string }): Promise<any> {
-    console.log(`{ cmd: "probeFile" }`, fileId);
+  public probeFile({ fileId }: { fileId: string }): Promise<FFprobeResult> {
     return this.probeService.probeFile(fileId);
   }
 }

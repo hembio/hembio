@@ -1,4 +1,4 @@
 import { createService } from "@hembio/core";
-import { IndexerModule } from "./indexer.module";
+import { AppModule } from "./app.module";
 
-createService("indexer", IndexerModule);
+createService("indexer", AppModule);

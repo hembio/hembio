@@ -18,19 +18,17 @@ import { pathWalker } from "@hembio/fs";
 import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
-import chokidar from "chokidar";
 import PQueue from "p-queue";
 import slugify from "slug";
-import pkg from "../package.json";
-import { fetchMetadata } from "./fetchMetadata";
-import { MetadataService } from "./metadata/metadata.service";
+import { fetchMetadata } from "../fetchMetadata";
+import { MetadataService } from "../metadata/metadata.service";
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 @Injectable()
-export class IndexerService {
+export class LibraryService {
   private logger = createLogger("indexer");
   private runners = new Set<string>();
 
@@ -51,16 +49,11 @@ export class IndexerService {
   ) {
     setTimeout(async () => {
       await this.orm.isConnected();
-      this.watchForFileChanges();
       //await this.removeDeletedFilesAndTitles();
       // await this.checkAllLibraries();
       await this.runTasks();
       // this.metadataService.checkMissingMetadata();
     }, 1000);
-  }
-
-  public getVersion(): string {
-    return pkg.version;
   }
 
   private async runner(name: string, fn: () => Promise<void>) {
@@ -488,54 +481,5 @@ export class IndexerService {
     }
     await this.removeQueue.onIdle();
     this.runners.delete(runnerName);
-  }
-
-  public async watchForFileChanges(): Promise<void> {
-    const em = this.em.fork(false);
-    const libraryRepo = em.getRepository(LibraryEntity);
-    const libraries = await libraryRepo.findAll();
-
-    for (const library of libraries) {
-      if (library.watch) {
-        chokidar
-          .watch(library.path, {
-            usePolling: true,
-            interval: 60000,
-            binaryInterval: 60000,
-            depth: 2,
-            ignoreInitial: true,
-          })
-          .on("addDir", (addedDir) => {
-            this.logger.debug(`Directory added: ${addedDir}`);
-          })
-          .on("add", async (addedFile) => {
-            if (library.matcherRegEx.test(addedFile)) {
-              this.logger.debug(`File added: ${addedFile}`);
-              await this.checkPath(library, path.dirname(addedFile));
-            }
-          })
-          .on("unlinkDir", (removedDir) => {
-            this.logger.debug(`Directory removed: ${removedDir}`);
-          })
-          .on("unlink", async (removedFile) => {
-            if (library.matcherRegEx.test(removedFile)) {
-              const em = this.em.fork(false);
-              this.logger.debug(`File removed: ${removedFile}`);
-              const relPath = path.relative(library.path, removedFile);
-              const found = await em.find(FileEntity, { path: relPath });
-              if (found) {
-                try {
-                  await em.removeAndFlush(found);
-                } catch {
-                  // Ignore
-                }
-              }
-            }
-          })
-          .on("ready", () => {
-            this.logger.debug(`Watching for file changes in ${library.path}`);
-          });
-      }
-    }
   }
 }
