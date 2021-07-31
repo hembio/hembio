@@ -90,7 +90,9 @@ export const SignIn = observer(() => {
             <Typography variant="body2" color="textSecondary" align="center">
               {"Made with "}
               <Typography component="span" variant="body1" color="textPrimary">
-                ❤️
+                <span role="img" aria-label="love">
+                  ❤️
+                </span>
               </Typography>
               {" by the "}
               <Link color="inherit" href="https://github.com/hembio">
