@@ -19,6 +19,7 @@
     "@hembio/core": "workspace:packages/libs/core",
     "@hembio/fs": "workspace:packages/libs/fs",
     "@hembio/logger": "workspace:packages/libs/logger",
+    "@hembio/mediainfo": "workspace:packages/libs/mediainfo",
     "@nestjs/common": "^7.6.18",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^7.6.18",
