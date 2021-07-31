@@ -9,6 +9,7 @@
     "allowJs": true,
     "module": "esnext",
     "isolatedModules": true,
+    "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
       "$/*": ["public/*"]
