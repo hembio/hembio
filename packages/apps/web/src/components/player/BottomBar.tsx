@@ -4,6 +4,7 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../stores";
+import { ActorsMiniMenu } from "./ActorsMiniMenu";
 import { BackButton } from "./BackButton";
 import { FullscreenToggle } from "./FullScreenToggle";
 import { PlaybackToggle } from "./PlaybackToggle";
@@ -103,6 +104,7 @@ export const BottomBar = observer(({ showUI, onInteraction }: Props) => {
           <Typography variant="body1" className={classes.time}>
             {"Ends at " + playerStore.endsAt}
           </Typography>
+          <ActorsMiniMenu showUI={showUI} />
           <SubtitleSelector showUI={showUI} />
           <FullscreenToggle showUI={showUI} />
         </div>

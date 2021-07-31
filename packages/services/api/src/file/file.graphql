@@ -4,6 +4,9 @@ fragment FileWithTitle on FileEntity {
   subtitles
   title {
     ...Title
+    topBilling(take: 8) {
+      ...Cast
+    }
   }
 }
 
