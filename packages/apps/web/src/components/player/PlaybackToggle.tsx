@@ -51,6 +51,8 @@ export const PlaybackToggle = memo(({ showUI }: Props) => {
                 left: 0,
                 zIndex: 1,
                 pointerEvents: "none",
+                color: "inherit",
+                opacity: 0.2,
               }}
             />
           )}

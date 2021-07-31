@@ -89,18 +89,41 @@ export class PlayerStore {
   }
 
   @action
-  public setPending(isPending = true): void {
-    this.isPending = isPending;
+  public setPlayState(state: string): void {
+    switch (state) {
+      case "ready":
+        this.isReady = true;
+        this.isPending = false;
+        break;
+      case "ended":
+      case "paused":
+        this.isReady = true;
+        this.isPlaying = false;
+        this.isPending = false;
+        break;
+      case "playing":
+        this.isReady = true;
+        this.isPlaying = true;
+        this.isPending = false;
+        break;
+      case "seeking":
+      case "stalled":
+        this.isReady = true;
+        this.isPlaying = true;
+        this.isPending = true;
+        break;
+      case "waiting":
+      case "pending":
+        this.isReady = true;
+        this.isPlaying = false;
+        this.isPending = true;
+        break;
+    }
   }
 
   @action
   public setInFullscreen(inFullscreen = true): void {
     this.inFullscreen = inFullscreen;
-  }
-
-  @action
-  public setPlaying(isPlaying = true): void {
-    this.isPlaying = isPlaying;
   }
 
   @action
@@ -241,12 +264,11 @@ export class PlayerStore {
       this.mpv.setRef(videoRef as HTMLEmbedElement);
 
       this.mpv.on("play", () => {
-        this.setPending(false);
-        this.setPlaying(true);
+        this.setPlayState("playing");
       });
 
       this.mpv.on("pause", () => {
-        this.setPlaying(false);
+        this.setPlayState("paused");
       });
 
       this.mpv.on("durationchange", () => {
@@ -353,7 +375,7 @@ export class PlayerStore {
         return;
       }
       // console.log("Media can now be played");
-      this.setPending(false);
+      this.setPlayState("playing");
       this.setCurrentTime(this.video.currentTime);
       this.setVolume(this.video.volume);
       this.setDuration(this.video.duration);
@@ -373,36 +395,31 @@ export class PlayerStore {
     });
 
     this.video.addEventListener("play", () => {
-      this.setPending(false);
-      this.setPlaying(true);
+      this.setPlayState("playing");
     });
 
     this.video.addEventListener("pause", () => {
-      this.setPlaying(false);
+      this.setPlayState("paused");
     });
 
     this.video.addEventListener("waiting", () => {
-      this.setPlaying(true);
-      this.setPending(true);
+      this.setPlayState("waiting");
     });
 
     this.video.addEventListener("seeking", () => {
-      this.setPending(true);
-      this.setPlaying(true);
+      this.setPlayState("seeking");
     });
 
     this.video.addEventListener("seeked", () => {
-      this.setPending(false);
-      this.setPlaying(true);
+      this.setPlayState("playing");
     });
 
     this.video.addEventListener("stalled", () => {
-      this.setPlaying(false);
-      this.setPending(true);
+      this.setPlayState("stalled");
     });
 
     this.video.addEventListener("ended", () => {
-      this.setPlaying(false);
+      this.setPlayState("ended");
     });
 
     this.video.addEventListener("progress", () => {

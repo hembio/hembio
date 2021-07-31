@@ -1,4 +1,3 @@
-import { CircularProgress } from "@material-ui/core";
 import Alert from "@material-ui/core/Alert";
 import AlertTitle from "@material-ui/core/AlertTitle";
 import Container from "@material-ui/core/Container";
@@ -8,8 +7,7 @@ import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
 import { Video } from "~/components/Video";
 import { PlayerOverlay } from "~/containers/PlayerOverlay";
-import { useFileQuery, useProbeFileQuery } from "~/generated/graphql";
-import { useStores } from "~/stores";
+import { useFileQuery } from "~/generated/graphql";
 
 const useStyles = makeStyles(
   createStyles({
@@ -27,10 +25,6 @@ const useStyles = makeStyles(
       overflow: "hidden",
       background: "#000",
     },
-    spinner: {
-      color: "rgba(255, 255, 255, .8)",
-      placeSelf: "center",
-    },
   }),
   {
     name: "Player",
@@ -39,46 +33,32 @@ const useStyles = makeStyles(
 
 export const Player = observer(() => {
   const { fileId } = useParams<{ fileId: string }>();
-  const { playerStore } = useStores();
   const classes = useStyles();
 
   const { data, loading, error } = useFileQuery({ variables: { fileId } });
 
-  const { data: probeData } = useProbeFileQuery({ variables: { fileId } });
+  // const { data: probeData } = useProbeFileQuery({ variables: { fileId } });
 
-  if (loading) {
+  if (error) {
     return (
-      <div className={classes.container}>
-        <CircularProgress className={classes.spinner} size={64} />
-      </div>
+      <Container>
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          {error.message}
+          <br />
+          <pre style={{ whiteSpace: "pre-wrap" }}>{error.stack}</pre>
+        </Alert>
+      </Container>
     );
   }
 
-  if (error) {
-    if (error) {
-      return (
-        <Container>
-          <Alert severity="error">
-            <AlertTitle>Error</AlertTitle>
-            {error.message}
-            <br />
-            <pre style={{ whiteSpace: "pre-wrap" }}>{error.stack}</pre>
-          </Alert>
-        </Container>
-      );
-    }
-  }
-
-  if (!data || !data.file) {
+  if (!loading && (!data || !data.file)) {
     return <NotFound />;
   }
 
-  const { file } = data;
+  const file = data?.file;
   return (
     <div className={classes.container}>
-      {playerStore.isPending && (
-        <CircularProgress className={classes.spinner} size={64} />
-      )}
       {file && <Video key={file.id} file={file} />}
       <PlayerOverlay />
     </div>
