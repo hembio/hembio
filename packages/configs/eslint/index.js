@@ -88,6 +88,8 @@ const config = {
     "@emotion/no-vanilla": "error",
     "@emotion/import-from-emotion": "error",
     "@emotion/styled-import": "error",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/media-has-caption": "warn",
   },
   overrides: [
     {
