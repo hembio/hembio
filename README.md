@@ -1,5 +1,7 @@
 # hembio monorepo
 
+> ⚠️ This is under heavy development and considered experimental. You have been warned!
+
 This is the main [Yarn v2][yarn] monorepo for hembio.
 
 ## Tech stack
@@ -50,6 +52,10 @@ packages
         ├── indexer     // Indexer microservice
         └── transcoder  // Transcoder microservice
 ```
+
+## LICENSE
+
+Current license is proprietary (i.e. non-free) and all rights are reserved. We are planning on moving over to an open-source license before release to the public and are currently evaluating which license that would best fit this project.
 
 [node]: https://nodejs.org/en/download/
 [nestjs]: https://nestjs.com/
