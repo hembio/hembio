@@ -20,13 +20,13 @@
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^7.6.18",
     "@nestjs/microservices": "^7.6.18",
-    "@nestjs/schedule": "^1.0.0",
+    "@nestjs/schedule": "^1.0.1",
     "axios": "^0.21.1",
     "color-thief-jimp": "^2.0.2",
     "jimp": "^0.16.1",
     "p-queue": "^6.6.2",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0",
+    "rxjs": "^7.3.0",
     "~": "link:src"
   },
   "devDependencies": {
