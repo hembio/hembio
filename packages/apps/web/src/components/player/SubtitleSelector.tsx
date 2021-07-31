@@ -22,6 +22,7 @@ export const SubtitleSelector = memo(({ showUI }: Props) => {
   useEffect(() => {
     if (showUI === false) {
       setTooltip(false);
+      setAnchorEl(null);
     }
   }, [showUI]);
 
