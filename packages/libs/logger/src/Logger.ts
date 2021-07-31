@@ -46,7 +46,9 @@ export class Logger implements LoggerService {
         if (err) finalLogger.error(err, "error caused exit");
       } catch {
         // Ignore
-        console.error(evt, err);
+        this.debug(
+          "Previous error occurred before the file logger could be initialized",
+        );
       }
       process.exit(err ? 1 : 0);
     });
@@ -54,11 +56,9 @@ export class Logger implements LoggerService {
     // catch all the ways node might exit
     process.on("beforeExit", () => handler(null, "beforeExit"));
     process.on("exit", () => handler(null, "exit"));
-    process.on("uncaughtException", (err) => handler(err, "uncaughtException"));
-    // process.on("unhandledRejection", (reason, promise) => {
-    //   this.error({ promise, reason }, "Unhandled Rejection");
-    //   handler(null, "unhandledRejection");
-    // });
+    process.on("uncaughtExceptionMonitor", (e: Error, origin: string) => {
+      this.error(e, origin);
+    });
     process.on("SIGINT", () => handler(null, "SIGINT"));
     process.on("SIGQUIT", () => handler(null, "SIGQUIT"));
     process.on("SIGTERM", () => handler(null, "SIGTERM"));
