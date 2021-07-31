@@ -85,7 +85,7 @@ export function AppBar({ open, onDrawerOpen }: Props): JSX.Element {
     <>
       <MuiAppBarWithOpen position="fixed" open={open} show={show}>
         <Container>
-          <Toolbar className={classes.root}>
+          <Toolbar className={classes.root} sx={{ ml: -2, mr: 0 }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"

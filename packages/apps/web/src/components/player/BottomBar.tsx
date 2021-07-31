@@ -85,6 +85,8 @@ export const BottomBar = observer(({ showUI, onInteraction }: Props) => {
   }
 
   return (
+    // TODO: Can we fix this?
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       className={clsx(classes.container, { [classes.hide]: !showUI })}
       onMouseDown={onInteraction}

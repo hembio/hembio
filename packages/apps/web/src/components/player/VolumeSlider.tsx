@@ -1,13 +1,14 @@
 import Grid from "@material-ui/core/Grid";
+import Tooltip from "@material-ui/core/Tooltip";
 import VolumeDown from "@material-ui/icons/VolumeDown";
 import VolumeOffIcon from "@material-ui/icons/VolumeOff";
 import VolumeUp from "@material-ui/icons/VolumeUp";
 import { makeStyles, styled } from "@material-ui/styles";
 import { Observer } from "mobx-react-lite";
-import { memo } from "react";
-import { useStores } from "../../stores";
+import { memo, useState } from "react";
 import { ControlButton } from "./ControlButton";
 import { Slider } from "./Slider";
+import { useStores } from "~/stores";
 
 export const SmallSlider = styled(Slider)({
   root: {
@@ -83,6 +84,7 @@ const useStyles = makeStyles({
 
 export const VolumeSlider = memo(() => {
   const classes = useStyles();
+  const [showTooltip, setTooltip] = useState(false);
   const { playerStore } = useStores();
 
   const handleChange = (_e: unknown, newValue: number | number[]) => {
@@ -111,12 +113,20 @@ export const VolumeSlider = memo(() => {
               alignItems="center"
             >
               <Grid item>
-                <ControlButton
-                  color="primary"
-                  onClick={() => playerStore.toggleMute()}
+                <Tooltip
+                  open={showTooltip}
+                  onClose={() => setTooltip(false)}
+                  onOpen={() => setTooltip(true)}
+                  title={isMuted ? "Unmute (m)" : "Mute (m)"}
+                  aria-label="toggle mute"
                 >
-                  {icon}
-                </ControlButton>
+                  <ControlButton
+                    color="primary"
+                    onClick={() => playerStore.toggleMute()}
+                  >
+                    {icon}
+                  </ControlButton>
+                </Tooltip>
               </Grid>
               <Grid item xs>
                 <SmallSlider

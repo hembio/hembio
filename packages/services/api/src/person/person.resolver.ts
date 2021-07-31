@@ -1,5 +1,5 @@
+import { PersonEntity } from "@hembio/core";
 import { Query, Resolver, Args, Mutation } from "@nestjs/graphql";
-import { PersonEntity } from "../../../../libs/core/src";
 import { PersonService } from "./person.service";
 import { UpdateMutationModel } from "~/common/models/update-mutation.model";
 import { ImageService } from "~/image/image.service";

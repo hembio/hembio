@@ -7,9 +7,9 @@ import {
   MikroORM,
 } from "@hembio/core";
 import { IMDbProvider, SearchResult } from "@hembio/indexer";
+import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import MiniSearch from "minisearch";
-import { createLogger } from "../../../../libs/logger/src";
 import { TitleNotFoundException } from "./exceptions/TitleNotFoundException";
 
 interface Params {

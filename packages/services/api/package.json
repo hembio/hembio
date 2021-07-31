@@ -79,6 +79,7 @@
     "@hapi/accept": "^5.0.2",
     "@hembio/core": "workspace:packages/libs/core",
     "@hembio/discovery": "workspace:packages/libs/discovery",
+    "@hembio/fs": "workspace:packages/libs/fs",
     "@hembio/indexer": "workspace:packages/services/indexer",
     "@hembio/logger": "workspace:packages/libs/logger",
     "@hembio/transcoder": "workspace:packages/services/transcoder",

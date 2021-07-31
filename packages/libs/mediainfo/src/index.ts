@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
+import { getCwd } from "@hembio/core";
 import execa from "execa";
-import { getCwd } from "../../core/src";
 
 const isWin = process.platform === "win32";
 const is64 = process.arch === "x64";
@@ -84,7 +84,7 @@ Audio_End;]
 ;
 Text; '%Language%'
 Text_Begin;,'subs':[
-Text_Middle;, 
+Text_Middle;,
 Text_End;]
 ;`;
 

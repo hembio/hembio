@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@hembio/core": "workspace:packages/libs/core",
+    "@hembio/indexer": "workspace:packages/services/indexer",
+    "@hembio/logger": "workspace:packages/libs/logger",
     "@nestjs/common": "^7.6.18",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^7.6.18",

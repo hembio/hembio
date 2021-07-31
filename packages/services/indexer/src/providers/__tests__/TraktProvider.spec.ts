@@ -1,4 +1,4 @@
-import { TitleType } from "../../../../../libs/core/src";
+import { TitleType } from "@hembio/core";
 import { TraktProvider } from "../TraktProvider";
 
 describe("TraktProvider", () => {

@@ -4,11 +4,11 @@ import {
   RefreshTokenEntity,
   UserEntity,
 } from "@hembio/core";
+import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { authenticator } from "@otplib/preset-default";
 import { toDataURL } from "qrcode";
-import { createLogger } from "../../../../libs/logger/src";
 import { CredentialsDto } from "./dto/credentials.dto";
 import { InvalidUsernameOrPassword } from "./exceptions/invalid-username-or-password.exception";
 import { Token } from "./token.interface";

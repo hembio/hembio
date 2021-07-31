@@ -5,7 +5,7 @@ import { Theme } from "@material-ui/core/styles";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
-import { useStores } from "../stores";
+import { useStores } from "~/stores";
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -44,7 +44,7 @@ export const TwoFactorForm = observer(() => {
         nextFocusItem.focus();
       }
     }
-  }, [tfaCode]);
+  }, [focusIndex, tfaCode]);
 
   return (
     <form
@@ -73,6 +73,8 @@ export const TwoFactorForm = observer(() => {
           id={`digit-${idx + 1}`}
           // label={`digit-${idx + 1}`}
           name={`digit-${idx + 1}`}
+          // TODO: Remove autofocus
+          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus={idx === 0}
           focused={focusIndex === idx}
           InputProps={{

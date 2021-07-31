@@ -54,7 +54,7 @@ export function AddLibraryDialog({
               id="content-type"
               value={type}
               label="Content type"
-              onChange={(e) => setType(e.target.value)}
+              onChange={(e) => setType(e.target.value as LibraryType)}
             >
               <MenuItem value={LibraryType.Movies}>Movies</MenuItem>
               <MenuItem value={LibraryType.Tvshows}>TV Shows</MenuItem>
