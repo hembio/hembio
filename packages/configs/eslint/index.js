@@ -3,7 +3,13 @@ const path = require("path");
 /** @type {import('eslint').Linter.Config} */
 const config = {
   root: true,
-  plugins: ["unused-imports", "workspaces", "@emotion"],
+  plugins: [
+    "unused-imports",
+    "workspaces",
+    "@emotion",
+    "react-hooks",
+    "jsx-a11y",
+  ],
   extends: [
     "eslint:recommended",
     "plugin:json/recommended",
@@ -13,6 +19,8 @@ const config = {
     "plugin:import/typescript",
     "plugin:workspaces/recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
     "prettier",
   ],
   parser: "@typescript-eslint/parser",
