@@ -1,5 +1,19 @@
-import { ArgsType, Field, Int } from "@nestjs/graphql";
+import { ArgsType, Field, InputType, Int } from "@nestjs/graphql";
 import { PaginationArgs } from "~/common/args/pagination.args";
+
+@InputType()
+export class GenreFilterInput {
+  @Field(() => String)
+  public slug!: string;
+  @Field(() => Number)
+  public value!: number;
+}
+
+@InputType()
+export class FilterInput {
+  @Field(() => [GenreFilterInput])
+  public genre?: GenreFilterInput[];
+}
 
 @ArgsType()
 export class GetTitleArgs extends PaginationArgs {
@@ -17,4 +31,7 @@ export class GetTitleArgs extends PaginationArgs {
 
   @Field(() => String, { nullable: true })
   public orderDirection?: string;
+
+  @Field(() => FilterInput, { nullable: true })
+  public filter?: FilterInput;
 }

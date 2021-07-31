@@ -53,12 +53,21 @@ export type FileEntity = {
   probe?: Maybe<Scalars['Boolean']>;
 };
 
+export type FilterInput = {
+  genre: Array<GenreFilterInput>;
+};
+
 export type GenreEntity = {
   __typename?: 'GenreEntity';
   id: Scalars['ID'];
   slug: Scalars['String'];
   titles: Array<TitleEntity>;
   name: Scalars['String'];
+};
+
+export type GenreFilterInput = {
+  slug: Scalars['String'];
+  value: Scalars['Float'];
 };
 
 export type IdentityModel = {
@@ -102,6 +111,7 @@ export type LibraryEntityTitlesArgs = {
   year?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Scalars['String']>;
   orderDirection?: Maybe<Scalars['String']>;
+  filter?: Maybe<FilterInput>;
 };
 
 
@@ -348,6 +358,10 @@ export type FileWithTitleFragment = (
   & Pick<FileEntity, 'id' | 'path' | 'subtitles'>
   & { title: (
     { __typename?: 'TitleEntity' }
+    & { topBilling: Array<(
+      { __typename?: 'CreditEntity' }
+      & CastFragment
+    )> }
     & TitleFragment
   ) }
 );
@@ -611,6 +625,7 @@ export type TitlesQueryVariables = Exact<{
   take?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Scalars['String']>;
   orderDirection?: Maybe<Scalars['String']>;
+  filter?: Maybe<FilterInput>;
 }>;
 
 
@@ -745,6 +760,19 @@ export const TitleFragmentDoc = gql`
   releaseDate
 }
     `;
+export const CastFragmentDoc = gql`
+    fragment Cast on CreditEntity {
+  id
+  department
+  order
+  character
+  person {
+    id
+    name
+    image
+  }
+}
+    `;
 export const FileWithTitleFragmentDoc = gql`
     fragment FileWithTitle on FileEntity {
   id
@@ -752,9 +780,13 @@ export const FileWithTitleFragmentDoc = gql`
   subtitles
   title {
     ...Title
+    topBilling(take: 8) {
+      ...Cast
+    }
   }
 }
-    ${TitleFragmentDoc}`;
+    ${TitleFragmentDoc}
+${CastFragmentDoc}`;
 export const GenreFragmentDoc = gql`
     fragment Genre on GenreEntity {
   id
@@ -795,19 +827,6 @@ export const PersonFragmentDoc = gql`
   externalIds {
     imdb
     tmdb
-  }
-}
-    `;
-export const CastFragmentDoc = gql`
-    fragment Cast on CreditEntity {
-  id
-  department
-  order
-  character
-  person {
-    id
-    name
-    image
   }
 }
     `;
@@ -1391,7 +1410,7 @@ export function refetchIdentifyTitleQuery(variables?: IdentifyTitleQueryVariable
       return { query: IdentifyTitleDocument, variables: variables }
     }
 export const TitlesDocument = gql`
-    query Titles($libraryId: String!, $skip: Int, $take: Int, $orderBy: String, $orderDirection: String) {
+    query Titles($libraryId: String!, $skip: Int, $take: Int, $orderBy: String, $orderDirection: String, $filter: FilterInput) {
   library(id: $libraryId) {
     id
     titles(
@@ -1399,6 +1418,7 @@ export const TitlesDocument = gql`
       take: $take
       orderBy: $orderBy
       orderDirection: $orderDirection
+      filter: $filter
     ) {
       edges {
         ...Title
@@ -1426,6 +1446,7 @@ export const TitlesDocument = gql`
  *      take: // value for 'take'
  *      orderBy: // value for 'orderBy'
  *      orderDirection: // value for 'orderDirection'
+ *      filter: // value for 'filter'
  *   },
  * });
  */

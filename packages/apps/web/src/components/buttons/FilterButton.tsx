@@ -1,47 +1,51 @@
 import Box from "@material-ui/core/Box";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
 import IconButton from "@material-ui/core/IconButton";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
 import Typography from "@material-ui/core/Typography";
-import Check from "@material-ui/icons/Check";
 import FilterList from "@material-ui/icons/FilterList";
 import { useState } from "react";
+import { useGenresQuery } from "~/generated/graphql";
 
 interface SortButtonProps {
-  onSort: (field: string, direction: string) => void;
-  orderBy: string;
-  orderDirection: string;
+  onFilter: (filter: Record<string, any>) => void;
+  filter: Record<string, any>;
 }
 
-const fields = {
-  releaseDate: "Release date",
-  createdAt: "Date added",
-  name: "Name",
-  ratingImdb: "Rating",
-};
-
-const directions = {
-  ASC: "Ascending",
-  DESC: "Descending",
-};
-
 export function FilterButton({
-  orderBy,
-  orderDirection,
-  onSort,
+  filter,
+  onFilter,
 }: SortButtonProps): JSX.Element {
+  const [values, setValues] = useState<Record<string, number>>({});
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { data } = useGenresQuery();
   const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleChange = (slug: string) => {
+    if (!values[slug]) {
+      values[slug] = 0;
+    }
+    if (values[slug] === -1) {
+      delete values[slug];
+    } else if (values[slug] === 0) {
+      values[slug] = 1;
+    } else if (values[slug] === 1) {
+      values[slug] = -1;
+    }
+    setValues({ ...values });
+    onFilter({ genre: values });
+  };
+
+  const genres = data?.genres || new Array(27).fill(undefined);
   return (
     <>
       <IconButton
-        aria-label="sort-button"
+        aria-label="filter-button"
         onClick={(e) => setAnchorEl(e.currentTarget)}
       >
         <FilterList />
@@ -62,52 +66,57 @@ export function FilterButton({
           horizontal: "right",
         }}
       >
-        <MenuList>
-          <Box sx={{ ml: 2 }}>
+        <Box sx={{ width: "750px" }}>
+          <Box
+            sx={{
+              mt: 1,
+              ml: 3,
+            }}
+          >
             <Typography variant="h6" color="body1">
-              Sort by
+              Filter
             </Typography>
           </Box>
-          {Object.entries(fields).map(([field, text]) => (
-            <MenuItem
-              key={field}
-              onClick={() => {
-                onSort(field, orderDirection);
-                handleClose();
+          <Box
+            sx={{
+              m: 3,
+              mt: 1,
+              display: "grid",
+              gap: 1,
+              gridAutoFlow: "row",
+              gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+              justifyItems: "stretch",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              sx={{
+                gridColumn: "1 / -1",
+                display: "grid",
+                gridAutoFlow: "column",
               }}
             >
-              {field === orderBy && (
-                <ListItemIcon>
-                  <Check />
-                </ListItemIcon>
-              )}
-              <ListItemText inset={field !== orderBy}>{text}</ListItemText>
-            </MenuItem>
-          ))}
-          <Box sx={{ ml: 2, mt: 2 }}>
-            <Typography variant="h6" color="body1">
-              Sort direction
-            </Typography>
+              <FormLabel component="legend">Genres</FormLabel>
+            </Box>
+            {genres.map((genre, idx) => (
+              <Box key={genre ? genre.slug : idx}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      color="secondary"
+                      indeterminate={values[genre?.slug] === -1}
+                      checked={values[genre?.slug] === 1 ? true : false}
+                      onChange={() => handleChange(genre?.slug)}
+                      name={genre ? genre.slug : ""}
+                      value={genre ? genre.id : ""}
+                    />
+                  }
+                  label={genre ? genre.name : ""}
+                />
+              </Box>
+            ))}
           </Box>
-          {Object.entries(directions).map(([direction, text]) => (
-            <MenuItem
-              key={direction}
-              onClick={() => {
-                onSort(orderBy, direction);
-                handleClose();
-              }}
-            >
-              {direction === orderDirection && (
-                <ListItemIcon>
-                  <Check />
-                </ListItemIcon>
-              )}
-              <ListItemText inset={direction !== orderDirection}>
-                {text}
-              </ListItemText>
-            </MenuItem>
-          ))}
-        </MenuList>
+        </Box>
       </Menu>
     </>
   );

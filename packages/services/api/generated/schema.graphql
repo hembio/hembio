@@ -36,7 +36,7 @@ type LibraryEntity {
   path: String!
   watch: Boolean!
   matcher: String!
-  titles(skip: Int = 0, take: Int = 50, ids: [String!], name: String, year: Int, orderBy: String, orderDirection: String): PaginatedTitleResponse!
+  titles(skip: Int = 0, take: Int = 50, ids: [String!], name: String, year: Int, orderBy: String, orderDirection: String, filter: FilterInput): PaginatedTitleResponse!
   newlyAdded(skip: Int = 0, take: Int = 50): PaginatedTitleResponse!
 }
 
@@ -46,6 +46,15 @@ enum LibraryType {
   MUSIC
   PODCASTS
   PHOTOS
+}
+
+input FilterInput {
+  genre: [GenreFilterInput!]!
+}
+
+input GenreFilterInput {
+  slug: String!
+  value: Float!
 }
 
 type FileEntity {
@@ -179,6 +188,14 @@ type UpdateMutationModel {
   id: String
 }
 
+type IdentityModel {
+  provider: String!
+  externalId: String!
+  type: String!
+  name: String!
+  year: String!
+}
+
 type StatsModel {
   time: Int!
   uptime: Int!
@@ -189,33 +206,25 @@ type StatsModel {
   totalTitles: Int!
 }
 
-type IdentityModel {
-  provider: String!
-  externalId: String!
-  type: String!
-  name: String!
-  year: String!
-}
-
 type Query {
-  file(fileId: String!): FileEntity
-  genres: [GenreEntity!]!
-  library(id: String!): LibraryEntity
-  libraries: [LibraryEntity!]!
-  person(id: String!): PersonEntity
-  stats: StatsModel!
-  title(id: String!): TitleEntity
-  search(query: String!): [TitleEntity!]!
   users: [UserEntity!]!
   user(userId: String!): UserEntity
+  library(id: String!): LibraryEntity
+  libraries: [LibraryEntity!]!
+  title(id: String!): TitleEntity
+  search(query: String!): [TitleEntity!]!
+  file(fileId: String!): FileEntity
+  stats: StatsModel!
+  person(id: String!): PersonEntity
+  genres: [GenreEntity!]!
 }
 
 type Mutation {
   addLibrary(name: String!, type: LibraryType!, path: String!): AddLibraryResponse!
   checkLibrary(id: String!): UpdateMutationModel!
-  updatePersonImages(id: String!): UpdateMutationModel!
   updateCredits(id: String!): UpdateMutationModel!
   updateMetadata(id: String!): UpdateMutationModel!
   updateTitleImages(id: String!): UpdateMutationModel!
   deleteTitle(id: String!): UpdateMutationModel!
+  updatePersonImages(id: String!): UpdateMutationModel!
 }

@@ -39,6 +39,7 @@ function useSearchParams() {
   const initialPage = Number(p) > 0 ? Number(p) - 1 : 0;
   const [orderBy, setOrderBy] = useState(ob || "releaseDate");
   const [orderDirection, setOrderDirection] = useState(od || "DESC");
+  const [filter, setFilter] = useState<Record<string, any>>({});
   const [page, setPage] = useState(initialPage);
 
   useEffect(() => {
@@ -62,6 +63,8 @@ function useSearchParams() {
     setOrderBy,
     orderDirection,
     setOrderDirection,
+    filter,
+    setFilter,
     page,
     setPage,
   };
@@ -77,6 +80,8 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
     setOrderBy,
     orderDirection,
     setOrderDirection,
+    filter,
+    setFilter,
     page,
     setPage,
   } = useSearchParams();
@@ -124,6 +129,26 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
     titles.push(...new Array(titlesPerPage).fill(undefined));
   }
 
+  const handlePagination = (nextPage: number) => {
+    setPage(nextPage);
+    rootRef.current?.scrollTo(0, 0);
+    const params: Record<string, string> = {};
+    if (nextPage > 0) {
+      params["p"] = (nextPage + 1).toString();
+    }
+    if (orderBy) {
+      params["ob"] = orderBy;
+    }
+    if (orderDirection) {
+      params["od"] = orderDirection;
+    }
+    history.push({
+      pathname: location.pathname,
+      search: new URLSearchParams(params).toString(),
+      state: {},
+    });
+  };
+
   const handleSort = (field: string, direction: string) => {
     setOrderBy(field);
     setOrderDirection(direction);
@@ -145,24 +170,8 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
     });
   };
 
-  const handlePagination = (nextPage: number) => {
-    setPage(nextPage);
-    rootRef.current?.scrollTo(0, 0);
-    const params: Record<string, string> = {};
-    if (nextPage > 0) {
-      params["p"] = (nextPage + 1).toString();
-    }
-    if (orderBy) {
-      params["ob"] = orderBy;
-    }
-    if (orderDirection) {
-      params["od"] = orderDirection;
-    }
-    history.push({
-      pathname: location.pathname,
-      search: new URLSearchParams(params).toString(),
-      state: {},
-    });
+  const handleFilter = (filter: Record<string, any>) => {
+    setFilter(filter);
   };
 
   return (
@@ -213,11 +222,7 @@ export const TitleList = ({ libraryId }: Props): JSX.Element | null => {
             />
           </Grid>
           <Grid item>
-            <FilterButton
-              onSort={handleSort}
-              orderBy={orderBy}
-              orderDirection={orderDirection}
-            />
+            <FilterButton onFilter={handleFilter} filter={{}} />
           </Grid>
         </Grid>
       </Grid>

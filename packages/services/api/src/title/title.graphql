@@ -131,6 +131,7 @@ query Titles(
   $take: Int
   $orderBy: String
   $orderDirection: String
+  $filter: FilterInput
 ) {
   library(id: $libraryId) {
     id
@@ -139,6 +140,7 @@ query Titles(
       take: $take
       orderBy: $orderBy
       orderDirection: $orderDirection
+      filter: $filter
     ) {
       edges {
         ...Title
