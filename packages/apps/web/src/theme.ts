@@ -45,6 +45,13 @@ export const theme = createTheme({
         maxWidth: isElectron() ? false : "xl",
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backdropFilter: "blur(4px)",
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
@@ -105,10 +112,10 @@ export const theme = createTheme({
         },
       },
     },
-    MuiAppBar: {
+    MuiTooltip: {
       styleOverrides: {
-        colorPrimary: {
-          backdropFilter: "blur(4px)",
+        tooltip: {
+          backgroundColor: "white",
         },
       },
     },
