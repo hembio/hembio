@@ -10,9 +10,10 @@
     "module": "esnext",
     "isolatedModules": true,
     "paths": {
-      "~/*": ["./src/*"],
-      "$/*": ["./public/*"]
+      "~/*": ["src/*"],
+      "$/*": ["public/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

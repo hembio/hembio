@@ -1,4 +1,5 @@
 {
   "extends": "@hembio/tsconfig/dev",
-  "include": ["config.ts"]
+  "include": ["config.ts"],
+  "exclude": ["node_modules"]
 }
