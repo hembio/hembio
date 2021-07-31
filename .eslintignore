@@ -1,0 +1,13 @@
+.yarn
+logs
+.transcoding
+.cache
+.images
+.env
+.webpack
+.db
+coverage
+node_modules/*
+**/node_modules/**
+dist
+**/dist/*
