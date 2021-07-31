@@ -15,7 +15,11 @@
     "eslint-plugin-unused-imports": "^1.1.2"
   },
   "devDependencies": {
-    "@types/eslint": "^7.28.0"
+    "@emotion/eslint-plugin": "^11.2.0",
+    "@types/eslint": "^7.28.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-json": "^3.0.0",
+    "eslint-plugin-workspaces": "^0.6.2"
   },
   "peerDependencies": {
     "eslint": ">= 3"
