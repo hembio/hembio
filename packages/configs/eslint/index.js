@@ -11,6 +11,7 @@ const config = {
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:workspaces/recommended",
     "plugin:react/recommended",
     "prettier",
   ],
