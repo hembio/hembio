@@ -4,7 +4,6 @@ import { useTheme } from "@material-ui/core/styles";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useStores } from "~/stores";
@@ -74,13 +73,13 @@ export const PlayStateIndicator = observer(() => {
       {indicator === "pause" && (
         <PauseIcon
           css={showIndicator && animate}
-          className={clsx([classes.indicator, { show: showIndicator }])}
+          className={classes.indicator}
         />
       )}
       {indicator === "play" && (
         <PlayArrowIcon
           css={showIndicator && animate}
-          className={clsx([classes.indicator, { show: showIndicator }])}
+          className={classes.indicator}
         />
       )}
     </div>
