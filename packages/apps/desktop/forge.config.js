@@ -65,7 +65,7 @@ module.exports = {
     ],
   ],
   hooks: {
-    postPackage: async (forgeConfig, options) => {
+    postPackage: async (_forgeConfig, _options) => {
       await copyDir(
         path.join(__dirname, "bin/mpv/win32"),
         path.join(__dirname, "out/hembio-win32-x64"),

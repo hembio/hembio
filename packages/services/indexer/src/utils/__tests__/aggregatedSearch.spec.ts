@@ -1,4 +1,3 @@
-import "jest";
 import { aggregatedSearch } from "../aggregatedSearch";
 
 describe("fetch", () => {

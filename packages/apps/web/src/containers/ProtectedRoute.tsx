@@ -1,5 +1,5 @@
-import { Route, Redirect, RouteProps } from "react-router-dom";
 import { Observer } from "mobx-react-lite";
+import { Route, Redirect, RouteProps } from "react-router-dom";
 import { useStores } from "../stores";
 
 interface ProtectedRouteProps extends RouteProps {

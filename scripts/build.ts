@@ -3,8 +3,8 @@ import { unlink, mkdir } from "fs/promises";
 import path from "path";
 import zlib from "zlib";
 import execa from "execa";
-import * as tar from "tar-stream";
 import { globby } from "globby";
+import * as tar from "tar-stream";
 
 async function untar(archive: string, target: string): Promise<void> {
   return new Promise<void>((resolve) => {

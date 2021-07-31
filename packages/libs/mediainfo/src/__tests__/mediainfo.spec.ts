@@ -1,4 +1,3 @@
-import "jest";
 import path from "path";
 import { mediainfo } from "../index";
 

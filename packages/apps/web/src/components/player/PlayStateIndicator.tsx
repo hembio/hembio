@@ -1,4 +1,6 @@
 /** @jsxImportSource @emotion/react */
+/** @jsx jsx */
+import { jsx } from '@emotion/react'
 import { css, keyframes } from "@emotion/react";
 import { useTheme } from "@material-ui/core/styles";
 import PauseIcon from "@material-ui/icons/Pause";

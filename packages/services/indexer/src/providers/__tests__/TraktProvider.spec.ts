@@ -14,9 +14,9 @@ describe("TraktProvider", () => {
     expect(result[0].year).toBe(2014);
   });
 
-  it.only("should fetch metadata for Greyhound (2020)", async () => {
+  it.skip("should fetch metadata for Greyhound (2020)", async () => {
     const provider = new TraktProvider();
-    const result = await provider.metadata(364601, TitleType.MOVIE);
+    const result = await provider.metadata(TitleType.MOVIE, 364601);
     console.log(result);
   });
 });

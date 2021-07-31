@@ -1,4 +1,3 @@
-import "jest";
 import { Matcher } from "../Matcher";
 
 describe("Matcher", () => {

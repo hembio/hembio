@@ -1,6 +1,6 @@
 import path from "path";
-import { createLogger } from "@hembio/logger";
 import { pathWalker } from "@hembio/fs";
+import { createLogger } from "@hembio/logger";
 import { Matcher } from "@hembio/matcher";
 
 export const logger = createLogger("renamer", { mobx: true });

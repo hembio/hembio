@@ -1,4 +1,3 @@
-import "jest";
 import { findFiles } from "../findFiles";
 
 describe("findFiles", () => {

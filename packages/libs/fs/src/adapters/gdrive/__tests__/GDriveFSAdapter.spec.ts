@@ -1,6 +1,5 @@
 import { createWriteStream } from "fs";
 import { stat, unlink } from "fs/promises";
-import "jest";
 import path from "path";
 import { Readable } from "stream";
 import { GDriveFSAdapter } from "../GDriveFSAdapter";
