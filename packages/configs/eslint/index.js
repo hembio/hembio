@@ -9,6 +9,9 @@ const config = {
     {
       files: ["*.js"],
       extends: ["eslint:recommended", "prettier"],
+      rules: {
+        "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      },
     },
     {
       files: ["*.json"],
