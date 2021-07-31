@@ -1,4 +1,8 @@
-# hembio monorepo
+<p align="center">
+  <img width="50%" src="./assets/logo.png">
+</p>
+
+---
 
 > ⚠️ This is under heavy development and considered experimental. You have been warned!
 
