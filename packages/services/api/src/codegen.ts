@@ -21,7 +21,7 @@ const reactHooksFile = path.join(
 // console.log("schemaFile:", schemaFile);
 // console.log("reactHooksFile", reactHooksFile);
 
-async function generateSchema() {
+async function generateSchema(): Promise<string> {
   const app = await NestFactory.createApplicationContext(
     GraphQLSchemaBuilderModule,
   );
@@ -68,7 +68,7 @@ async function generateSchema() {
   return printSchema(schema);
 }
 
-async function main() {
+async function main(): Promise<void> {
   const schema = await generateSchema();
 
   const schemaGenHeader = `# ------------------------------------------------------
