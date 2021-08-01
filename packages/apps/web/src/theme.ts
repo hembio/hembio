@@ -45,6 +45,13 @@ export const theme = createTheme({
         maxWidth: isElectron() ? false : "xl",
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        container: {
+          backdropFilter: "blur(4px)",
+        },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
