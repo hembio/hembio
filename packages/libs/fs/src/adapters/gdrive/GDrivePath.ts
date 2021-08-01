@@ -1,4 +1,4 @@
-const splitPath = (fsPath: string) => {
+const splitPath = (fsPath: string): string[] => {
   if (!fsPath) {
     throw new Error("Invalid pathname. It should not be empty.");
   }
