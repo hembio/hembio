@@ -80,6 +80,10 @@ const config = {
     "unused-imports/no-unused-imports": "warn",
     "unused-imports/no-unused-vars": "off",
     "@typescript-eslint/explicit-member-accessibility": ["warn"],
+    "@typescript-eslint/explicit-function-return-type": [
+      "warn",
+      { allowExpressions: true },
+    ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
@@ -97,6 +101,7 @@ const config = {
       rules: {
         "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
         "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
       },
     },
     {
