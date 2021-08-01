@@ -1,3 +1,4 @@
+import { decode } from "html-entities";
 import MiniSearch from "minisearch";
 import { deromanizeText, romanizeText } from "romanizr";
 import {
@@ -40,6 +41,8 @@ export const aggregatedSearch = async (
       if (result.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         result.forEach((res: any) => {
+          // decode any potential html entities
+          res.name = decode(res.name);
           if (res.year) {
             res.normalizedName = deromanizeText(res.name) + ` (${res.year})`;
             res.romanizedName = romanizeText(res.name) + ` (${res.year})`;

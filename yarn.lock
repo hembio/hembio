@@ -3497,6 +3497,7 @@ __metadata:
     diacritics: ^1.3.0
     eventemitter3: ^4.0.7
     ffmpeggy: ^1.0.0
+    html-entities: ^2.3.2
     jest: ^27.0.6
     mobx: ^6.3.2
     mobx-utils: ^6.0.4
