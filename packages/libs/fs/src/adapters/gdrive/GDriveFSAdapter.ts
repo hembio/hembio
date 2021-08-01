@@ -1,6 +1,6 @@
 import { Readable } from "stream";
-import { GoogleAuth } from "google-auth-library";
 import { drive_v3, google } from "googleapis";
+import type { AuthPlus } from "googleapis/build/src/googleapis";
 import { BaseFSAdapter, FSStatResult } from "../base";
 import { GDrivePath } from "./GDrivePath";
 
@@ -26,7 +26,7 @@ interface CurrentPathEntry {
 type MaybePromiseCallback = () => void | Promise<void>;
 
 export class GDriveFSAdapter extends BaseFSAdapter {
-  private auth: GoogleAuth;
+  private auth: AuthPlus["GoogleAuth"];
   private api: drive_v3.Drive;
   private currentPath!: CurrentPathEntry[];
   private cwdUpdateHandler?: MaybePromiseCallback;
@@ -74,13 +74,15 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     this.setCurrentPath(new GDrivePath(this.basePath));
   }
 
-  private getCurrentPath() {
+  private getCurrentPath(): GDrivePath {
     const path = this.currentPath.map((path) => `${path.name}/`).join("");
     const cwd = new GDrivePath(path);
     return cwd;
   }
 
-  private onCwdUpdate(handler: MaybePromiseCallback) {
+  private onCwdUpdate(
+    handler: MaybePromiseCallback,
+  ): MaybePromiseCallback | undefined {
     const prev = this.cwdUpdateHandler;
     if (handler) {
       this.cwdUpdateHandler = handler;
@@ -88,7 +90,7 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return prev;
   }
 
-  private async fireCwdUpdate() {
+  private async fireCwdUpdate(): Promise<void> {
     if (this.cwdUpdateHandler) {
       try {
         const result = this.cwdUpdateHandler();
@@ -104,7 +106,7 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     }
   }
 
-  private async setCurrentPath(gdPath: GDrivePath) {
+  private async setCurrentPath(gdPath: GDrivePath): Promise<boolean> {
     if (!gdPath.isAbsolute()) {
       return false;
     }
@@ -116,7 +118,7 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return true;
   }
 
-  private async isDirectory(gdPath: GDrivePath) {
+  private async isDirectory(gdPath: GDrivePath): Promise<boolean> {
     const file = await this.getFileOfPath(this.toAbsolutePath(gdPath));
     if (!file) {
       return false;
@@ -124,7 +126,10 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return file.mimeType === DIR_MIME;
   }
 
-  private async findFileByName(parentFolderId: string, fileName: string) {
+  private async findFileByName(
+    parentFolderId: string,
+    fileName: string,
+  ): Promise<drive_v3.Schema$File[]> {
     const files: drive_v3.Schema$File[] = [];
     const q = [
       `parents in '${parentFolderId}'`,
@@ -154,13 +159,17 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return files;
   }
 
-  private async getFileResource(params: drive_v3.Params$Resource$Files$Get) {
+  private async getFileResource(
+    params: drive_v3.Params$Resource$Files$Get,
+  ): Promise<drive_v3.Schema$File> {
     params.supportsAllDrives = true;
     const response = await this.api.files.get(params);
     return response.data;
   }
 
-  private async getFileList(params: drive_v3.Params$Resource$Files$List) {
+  private async getFileList(
+    params: drive_v3.Params$Resource$Files$List,
+  ): Promise<drive_v3.Schema$FileList> {
     if (this.driveId) {
       // params.supportsAllDrives = true;
       // params.includeItemsFromAllDrives = true;
@@ -171,7 +180,10 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return response.data;
   }
 
-  private async getFileByName(parentFolderId: string, fileName: string) {
+  private async getFileByName(
+    parentFolderId: string,
+    fileName: string,
+  ): Promise<drive_v3.Schema$File[]> {
     const files: drive_v3.Schema$File[] = [];
     const q = [
       `parents in '${parentFolderId}'`,
@@ -201,7 +213,7 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return files;
   }
 
-  private async getPaths(gdPath: GDrivePath) {
+  private async getPaths(gdPath: GDrivePath): Promise<CurrentPathEntry[]> {
     if (!gdPath.isAbsolute()) {
       return [];
     }
@@ -234,7 +246,7 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return paths;
   }
 
-  private toAbsolutePath(path: GDrivePath) {
+  private toAbsolutePath(path: GDrivePath): GDrivePath {
     if (path.isAbsolute()) {
       return path;
     }
@@ -242,10 +254,12 @@ export class GDriveFSAdapter extends BaseFSAdapter {
     return GDrivePath.merge(cwd, path);
   }
 
-  private async getFileOfPath(gdPath: GDrivePath) {
+  private async getFileOfPath(
+    gdPath: GDrivePath,
+  ): Promise<CurrentPathEntry | undefined> {
     const paths = await this.getPaths(gdPath);
     if (!paths) {
-      return null;
+      return undefined;
     }
     return paths.slice(-1)[0];
   }
