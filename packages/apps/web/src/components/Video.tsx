@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import { memo, useEffect, useRef } from "react";
@@ -19,9 +20,13 @@ const useStyles = makeStyles(
       // "-webkit-app-region": "drag",
     },
     video: {
+      flex: "1",
+      alignSelf: "center",
       placeSelf: "center",
       // Remove width to get automatic zoom
-      width: "100%",
+      maxWidth: "100%",
+      maxHeight: "100%",
+      margin: "auto",
       "&::cue": {
         fontFamily: "'Lucida Grande', Arial, serif",
         lineHeight: "1.2em",
