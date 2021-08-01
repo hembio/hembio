@@ -2,17 +2,17 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Hembio",
   "compilerOptions": {
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
     "alwaysStrict": true,
     "declaration": true,
     "declarationMap": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "useDefineForClassFields": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "CommonJS",
@@ -31,6 +31,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "useDefineForClassFields": true
   }
 }
