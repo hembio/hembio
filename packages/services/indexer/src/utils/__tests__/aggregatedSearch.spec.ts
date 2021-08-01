@@ -234,4 +234,32 @@ describe("fetch", () => {
     expect(result?.ids.trakt).toBe(5723);
     expect(result?.ids.tmdb).toBe(10545);
   });
+
+  it("should find Frankenstein's Monster's Monster, Frankenstein (2019)", async () => {
+    expect.assertions(6);
+    const result = await aggregatedSearch(
+      "Frankenstein's Monster's Monster, Frankenstein",
+      2019,
+    );
+    expect(result).toBeDefined();
+    expect(result?.name).toBe("Frankenstein's Monster's Monster, Frankenstein");
+    expect(result?.year).toBe(2019);
+    expect(result?.ids.imdb).toBe("tt10516390");
+    expect(result?.ids.trakt).toBe(456705);
+    expect(result?.ids.tmdb).toBe(612701);
+  });
+
+  it("should find Batman The Dark Knight Returns, Part 2 (2013)", async () => {
+    expect.assertions(6);
+    const result = await aggregatedSearch(
+      "Batman The Dark Knight Returns, Part 2",
+      2013,
+    );
+    expect(result).toBeDefined();
+    expect(result?.name).toBe("Batman: The Dark Knight Returns, Part 2");
+    expect(result?.year).toBe(2013);
+    expect(result?.ids.imdb).toBe("tt2166834");
+    expect(result?.ids.trakt).toBe(94682);
+    expect(result?.ids.tmdb).toBe(142061);
+  });
 });
