@@ -26,7 +26,7 @@
     "@hembio/tsconfig": "workspace:packages/configs/typescript",
     "@types/eslint": "^7.28.0",
     "@types/jest": "^26.0.24",
-    "@types/node": "^16.4.8",
+    "@types/node": "^16.4.9",
     "@types/react": "^17.0.15",
     "@types/rimraf": "^3.0.1",
     "@types/tar-stream": "^2.2.1",
