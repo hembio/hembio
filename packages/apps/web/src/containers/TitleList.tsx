@@ -22,11 +22,16 @@ import { useTitlesQuery } from "~/generated/graphql";
 import { useListener } from "~/hooks/useListener";
 import { useQueryStrings } from "~/hooks/useQueryString";
 
+export interface FilterParams {
+  year?: [number, number];
+  genre?: Record<string, number>;
+}
+
 interface SearchParams {
   page: number;
   orderBy: string;
   orderDirection: string;
-  filter: Record<string, string | number>;
+  filter: FilterParams;
 }
 
 const createSearchURL = ({
@@ -58,7 +63,7 @@ interface UseSearchParamsReturn {
     setPage: Dispatch<SetStateAction<number>>;
     setOrderBy: Dispatch<SetStateAction<string>>;
     setOrderDirection: Dispatch<SetStateAction<string>>;
-    setFilter: Dispatch<SetStateAction<Record<string, any>>>;
+    setFilter: Dispatch<SetStateAction<FilterParams>>;
   };
 }
 
@@ -71,7 +76,7 @@ function useSearchParams(): UseSearchParamsReturn {
     od || defaultOrderDirection,
   );
   // TODO: Fix typings
-  const [filter, setFilter] = useState<Record<string, any>>({});
+  const [filter, setFilter] = useState<FilterParams>({});
   const [page, setPage] = useState(initialPage);
 
   useEffect(() => {
@@ -156,6 +161,7 @@ export const TitleList = ({
   const rootRef = useRef(document.getElementById("root"));
   const windowRef = useRef(window);
   const [totalCount, setTotalCount] = useState(0);
+
   const { data, loading, error } = useTitlesQuery({
     variables: {
       libraryId,
@@ -163,6 +169,10 @@ export const TitleList = ({
       take: titlesPerPage,
       orderBy,
       orderDirection,
+      filter: {
+        year: filter.year as number[],
+        genre: JSON.stringify(filter.genre),
+      },
     },
   });
 
@@ -217,7 +227,7 @@ export const TitleList = ({
     );
   };
 
-  const handleFilter = (filter: Record<string, any>): void => {
+  const handleFilter = (filter: FilterParams): void => {
     setFilter(filter);
   };
 
@@ -258,7 +268,7 @@ export const TitleList = ({
             />
           </Grid>
           <Grid item>
-            <FilterButton onFilter={handleFilter} filter={{}} />
+            <FilterButton onFilter={handleFilter} filter={filter} />
           </Grid>
         </Grid>
       </Grid>

@@ -10,8 +10,8 @@ i18n
   .use(initReactI18next) // bind react-i18next to the instance
   .init({
     fallbackLng: "en-US",
-    fallbackNS: "translation",
-    defaultNS: "translation",
+    fallbackNS: "main",
+    defaultNS: "main",
     debug: true,
     interpolation: {
       escapeValue: false, // not needed for react
@@ -23,7 +23,7 @@ i18n
       backends: [
         resourcesToBackend((language, namespace, callback) => {
           import(`./locales/${language}/${namespace}.json`)
-            .then((resources) => {
+            .then(({ default: resources }) => {
               callback(null, resources);
             })
             .catch((error) => {

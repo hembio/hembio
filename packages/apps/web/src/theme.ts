@@ -119,10 +119,18 @@ export const theme = createTheme({
         },
       },
     },
+    MuiSlider: {
+      styleOverrides: {
+        valueLabel: {
+          top: -8,
+          backgroundColor: "unset",
+        },
+      },
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: "white",
+          // backgroundColor: "white",
         },
       },
     },

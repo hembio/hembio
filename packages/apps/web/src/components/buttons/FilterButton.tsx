@@ -1,3 +1,4 @@
+import { TitleGenreSlugs } from "@hembio/core";
 import Box from "@material-ui/core/Box";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -7,33 +8,35 @@ import Slider from "@material-ui/core/Slider";
 import Typography from "@material-ui/core/Typography";
 import FilterList from "@material-ui/icons/FilterList";
 import { useState } from "react";
-import { useGenresQuery } from "~/generated/graphql";
+import { useTranslation } from "react-i18next";
+import { FilterParams } from "~/containers/TitleList";
 
 interface SortButtonProps {
-  onFilter: (filter: Record<string, any>) => void;
-  filter: Record<string, any>;
+  onFilter: (filter: FilterParams) => void;
+  filter: FilterParams;
 }
 
-function GenreFilter({ filter, onFilter }: SortButtonProps) {
-  const [values, setValues] = useState<Record<string, number>>({});
-  const { data } = useGenresQuery();
+type GenreParam = Required<Pick<FilterParams, "genre">>["genre"];
 
-  const handleChange = (slug: string) => {
-    if (!values[slug]) {
-      values[slug] = 0;
+function GenreFilter({ filter, onFilter }: SortButtonProps): JSX.Element {
+  const [values, setValues] = useState<GenreParam>(filter.genre || {});
+  const { t } = useTranslation("genres");
+
+  const handleChange = (id: string): void => {
+    if (!values[id]) {
+      values[id] = 0;
     }
-    if (values[slug] === -1) {
-      delete values[slug];
-    } else if (values[slug] === 0) {
-      values[slug] = 1;
-    } else if (values[slug] === 1) {
-      values[slug] = -1;
+    if (values[id] === -1) {
+      delete values[id];
+    } else if (values[id] === 0) {
+      values[id] = 1;
+    } else if (values[id] === 1) {
+      values[id] = -1;
     }
     setValues({ ...values });
-    onFilter({ genre: values });
+    onFilter({ ...filter, genre: values });
   };
 
-  const genres = data?.genres || new Array(27).fill(undefined);
   return (
     <Box
       sx={{
@@ -59,20 +62,20 @@ function GenreFilter({ filter, onFilter }: SortButtonProps) {
           Genres
         </Typography>
       </Box>
-      {genres.map((genre, idx) => (
-        <Box key={genre ? genre.slug : idx}>
+      {TitleGenreSlugs.map((genre) => (
+        <Box key={genre}>
           <FormControlLabel
             control={
               <Checkbox
                 color="secondary"
-                indeterminate={values[genre?.slug] === -1}
-                checked={values[genre?.slug] === 1 ? true : false}
-                onChange={() => handleChange(genre?.slug)}
-                name={genre ? genre.slug : ""}
-                value={genre ? genre.id : ""}
+                indeterminate={values[genre] === -1}
+                checked={values[genre] === 1 ? true : false}
+                onChange={() => handleChange(genre)}
+                name={genre}
+                value={genre}
               />
             }
-            label={genre ? genre.name : ""}
+            label={t(genre)}
           />
         </Box>
       ))}
@@ -80,13 +83,17 @@ function GenreFilter({ filter, onFilter }: SortButtonProps) {
   );
 }
 
-function YearFilter({ filter, onFilter }: SortButtonProps) {
-  const currentYear = new Date().getFullYear();
-  const [values, setValues] = useState<[number, number]>([1888, currentYear]);
+type YearParam = Required<Pick<FilterParams, "year">>["year"];
 
-  const handleChange = (_e: Event, nextValues: number | number[]) => {
+function YearFilter({ filter, onFilter }: SortButtonProps): JSX.Element {
+  const currentYear = new Date().getFullYear();
+  const [values, setValues] = useState<YearParam>(
+    filter.year || [1888, currentYear],
+  );
+
+  const handleChange = (_e: Event, nextValues: number | number[]): void => {
     // Note: This is safe to infer to [number, number]
-    setValues(nextValues as [number, number]);
+    setValues(nextValues as YearParam);
   };
 
   const marks = [
@@ -118,12 +125,13 @@ function YearFilter({ filter, onFilter }: SortButtonProps) {
           getAriaLabel={() => "Year filter range"}
           color="secondary"
           value={values}
-          onChange={handleChange}
           marks={marks}
           min={marks[0].value}
           max={marks[1].value}
           valueLabelDisplay="on"
           disableSwap
+          onChange={handleChange}
+          onChangeCommitted={() => onFilter({ ...filter, year: values })}
         />
       </Box>
     </Box>
@@ -137,7 +145,7 @@ export function FilterButton({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
-  const handleClose = () => {
+  const handleClose = (): void => {
     setAnchorEl(null);
   };
 
@@ -168,13 +176,17 @@ export function FilterButton({
         <Box sx={{ width: "750px" }}>
           <Box
             sx={{
+              display: "grid",
+              gridAutoFlow: "column",
+              justifyContent: "space-between",
               mt: 1,
-              ml: 3,
+              mx: 2,
             }}
           >
             <Typography variant="h6" color="body1">
               Filter by
             </Typography>
+            {/* <Button variant="text">Apply</Button> */}
           </Box>
           <YearFilter filter={filter} onFilter={onFilter} />
           <GenreFilter filter={filter} onFilter={onFilter} />

@@ -23,6 +23,8 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
 };
 
 export type AddLibraryResponse = {
@@ -57,8 +59,8 @@ export type FileEntity = {
 };
 
 export type FilterInput = {
-  year: Array<Scalars["Int"]>;
-  genre: Array<GenreFilterInput>;
+  year?: Maybe<Array<Scalars["Int"]>>;
+  genre?: Maybe<Scalars["JSON"]>;
 };
 
 export type GenreEntity = {
@@ -67,11 +69,6 @@ export type GenreEntity = {
   slug: Scalars["String"];
   titles: Array<TitleEntity>;
   name: Scalars["String"];
-};
-
-export type GenreFilterInput = {
-  slug: Scalars["String"];
-  value: Scalars["Float"];
 };
 
 export type IdentityModel = {
