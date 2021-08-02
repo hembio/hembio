@@ -61,7 +61,7 @@ class TitleRatings {
   public trakt?: number;
 
   @Field(() => Float, { nullable: true })
-  public get aggregated() {
+  public get aggregated(): number | undefined {
     const scores: number[] = [
       this.imdb,
       this.tmdb,
@@ -72,7 +72,7 @@ class TitleRatings {
     const len = scores.length;
     const aggregated =
       scores.reduce((acc: number, cur: number) => acc + cur, 0) / len;
-    return isNaN(aggregated) ? null : aggregated;
+    return isNaN(aggregated) ? undefined : aggregated;
   }
 }
 
@@ -266,11 +266,16 @@ export class TitleEntity {
   @Field(() => [GenreEntity])
   @ManyToMany({
     entity: () => GenreEntity,
-    lazy: true,
+    lazy: false,
     owner: true,
-    strategy: LoadStrategy.JOINED,
+    // strategy: LoadStrategy.SELECT_IN,
   })
   public genres = new Collection<GenreEntity>(this);
+
+  @Field(() => Int)
+  @Property({ nullable: true })
+  @Index()
+  public genreBits?: number;
 
   @Field(() => [CreditEntity])
   @OneToMany({

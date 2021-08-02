@@ -9,6 +9,7 @@ import {
   Populate,
   FilterQuery,
   RequestContext,
+  expr,
 } from "@mikro-orm/core";
 import { MikroOrmModule, InjectRepository } from "@mikro-orm/nestjs";
 import {
@@ -20,9 +21,6 @@ import getPort from "get-port";
 import internalIp from "internal-ip";
 import MikroORMConfig from "./mikro-orm.config";
 
-export * from "./createORM";
-export * from "~/entities";
-export * from "./seedDatabase";
 export {
   MikroORMConfig,
   MikroORM,
@@ -34,6 +32,9 @@ export {
   QueryOrder,
   InjectRepository,
   RequestContext,
+  getPort,
+  internalIp,
+  expr,
 };
 
 export type {
@@ -45,7 +46,12 @@ export type {
   FilterQuery,
 };
 
+export * from "./createORM";
+export * from "~/entities";
+export * from "./seedDatabase";
 export * from "~/modules/task";
+export * from "~/lib";
+export * from "./genres";
 
 // NOTE: utils need to be exported separately to avoid cyclic dependencies
 export * from "~/utils/beforeExit";
@@ -58,7 +64,4 @@ export * from "~/utils/prettyDuration";
 export * from "~/utils/prettyTime";
 export * from "~/utils/createService";
 export * from "~/utils/capitalize";
-export * from "~/lib";
 export * from "~/enums/Times";
-
-export { getPort, internalIp };

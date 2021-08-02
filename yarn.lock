@@ -3402,6 +3402,7 @@ __metadata:
     file-loader: ^6.2.0
     graphql: ^15.5.1
     graphql-tools: ^8.0.0
+    graphql-type-json: ^0.3.2
     html-loader: ^2.1.2
     jest: ^27.0.6
     jimp: ^0.16.1
@@ -14426,6 +14427,15 @@ __metadata:
     "@apollo/client":
       optional: true
   checksum: 8c16d7a7b136a557a5295836395759904b8dec7ba0ff0f8402b2f1966ca29fb0bcf4a66308f954a2c1b30884e68840826562ea23e1614331ceb145d175cb89c6
+  languageName: node
+  linkType: hard
+
+"graphql-type-json@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "graphql-type-json@npm:0.3.2"
+  peerDependencies:
+    graphql: ">=0.8.0"
+  checksum: 41620699637a5294937bd61d6e2696edea5a1279ef3d8f4b33716a910635595435381ccd1b74c6fae62c2bc81064c62ae27d3559c8380c0f99bdfdc8ecb249b0
   languageName: node
   linkType: hard
 

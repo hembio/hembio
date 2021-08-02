@@ -10,6 +10,7 @@ import {
   GraphQLSchemaFactory,
 } from "@nestjs/graphql";
 import { printSchema } from "graphql";
+import GraphQLJSON from "graphql-type-json";
 import requireGlob from "require-glob";
 
 const schemaFile = path.join(__dirname, "../generated/schema.graphql");
@@ -62,6 +63,8 @@ async function generateSchema(): Promise<string> {
       return [...result, ...exports];
     },
   });
+
+  resolvers["JSON"] = GraphQLJSON;
 
   const gqlSchemaFactory = app.get(GraphQLSchemaFactory);
   const schema = await gqlSchemaFactory.create(resolvers, scalars);

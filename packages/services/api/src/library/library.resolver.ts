@@ -57,10 +57,15 @@ export class LibraryResolver {
       libraryId: library.id,
       name,
       year: filter?.year ? filter.year : year,
+      genre: filter?.genre ? JSON.parse(filter.genre) : undefined,
       skip,
       take,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      orderBy: { [orderBy]: orderDirection } as any,
+      orderBy: {
+        [orderBy]: orderDirection,
+        year: orderDirection,
+        name: orderDirection,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any,
     });
     return { edges, totalCount };
   }

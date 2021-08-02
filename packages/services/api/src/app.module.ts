@@ -16,6 +16,7 @@ import {
 } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
+import GraphQLJSON from "graphql-type-json";
 import { CookieModule } from "nest-cookies";
 import { MercuriusModule } from "nestjs-mercurius";
 import { config } from "../../../../config";
@@ -51,6 +52,7 @@ const AppConfigModule = ConfigModule.forRoot({
     MikroOrmModule.forRoot(MikroORMConfig),
     MercuriusModule.forRoot({
       graphiql: true,
+      resolvers: { JSON: GraphQLJSON },
       autoSchemaFile: path.resolve(__dirname, "../generated/schema.graphql"),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       context: (req: any) => ({

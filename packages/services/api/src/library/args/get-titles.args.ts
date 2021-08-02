@@ -1,21 +1,14 @@
 import { ArgsType, Field, InputType, Int } from "@nestjs/graphql";
+import GraphQLJSON from "graphql-type-json";
 import { PaginationArgs } from "~/common/args/pagination.args";
 
 @InputType()
-export class GenreFilterInput {
-  @Field(() => String)
-  public slug!: string;
-  @Field(() => Number)
-  public value!: number;
-}
-
-@InputType()
 export class FilterInput {
-  @Field(() => [Int, Int])
+  @Field(() => [Int, Int], { nullable: true })
   public year?: [number, number];
 
-  @Field(() => [GenreFilterInput])
-  public genre?: GenreFilterInput[];
+  @Field(() => GraphQLJSON, { nullable: true })
+  public genre?: string;
 }
 
 @ArgsType()

@@ -5,6 +5,9 @@ import {
   Populate,
   EntityManager,
   MikroORM,
+  TitleGenreSlugs,
+  expr,
+  TitleGenreLiterals,
 } from "@hembio/core";
 import { IMDbProvider, SearchResult } from "@hembio/indexer";
 import { createLogger } from "@hembio/logger";
@@ -18,6 +21,7 @@ interface Params {
   orderBy?: QueryOrderMap;
   name?: string | RegExp;
   year?: number | [number, number];
+  genre?: Record<TitleGenreLiterals, number>;
   take?: number;
   skip?: number;
 }
@@ -28,7 +32,34 @@ export class TitleService {
   public constructor(
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
-  ) {}
+  ) {
+    // setTimeout(async () => {
+    //   await this.orm.isConnected();
+    //   this.setGenreBits();
+    // }, 1000);
+  }
+
+  public async setGenreBits(): Promise<void> {
+    const em = this.em.fork(false);
+    const titles = await this.em.find(TitleEntity, { genreBits: null }, [
+      "genres",
+    ]);
+
+    for (const title of titles) {
+      const genres = (await title.genres.init()).getItems();
+      let genreBits = 0;
+      for (const genre of genres) {
+        const genreIndex = TitleGenreSlugs.indexOf(
+          genre.slug as TitleGenreLiterals,
+        );
+        if (genreIndex !== -1) {
+          genreBits += Math.pow(2, genreIndex);
+        }
+      }
+      title.genreBits = genreBits;
+      await em.persistAndFlush(title);
+    }
+  }
 
   public async deleteOneById(id: string): Promise<boolean> {
     const em = this.em.fork(false);
@@ -66,30 +97,36 @@ export class TitleService {
   }
 
   public async findAll(params: Params): Promise<[TitleEntity[], number]> {
-    const { ids, libraryId, name, year, take, skip, orderBy } = params;
+    const { ids, libraryId, name, year, genre, take, skip, orderBy } = params;
+    const em = this.em.fork(true);
 
-    const filter: Record<string, unknown> = {};
+    const $and: Array<string | Record<string, any>> = [];
+    if (ids) {
+      $and.push({ id: { $in: ids } });
+    }
+
     const options: FindOptions<TitleEntity, Populate<TitleEntity>> = {
       populate: [],
     };
 
     if (ids) {
-      filter.id = { $in: ids };
+      $and.push({ id: { $in: ids } });
     }
 
     if (libraryId) {
-      filter.library = libraryId;
+      $and.push({ library: libraryId });
     }
 
     if (name) {
-      filter.name =
-        typeof name === "string" ? new RegExp(`^${name}.*`, "i") : name;
+      $and.push({
+        name: typeof name === "string" ? new RegExp(`^${name}.*`, "i") : name,
+      });
     }
 
     if (year) {
-      filter.year = Array.isArray(year)
-        ? { $gte: year[0], $lte: year[1] }
-        : year;
+      $and.push({
+        year: Array.isArray(year) ? { $gte: year[0], $lte: year[1] } : year,
+      });
     }
 
     options.limit = take || 30;
@@ -97,9 +134,24 @@ export class TitleService {
     options.orderBy = orderBy;
     // options.cache = true;
 
-    const em = this.em.fork(true);
-    const titleRepo = em.getRepository(TitleEntity);
-    return titleRepo.findAndCount(filter, options);
+    if (genre) {
+      for (const [slug, val] of Object.entries(genre)) {
+        const idx = TitleGenreSlugs.indexOf(slug as TitleGenreLiterals);
+        if (idx === -1) {
+          continue;
+        }
+        const mask = Math.pow(2, idx);
+        if (val === 1) {
+          $and.push({ [expr(`genre_bits & ${mask}`)]: mask });
+        } else if (val === -1) {
+          $and.push({ [expr(`genre_bits & ${mask}`)]: { $ne: mask } });
+        }
+      }
+    }
+
+    console.dir({ $and }, { depth: null });
+
+    return em.findAndCount(TitleEntity, { $and }, options);
   }
 
   public async findOneById(id: string): Promise<TitleEntity> {
