@@ -131,7 +131,13 @@ function YearFilter({ filter, onFilter }: SortButtonProps): JSX.Element {
           valueLabelDisplay="on"
           disableSwap
           onChange={handleChange}
-          onChangeCommitted={() => onFilter({ ...filter, year: values })}
+          onChangeCommitted={() => {
+            // Defer setting the filter a bit
+            // so animations have time to finish
+            setTimeout(() => {
+              onFilter({ ...filter, year: values });
+            }, 100);
+          }}
         />
       </Box>
     </Box>
