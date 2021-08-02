@@ -21,6 +21,7 @@ import { SortButton } from "~/components/buttons/SortButton";
 import { useTitlesQuery } from "~/generated/graphql";
 import { useListener } from "~/hooks/useListener";
 import { useQueryStrings } from "~/hooks/useQueryString";
+import { useThrottledCallback } from "~/hooks/useThrottledCallback";
 
 export interface FilterParams {
   year?: [number, number];
@@ -206,30 +207,44 @@ export const TitleList = ({
     titles.push(...new Array(titlesPerPage).fill(undefined));
   }
 
-  const handlePagination = (nextPage: number): void => {
-    setPage(nextPage);
-    rootRef.current?.scrollTo(0, 0);
-    history.push(createSearchURL({ ...searchParams, page: nextPage + 1 }));
-  };
+  const handlePagination = useThrottledCallback(
+    (nextPage: number): void => {
+      setPage(nextPage);
+      rootRef.current?.scrollTo(0, 0);
+      history.push(createSearchURL({ ...searchParams, page: nextPage + 1 }));
+    },
+    [],
+    300,
+  );
 
-  const handleSort = (field: string, direction: string): void => {
-    setOrderBy(field);
-    setOrderDirection(direction);
-    setPage(0);
-    rootRef.current?.scrollTo(0, 0);
-    history.push(
-      createSearchURL({
-        ...searchParams,
-        page: 1,
-        orderBy: field,
-        orderDirection: direction,
-      }),
-    );
-  };
+  const handleSort = useThrottledCallback(
+    (field: string, direction: string): void => {
+      setOrderBy(field);
+      setOrderDirection(direction);
+      setPage(0);
+      rootRef.current?.scrollTo(0, 0);
+      history.push(
+        createSearchURL({
+          ...searchParams,
+          page: 1,
+          orderBy: field,
+          orderDirection: direction,
+        }),
+      );
+    },
+    [],
+    300,
+  );
 
-  const handleFilter = (filter: FilterParams): void => {
-    setFilter(filter);
-  };
+  const handleFilter = useThrottledCallback(
+    (filter: FilterParams): void => {
+      setFilter(filter);
+      setPage(0);
+      rootRef.current?.scrollTo(0, 0);
+    },
+    [],
+    300,
+  );
 
   return (
     <Container>
