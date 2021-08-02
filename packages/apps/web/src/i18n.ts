@@ -11,7 +11,9 @@ i18n
   .init({
     fallbackLng: "en-US",
     fallbackNS: "main",
+    ns: "main",
     defaultNS: "main",
+    supportedLngs: ["en-US", "sv-SE"],
     debug: true,
     interpolation: {
       escapeValue: false, // not needed for react
