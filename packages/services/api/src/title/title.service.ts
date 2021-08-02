@@ -149,8 +149,6 @@ export class TitleService {
       }
     }
 
-    console.dir({ $and }, { depth: null });
-
     return em.findAndCount(TitleEntity, { $and }, options);
   }
 
