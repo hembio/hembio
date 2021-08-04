@@ -13,6 +13,8 @@ import PersonIcon from "@material-ui/icons/Person";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
+import { CreditListitem } from "~/components/CreditListItem";
+import { PersonDebugBox } from "~/components/PersonDebugBox";
 import { TitleCard } from "~/components/TitleCard";
 import { HEMBIO_API_URL } from "~/constants";
 import { usePersonQuery } from "~/generated/graphql";
@@ -101,7 +103,7 @@ const useStyles = makeStyles(
 export const Person = (): JSX.Element => {
   const classes = useStyles();
   const { personId } = useParams<{ personId: string }>();
-  const { data, error } = usePersonQuery({
+  const { data, error, refetch } = usePersonQuery({
     variables: { id: personId },
   });
 
@@ -127,14 +129,6 @@ export const Person = (): JSX.Element => {
     person && person.image
       ? `${HEMBIO_API_URL}/images/people${person.image}`
       : undefined;
-
-  const directing =
-    person?.credits.filter((c) => c.job === "Director") ||
-    new Array(4).fill(undefined);
-
-  const acting =
-    person?.credits.filter((c) => c.job === "Actor") ||
-    new Array(4).fill(undefined);
 
   return (
     <>
@@ -289,58 +283,55 @@ export const Person = (): JSX.Element => {
               display: "grid",
               gap: 2,
               gridAutoFlow: "row",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))",
               // justifyItems: "stretch",
               alignItems: "center",
             }}
           >
-            {directing.length > 0 && (
-              <>
-                <Box sx={{ gridColumn: "1 / -1" }}>
-                  <Typography variant="h5" color="body1">
-                    Directing
-                  </Typography>
-                </Box>
-                {directing.map((credit, idx) => (
-                  <TitleCard key={credit?.id || idx} title={credit?.title} />
-                ))}
-              </>
-            )}
-            {acting.length > 0 && (
-              <>
-                <Box sx={{ gridColumn: "1 / -1" }}>
-                  <Typography variant="h5" color="body1">
-                    Starring
-                  </Typography>
-                </Box>
-                {acting.map((credit, idx) => (
-                  <TitleCard key={credit?.id || idx} title={credit?.title} />
-                ))}
-              </>
-            )}
+            {person &&
+              person.creditsByTitle &&
+              person.creditsByTitle.map((title, idx) => (
+                <>
+                  <Box
+                    sx={{
+                      width: "200px",
+                      display: "grid",
+                      gap: 2,
+                      gridAutoFlow: "row",
+                      gridTemplateColumns:
+                        "repeat(auto-fit, 200px minmax(450px, 1fr))",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TitleCard
+                      size="small"
+                      key={title?.id || idx}
+                      title={title}
+                    />
+                    <Box>
+                      {title &&
+                        title.credits.map((credit, idx) => (
+                          <CreditListitem
+                            key={credit ? credit.id : idx}
+                            credit={{ ...credit, person }}
+                          />
+                        ))}
+                    </Box>
+                  </Box>
+                </>
+              ))}
           </Box>
         </Paper>
         <Box sx={{ pt: 3 }} />
       </Container>
 
-      {/* <Container
+      <Container
         className={classes.root}
         sx={{ position: "relative", zIndex: 1, mt: 2 }}
       >
-        <CreditsBox title={person} />
-
-        {person && (
-          <TitleDebugBox title={person} reload={reload} refetch={refetch} />
-        )}
+        {person && <PersonDebugBox person={person} refetch={refetch} />}
         <Box sx={{ pt: 4 }} />
-
-        {person && (
-          <BackgroundPortal
-            src={`${HEMBIO_API_URL}/images/titles/${person.id}/background`}
-            opacity={0.4}
-          />
-        )}
-      </Container> */}
+      </Container>
     </>
   );
 };

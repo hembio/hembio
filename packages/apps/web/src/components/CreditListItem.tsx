@@ -9,7 +9,10 @@ import { HEMBIO_API_URL } from "~/constants";
 import { CastFragment, CrewFragment } from "~/generated/graphql";
 
 interface CreditListitemProps {
-  credit?: CastFragment | CrewFragment;
+  credit?: Pick<
+    CastFragment & CrewFragment,
+    "id" | "job" | "character" | "department" | "person"
+  >;
 }
 
 export function CreditListitem({ credit }: CreditListitemProps): JSX.Element {

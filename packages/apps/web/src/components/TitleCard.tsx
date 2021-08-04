@@ -87,10 +87,11 @@ interface Props {
   title?: Pick<TitleFragment, "id" | "thumb" | "name" | "year">;
   skeleton?: boolean;
   setRef?: React.Dispatch<HTMLDivElement>;
+  size?: "adapt" | "small" | "large" | "tiny";
 }
 
 export const TitleCard = forwardRef<HTMLDivElement, Props>(
-  ({ title, skeleton }, ref) => {
+  ({ title, skeleton, size = "small" }, ref) => {
     const classes = useStyles();
     const randomWidth = !title || skeleton ? Math.random() * 60 + 20 : 0;
     return (
@@ -99,7 +100,7 @@ export const TitleCard = forwardRef<HTMLDivElement, Props>(
           <PosterImage
             id={title ? title.id : undefined}
             thumbnail={title ? title.thumb : undefined}
-            size="small"
+            size={size}
           />
           <div className={classes.bottomBar}>
             <Tooltip

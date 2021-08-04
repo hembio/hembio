@@ -43,6 +43,15 @@ export type CreditEntity = {
   title: TitleEntity;
 };
 
+export type CreditsByTitle = {
+  __typename?: "CreditsByTitle";
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  year: Scalars["Float"];
+  thumb?: Maybe<Scalars["String"]>;
+  credits: Array<CreditEntity>;
+};
+
 export type FileEntity = {
   __typename?: "FileEntity";
   id: Scalars["ID"];
@@ -61,14 +70,6 @@ export type FileEntity = {
 export type FilterInput = {
   year?: Maybe<Array<Scalars["Int"]>>;
   genre?: Maybe<Scalars["JSON"]>;
-};
-
-export type GenreEntity = {
-  __typename?: "GenreEntity";
-  id: Scalars["ID"];
-  slug: Scalars["String"];
-  titles: Array<TitleEntity>;
-  name: Scalars["String"];
 };
 
 export type GenreModel = {
@@ -194,6 +195,7 @@ export type PersonEntity = {
   placeOfBirth?: Maybe<Scalars["String"]>;
   image?: Maybe<Scalars["String"]>;
   credits: Array<CreditEntity>;
+  creditsByTitle?: Maybe<Array<CreditsByTitle>>;
 };
 
 export type PersonExternalIds = {
@@ -205,7 +207,6 @@ export type PersonExternalIds = {
 export type Query = {
   __typename?: "Query";
   file?: Maybe<FileEntity>;
-  genres: Array<GenreEntity>;
   library?: Maybe<LibraryEntity>;
   libraries: Array<LibraryEntity>;
   person?: Maybe<PersonEntity>;
@@ -285,7 +286,6 @@ export type TitleEntity = {
   year: Scalars["Int"];
   releaseDate?: Maybe<Scalars["DateTime"]>;
   runtime?: Maybe<Scalars["Int"]>;
-  genreBits?: Maybe<Scalars["Int"]>;
   credits: Array<CreditEntity>;
   images: Array<ImageEntity>;
   files: Array<FileEntity>;
@@ -370,17 +370,6 @@ export type ProbeFileQuery = { __typename?: "Query" } & {
   file?: Maybe<{ __typename?: "FileEntity" } & Pick<FileEntity, "probe">>;
 };
 
-export type GenreFragment = { __typename?: "GenreEntity" } & Pick<
-  GenreEntity,
-  "id" | "slug" | "name"
->;
-
-export type GenresQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GenresQuery = { __typename?: "Query" } & {
-  genres: Array<{ __typename?: "GenreEntity" } & GenreFragment>;
-};
-
 export type LibraryFragment = { __typename?: "LibraryEntity" } & Pick<
   LibraryEntity,
   "id" | "type" | "slug" | "name" | "createdAt"
@@ -415,16 +404,20 @@ export type PersonFragment = { __typename?: "PersonEntity" } & Pick<
   PersonEntity,
   "id" | "createdAt" | "name" | "image" | "bio" | "birthday" | "placeOfBirth"
 > & {
-    credits: Array<
-      { __typename?: "CreditEntity" } & Pick<
-        CreditEntity,
-        "id" | "job" | "character" | "department"
-      > & {
-          title: { __typename?: "TitleEntity" } & Pick<
-            TitleEntity,
-            "id" | "name" | "year" | "thumb"
-          >;
-        }
+    creditsByTitle?: Maybe<
+      Array<
+        { __typename?: "CreditsByTitle" } & Pick<
+          CreditsByTitle,
+          "id" | "name" | "year" | "thumb"
+        > & {
+            credits: Array<
+              { __typename?: "CreditEntity" } & Pick<
+                CreditEntity,
+                "id" | "job" | "character" | "department"
+              >
+            >;
+          }
+      >
     >;
     externalIds: { __typename?: "PersonExternalIds" } & Pick<
       PersonExternalIds,
@@ -718,13 +711,6 @@ export const FileWithTitleFragmentDoc = gql`
   ${TitleFragmentDoc}
   ${CastFragmentDoc}
 `;
-export const GenreFragmentDoc = gql`
-  fragment Genre on GenreEntity {
-    id
-    slug
-    name
-  }
-`;
 export const LibraryFragmentDoc = gql`
   fragment Library on LibraryEntity {
     id
@@ -743,16 +729,16 @@ export const PersonFragmentDoc = gql`
     bio
     birthday
     placeOfBirth
-    credits {
+    creditsByTitle {
       id
-      job
-      character
-      department
-      title {
+      name
+      year
+      thumb
+      credits {
         id
-        name
-        year
-        thumb
+        job
+        character
+        department
       }
     }
     externalIds {
@@ -937,57 +923,6 @@ export type ProbeFileQueryResult = Apollo.QueryResult<
 >;
 export function refetchProbeFileQuery(variables?: ProbeFileQueryVariables) {
   return { query: ProbeFileDocument, variables: variables };
-}
-export const GenresDocument = gql`
-  query Genres {
-    genres {
-      ...Genre
-    }
-  }
-  ${GenreFragmentDoc}
-`;
-
-/**
- * __useGenresQuery__
- *
- * To run a query within a React component, call `useGenresQuery` and pass it any options that fit your needs.
- * When your component renders, `useGenresQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGenresQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGenresQuery(
-  baseOptions?: Apollo.QueryHookOptions<GenresQuery, GenresQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GenresQuery, GenresQueryVariables>(
-    GenresDocument,
-    options,
-  );
-}
-export function useGenresLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GenresQuery, GenresQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GenresQuery, GenresQueryVariables>(
-    GenresDocument,
-    options,
-  );
-}
-export type GenresQueryHookResult = ReturnType<typeof useGenresQuery>;
-export type GenresLazyQueryHookResult = ReturnType<typeof useGenresLazyQuery>;
-export type GenresQueryResult = Apollo.QueryResult<
-  GenresQuery,
-  GenresQueryVariables
->;
-export function refetchGenresQuery(variables?: GenresQueryVariables) {
-  return { query: GenresDocument, variables: variables };
 }
 export const LibrariesDocument = gql`
   query Libraries {

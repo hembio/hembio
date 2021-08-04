@@ -6,16 +6,16 @@ fragment Person on PersonEntity {
   bio
   birthday
   placeOfBirth
-  credits {
+  creditsByTitle {
     id
-    job
-    character
-    department
-    title {
+    name
+    year
+    thumb
+    credits {
       id
-      name
-      year
-      thumb
+      job
+      character
+      department
     }
   }
   externalIds {

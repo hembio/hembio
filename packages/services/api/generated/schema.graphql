@@ -20,6 +20,7 @@ type PersonEntity {
   placeOfBirth: String
   image: String
   credits: [CreditEntity!]!
+  creditsByTitle: [CreditsByTitle!]
 }
 
 """
@@ -193,6 +194,14 @@ type IdentityModel {
 type GenreModel {
   id: ID!
   slug: String!
+}
+
+type CreditsByTitle {
+  id: ID!
+  name: String!
+  year: Float!
+  thumb: String
+  credits: [CreditEntity!]!
 }
 
 type StatsModel {
