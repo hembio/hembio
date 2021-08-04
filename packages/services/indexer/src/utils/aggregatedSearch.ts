@@ -76,7 +76,7 @@ export const aggregatedSearch = async (
 
       return {
         ...entry,
-        score: r.score + idCount,
+        score: r.score + idCount * 6,
       };
     })
     .sort((a, b) => {
@@ -93,15 +93,15 @@ export const aggregatedSearch = async (
 
   const bestResult = sortedResults[0] || mergedResults[0];
 
-  const filteredResult = sortedResults.filter((r) => {
-    return (
-      r.name.replace(/ /g, "_").replace(/\W/g, "").toLowerCase() ===
-        bestResult.name.replace(/ /g, "_").replace(/\W/g, "").toLowerCase() &&
-      bestResult.year === r.year
-    );
-  });
+  // const filteredResult = sortedResults.filter((r) => {
+  //   return (
+  //     r.name.replace(/ /g, "_").replace(/\W/g, "").toLowerCase() ===
+  //       bestResult.name.replace(/ /g, "_").replace(/\W/g, "").toLowerCase() &&
+  //     bestResult.year === r.year
+  //   );
+  // });
 
-  const mergedResult = filteredResult.reduce(
+  const mergedResult = sortedResults.reduce(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (acc: any, cur: any) => {
       Object.keys(cur.ids).forEach((id) => {

@@ -45,6 +45,17 @@ describe("fetch", () => {
     expect(result?.ids.tmdb).toBe(8077);
   });
 
+  it("should find Alien 3 (1992)", async () => {
+    expect.assertions(6);
+    const result = await aggregatedSearch("Alien 3", 1992);
+    expect(result).toBeDefined();
+    expect(result?.name).toBe("Alien³");
+    expect(result?.year).toBe(1992);
+    expect(result?.ids.imdb).toBe("tt0103644");
+    expect(result?.ids.trakt).toBe(4044);
+    expect(result?.ids.tmdb).toBe(8077);
+  });
+
   it("should find Star Wars: The Rise of Skywalker", async () => {
     expect.assertions(6);
     const result = await aggregatedSearch(
@@ -151,7 +162,7 @@ describe("fetch", () => {
     expect.assertions(6);
     const result = await aggregatedSearch("A Star is Born", 2010);
     expect(result).toBeDefined();
-    expect(result?.name).toBe("A Star is Born");
+    expect(result?.name).toBe("A Star Is Born");
     expect(result?.year).toBe(2010);
     expect(result?.ids.imdb).toBe("tt1776364");
     expect(result?.ids.trakt).toBe(405759);
