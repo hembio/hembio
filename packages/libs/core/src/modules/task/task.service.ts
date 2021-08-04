@@ -8,6 +8,7 @@ interface CreateTask {
   ref: string;
   payload?: Record<string, unknown>;
   priority?: number;
+  waitUntil?: Date;
 }
 
 @Injectable()
@@ -75,15 +76,15 @@ export class TaskService {
         if (existingTasks.length > 0) {
           if (data.priority) {
             for (const existingTask of existingTasks) {
-              if (existingTask.priority !== data.priority) {
-                existingTask.priority = data.priority;
-                await taskRepo.persistAndFlush(existingTask);
-                return existingTask;
+              if (data.waitUntil) {
+                existingTask.waitUntil = data.waitUntil;
               }
+              existingTask.priority = data.priority;
+              await taskRepo.persistAndFlush(existingTask);
             }
           }
-          // Task is already in queue for ref
-          return;
+          // Task is already in queue for ref, return the first one
+          return existingTasks[0];
         }
       }
       const task = taskRepo.create(data);

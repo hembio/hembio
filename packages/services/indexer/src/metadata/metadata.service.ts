@@ -7,6 +7,7 @@ import {
   TaskType,
   Times,
   TitleEntity,
+  TitleGenreSlugs,
   TitleType,
 } from "@hembio/core";
 import { createLogger } from "@hembio/logger";
@@ -169,19 +170,30 @@ export class MetadataService {
       const traktGenres = traktData?.genres || [];
       const tmdbGenres =
         tmdbData?.genres
-          ?.map((g) => g?.name?.toLowerCase())
+          ?.map((g) => g?.name?.toLowerCase().replace(/ /, "-"))
           .filter((g) => !!g) || [];
-      const useGenres =
-        tmdbGenres.length > traktGenres.length ? tmdbGenres : traktGenres;
+      const genreResult = [...new Set([...tmdbGenres, ...traktGenres])].map(
+        (g) => g.replace("science-fiction", "sci-fi"),
+      );
+
+      this.logger.debug(genreResult, "Got genres:");
 
       await title.genres.init();
       title.genres.removeAll();
-      for (const slug of useGenres) {
+      let genreBits = 0;
+      for (const slug of genreResult) {
+        const idx = TitleGenreSlugs.indexOf(slug);
+        if (idx === -1) {
+          continue;
+        }
+        genreBits += Math.pow(2, idx);
         const genre = await genreRepo.findOne({ slug });
         if (genre) {
           title.genres.add(genre);
         }
       }
+
+      title.genreBits = genreBits;
 
       await em.begin();
       try {
@@ -272,6 +284,7 @@ export class MetadataService {
       type: TaskType.METADATA,
       ref: titleId,
       priority: 10,
+      waitUntil: new Date(),
     });
 
     if (task) {
