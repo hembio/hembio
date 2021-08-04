@@ -263,7 +263,6 @@ export class TitleEntity {
   @ManyToOne({ entity: () => LibraryEntity, nullable: true, lazy: true })
   public library!: LibraryEntity;
 
-  @Field(() => [GenreEntity])
   @ManyToMany({
     entity: () => GenreEntity,
     lazy: false,
@@ -272,7 +271,6 @@ export class TitleEntity {
   })
   public genres = new Collection<GenreEntity>(this);
 
-  @Field(() => Int)
   @Property({ nullable: true })
   @Index()
   public genreBits?: number;

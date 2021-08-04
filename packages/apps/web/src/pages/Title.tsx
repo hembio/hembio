@@ -1,3 +1,4 @@
+import { TitleGenreLiterals } from "@hembio/core/src";
 import { Theme } from "@material-ui/core";
 import Alert from "@material-ui/core/Alert";
 import AlertTitle from "@material-ui/core/AlertTitle";
@@ -9,6 +10,7 @@ import Skeleton from "@material-ui/core/Skeleton";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { useParams } from "react-router-dom";
 import { ActionBox } from "../components/ActionBox";
@@ -109,6 +111,7 @@ export const Title = (): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
   const refresh = useRefresh();
+  const { t } = useTranslation("genres");
 
   const { titleId } = useParams<{ titleId: string }>();
   const { data, error, refetch } = useTitleQuery({
@@ -131,7 +134,7 @@ export const Title = (): JSX.Element => {
     );
   }
 
-  const reload = (goBack = false) => {
+  const reload = (goBack = false): void => {
     if (!goBack) {
       refetch();
     }
@@ -262,7 +265,9 @@ export const Title = (): JSX.Element => {
                               />
                             )}
                             {"\u00A0\u00A0\u00A0"}
-                            {title.genres.map((g) => g.name).join(", ")}
+                            {title.genres
+                              .map((g) => t(g.slug as TitleGenreLiterals))
+                              .join(", ")}
                           </>
                         )}
                       </Typography>

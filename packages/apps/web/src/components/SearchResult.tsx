@@ -1,3 +1,4 @@
+import { TitleGenreLiterals } from "@hembio/core/src";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -7,6 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import Skeleton from "@material-ui/core/Skeleton";
 import { experimentalStyled as styled } from "@material-ui/core/styles";
 import { RefObject, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { PosterImage } from "./PosterImage";
@@ -35,6 +37,7 @@ export function SearchResult({
   results,
   onBlur,
 }: SearchResultProps): JSX.Element {
+  const { t } = useTranslation("genres");
   const listRef = useRef<HTMLUListElement>(null);
   useOnClickOutside(listRef, onBlur, [inputRef.current]);
   useElementKeyboardNavigation(listRef);
@@ -79,17 +82,18 @@ export function SearchResult({
                   </ListItemAvatar>
                   <ListItemText
                     primary={title.name}
-                    secondary={[
-                      title.year,
-                      title.runtime
-                        ? `\u00A0\u00A0\u00A0${title.runtime} mins`
-                        : "",
-                      title.genres.length > 0
-                        ? `\u00A0\u00A0\u00A0${title.genres
-                            .map((g) => g.name)
-                            .join(", ")}`
-                        : "",
-                    ].join("")}
+                    secondary={
+                      <>
+                        {title.year}{" "}
+                        {title.runtime
+                          ? `\u00A0\u00A0\u00A0${title.runtime} mins`
+                          : ""}
+                        {"\u00A0\u00A0\u00A0"}
+                        {title.genres
+                          .map((g) => t(g.slug as TitleGenreLiterals))
+                          .join(", ")}
+                      </>
+                    }
                   />
                 </ListItemButton>
               </ListItem>

@@ -62,7 +62,7 @@ function GenreFilter({ filter, onFilter }: SortButtonProps): JSX.Element {
           Genres
         </Typography>
       </Box>
-      {TitleGenreSlugs.map((genre) => (
+      {TitleGenreSlugs.filter((g) => g !== "none").map((genre) => (
         <Box key={genre}>
           <FormControlLabel
             control={

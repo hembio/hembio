@@ -71,6 +71,12 @@ export type GenreEntity = {
   name: Scalars["String"];
 };
 
+export type GenreModel = {
+  __typename?: "GenreModel";
+  id: Scalars["ID"];
+  slug: Scalars["String"];
+};
+
 export type IdentityModel = {
   __typename?: "IdentityModel";
   provider: Scalars["String"];
@@ -279,11 +285,12 @@ export type TitleEntity = {
   year: Scalars["Int"];
   releaseDate?: Maybe<Scalars["DateTime"]>;
   runtime?: Maybe<Scalars["Int"]>;
-  genres: Array<GenreEntity>;
+  genreBits?: Maybe<Scalars["Int"]>;
   credits: Array<CreditEntity>;
   images: Array<ImageEntity>;
   files: Array<FileEntity>;
   identify: Array<IdentityModel>;
+  genres: Array<GenreModel>;
   topBilling: Array<CreditEntity>;
   cast: Array<CreditEntity>;
   crew: Array<CreditEntity>;
@@ -498,9 +505,7 @@ export type TitleWithFilesFragment = { __typename?: "TitleEntity" } & Pick<
       TitleRatings,
       "imdb" | "tmdb" | "trakt" | "rotten" | "metacritic" | "aggregated"
     >;
-    genres: Array<
-      { __typename?: "GenreEntity" } & Pick<GenreEntity, "id" | "slug" | "name">
-    >;
+    genres: Array<{ __typename?: "GenreModel" } & Pick<GenreModel, "slug">>;
     files: Array<
       { __typename?: "FileEntity" } & Pick<FileEntity, "id" | "path">
     >;
@@ -542,9 +547,7 @@ export type SearchTitleFragment = { __typename?: "TitleEntity" } & Pick<
   | "year"
   | "releaseDate"
   | "runtime"
-> & {
-    genres: Array<{ __typename?: "GenreEntity" } & Pick<GenreEntity, "name">>;
-  };
+> & { genres: Array<{ __typename?: "GenreModel" } & Pick<GenreModel, "slug">> };
 
 export type SearchTitlesQueryVariables = Exact<{
   query: Scalars["String"];
@@ -803,9 +806,7 @@ export const TitleWithFilesFragmentDoc = gql`
       aggregated
     }
     genres {
-      id
       slug
-      name
     }
     files {
       id
@@ -824,7 +825,7 @@ export const SearchTitleFragmentDoc = gql`
     releaseDate
     runtime
     genres {
-      name
+      slug
     }
   }
 `;

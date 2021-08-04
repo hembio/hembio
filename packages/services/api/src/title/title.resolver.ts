@@ -1,4 +1,11 @@
-import { CreditEntity, FileEntity, TitleEntity, UserRole } from "@hembio/core";
+import {
+  CreditEntity,
+  FileEntity,
+  TitleEntity,
+  TitleGenreLiterals,
+  TitleGenreSlugs,
+  UserRole,
+} from "@hembio/core";
 import {
   Args,
   Query,
@@ -16,6 +23,7 @@ import { CreditService } from "~/credit/credit.service";
 import { FileService } from "~/file/file.service";
 import { ImageService } from "~/image/image.service";
 import { IndexerService } from "~/indexer/indexer.service";
+import { GenreModel } from "~/library/models/genre.model";
 
 @Auth(UserRole.USER)
 @Resolver(() => TitleEntity)
@@ -59,6 +67,35 @@ export class TitleResolver {
       name: r.name,
       year: r.year,
     }));
+  }
+
+  private bitwise(val1: number, val2: number): number {
+    const maxInt32Bits = 4294967296; // 2^32
+    const val1HighBits = val1 / maxInt32Bits;
+    const val1LowBits = val1 % maxInt32Bits;
+    const val2HighBits = val2 / maxInt32Bits;
+    const val2LowBits = val2 % maxInt32Bits;
+    return Math.abs(
+      (val1HighBits & val2HighBits) * maxInt32Bits +
+        (val1LowBits & val2LowBits),
+    );
+  }
+
+  @ResolveField(() => [GenreModel], { name: "genres" })
+  public async getGenres(@Parent() title: TitleEntity): Promise<GenreModel[]> {
+    if (!title.genreBits) {
+      return [];
+    }
+    const genreBits = title.genreBits;
+    const genres = TitleGenreSlugs.reduce((acc, slug, idx) => {
+      const mask = Math.pow(2, idx);
+      const check = this.bitwise(genreBits, mask);
+      if (check === mask) {
+        return [...acc, { id: idx, slug }];
+      }
+      return acc;
+    }, [] as Array<{ id: number; slug: TitleGenreLiterals }>);
+    return genres;
   }
 
   @ResolveField(() => [CreditEntity], { name: "topBilling" })

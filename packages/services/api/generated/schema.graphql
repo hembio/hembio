@@ -77,13 +77,6 @@ enum Subtitle {
   English
 }
 
-type GenreEntity {
-  id: ID!
-  slug: String!
-  titles: [TitleEntity!]!
-  name: String!
-}
-
 type ImageEntity {
   id: ID!
   createdAt: DateTime!
@@ -128,12 +121,11 @@ type TitleEntity {
   year: Int!
   releaseDate: DateTime
   runtime: Int
-  genres: [GenreEntity!]!
-  genreBits: Int!
   credits: [CreditEntity!]!
   images: [ImageEntity!]!
   files: [FileEntity!]!
   identify: [IdentityModel!]!
+  genres: [GenreModel!]!
   topBilling(take: Int): [CreditEntity!]!
   cast: [CreditEntity!]!
   crew: [CreditEntity!]!
@@ -198,6 +190,11 @@ type IdentityModel {
   year: String!
 }
 
+type GenreModel {
+  id: ID!
+  slug: String!
+}
+
 type StatsModel {
   time: Int!
   uptime: Int!
@@ -218,7 +215,6 @@ type Query {
   file(fileId: String!): FileEntity
   stats: StatsModel!
   person(id: String!): PersonEntity
-  genres: [GenreEntity!]!
 }
 
 type Mutation {

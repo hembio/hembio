@@ -53,9 +53,7 @@ fragment TitleWithFiles on TitleEntity {
     aggregated
   }
   genres {
-    id
     slug
-    name
   }
   files {
     id
@@ -93,7 +91,7 @@ fragment SearchTitle on TitleEntity {
   releaseDate
   runtime
   genres {
-    name
+    slug
   }
 }
 
