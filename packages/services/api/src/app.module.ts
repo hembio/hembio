@@ -26,7 +26,6 @@ import { AuthModule } from "./auth/auth.module";
 import { CreditModule } from "./credit/credit.module";
 import { EventModule } from "./event/event.module";
 import { FileModule } from "./file/file.module";
-import { GenreModule } from "./genre/genre.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { IndexerModule } from "./indexer/indexer.module";
@@ -80,7 +79,6 @@ const AppConfigModule = ConfigModule.forRoot({
     StatsModule,
     CreditModule,
     PersonModule,
-    GenreModule,
   ],
   controllers: [AppController],
   providers: [
