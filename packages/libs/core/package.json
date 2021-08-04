@@ -21,7 +21,7 @@
     "migration:pending": "mikro-orm migration:pending"
   },
   "dependencies": {
-    "@apollo/gateway": "^0.35.1",
+    "@apollo/gateway": "^0.36.0",
     "@hembio/logger": "workspace:packages/libs/logger",
     "@mikro-orm/core": "^4.5.7",
     "@mikro-orm/knex": "^4.5.7",
@@ -32,7 +32,7 @@
     "@nestjs/core": "^7.6.18",
     "@nestjs/graphql": "^7.11.0",
     "@nestjs/microservices": "^7.6.18",
-    "apollo-server-core": "^3.1.1",
+    "apollo-server-core": "^3.1.2",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
