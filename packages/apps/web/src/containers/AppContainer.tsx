@@ -103,11 +103,11 @@ export const AppContainer = observer(() => {
     return null;
   }
 
-  const handleDrawerOpen = () => {
+  const handleDrawerOpen = (): void => {
     setDrawerOpen(true);
   };
 
-  const handleDrawerClose = () => {
+  const handleDrawerClose = (): void => {
     setDrawerOpen(false);
   };
 
@@ -183,7 +183,7 @@ export const AppContainer = observer(() => {
   );
 });
 
-function LibraryRoutes() {
+function LibraryRoutes(): JSX.Element {
   const { path } = useRouteMatch();
   return (
     <Switch>
@@ -202,7 +202,7 @@ function LibraryRoutes() {
   );
 }
 
-function TitleRoutes() {
+function TitleRoutes(): JSX.Element {
   const { path } = useRouteMatch();
   return (
     <Switch>
