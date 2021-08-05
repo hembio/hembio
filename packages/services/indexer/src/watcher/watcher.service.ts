@@ -1,5 +1,10 @@
 import path from "path";
-import { EntityManager, FileEntity, LibraryEntity } from "@hembio/core";
+import {
+  EntityManager,
+  FileEntity,
+  LibraryEntity,
+  TitleEntity,
+} from "@hembio/core";
 import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import chokidar from "chokidar";
@@ -42,15 +47,25 @@ export class WatcherService {
               );
             }
           })
-          .on("unlinkDir", (removedDir) => {
+          .on("unlinkDir", async (removedDir) => {
             this.logger.debug(`Detected directory unlink: ${removedDir}`);
+            const em = this.em.fork(false);
+            const relPath = path.relative(library.path, removedDir);
+            const found = await em.findOne(TitleEntity, { path: relPath });
+            if (found) {
+              try {
+                await em.removeAndFlush(found);
+              } catch {
+                // Ignore
+              }
+            }
           })
           .on("unlink", async (removedFile) => {
             if (library.matcherRegEx.test(removedFile)) {
               const em = this.em.fork(false);
               this.logger.debug(`Detected file unlink: ${removedFile}`);
               const relPath = path.relative(library.path, removedFile);
-              const found = await em.find(FileEntity, { path: relPath });
+              const found = await em.findOne(FileEntity, { path: relPath });
               if (found) {
                 try {
                   await em.removeAndFlush(found);
