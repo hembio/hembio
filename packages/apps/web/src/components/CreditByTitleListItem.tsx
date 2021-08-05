@@ -1,21 +1,23 @@
 import Avatar from "@material-ui/core/Avatar";
+import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemButton from "@material-ui/core/ListItemButton";
 import ListItemText from "@material-ui/core/ListItemText";
 import Skeleton from "@material-ui/core/Skeleton";
-import { Link } from "react-router-dom";
 import { CreditIcon } from "./CreditIcon";
-import { HEMBIO_API_URL } from "~/constants";
 import { CastFragment, CrewFragment } from "~/generated/graphql";
 
-interface CreditListitemProps {
-  credit?: Pick<
-    CastFragment & CrewFragment,
-    "id" | "job" | "character" | "department" | "person"
-  >;
+type CreditFragment = Pick<
+  CastFragment & CrewFragment,
+  "id" | "job" | "character" | "department" | "person"
+>;
+
+export interface CreditListitemProps {
+  credit?: CreditFragment;
 }
 
-export function CreditListitem({ credit }: CreditListitemProps): JSX.Element {
+export function CreditByTitleListItem({
+  credit,
+}: CreditListitemProps): JSX.Element {
   const cast = credit as CastFragment;
   const crew = credit as CrewFragment;
 
@@ -29,23 +31,14 @@ export function CreditListitem({ credit }: CreditListitemProps): JSX.Element {
         height: "80px",
         fontSize: "64px",
       }}
-      alt={credit && credit.person.name}
-      src={
-        credit && credit.person.image
-          ? `${HEMBIO_API_URL}/images/people${credit.person.image}`
-          : undefined
-      }
+      alt={credit && credit.department}
     >
-      {credit && !credit.person.image && <CreditIcon credit={credit} />}
+      <CreditIcon credit={credit} />
     </Avatar>
   );
 
   return (
-    <ListItemButton
-      component={Link}
-      sx={{ minHeight: "115px" }}
-      to={credit ? `/person/${credit.person.id}` : ""}
-    >
+    <ListItem sx={{ minHeight: "115px" }}>
       <ListItemAvatar>
         {!credit && <Skeleton variant="circular">{avatar}</Skeleton>}
         {credit && avatar}
@@ -56,22 +49,24 @@ export function CreditListitem({ credit }: CreditListitemProps): JSX.Element {
         primary={
           !credit ? (
             <Skeleton variant="text" width={`${randomWidthPrimary}%`} />
+          ) : cast.character ? (
+            cast.character
           ) : (
-            credit.person.name
+            crew.job
           )
         }
         primaryTypographyProps={{ fontSize: "20px" }}
         secondary={
           !credit ? (
             <Skeleton variant="text" width={`${randomWidthSecondary}%`} />
-          ) : cast.character ? (
-            `as ${cast.character}`
+          ) : credit.department && cast.character ? (
+            "Starring"
           ) : (
-            crew.job
+            credit.department
           )
         }
         secondaryTypographyProps={{ fontSize: "16px" }}
       />
-    </ListItemButton>
+    </ListItem>
   );
 }

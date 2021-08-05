@@ -10,7 +10,7 @@ import { useOnScreen } from "../hooks/useOnScreen";
 type PosterImageProps = ImgHTMLAttributes<HTMLImageElement> & {
   id?: string;
   thumbnail?: string | null | undefined;
-  size?: "adapt" | "small" | "large" | "tiny";
+  size?: "adapt" | "tiny" | "small" | "medium" | "large";
 };
 
 const useStyles = makeStyles(
@@ -37,17 +37,21 @@ const useStyles = makeStyles(
           width: "100%",
           height: "100%",
         },
+        "&.tiny": {
+          width: "35px",
+          height: "50px",
+        },
         "&.small": {
+          width: "140px",
+          height: "210px",
+        },
+        "&.medium": {
           width: "200px",
           height: "300px",
         },
         "&.large": {
           width: "360px",
           height: "540px",
-        },
-        "&.tiny": {
-          width: "35px",
-          height: "50px",
         },
       },
       thumbContainer: {
@@ -117,7 +121,7 @@ const useStyles = makeStyles(
 export const PosterImage = ({
   id,
   thumbnail,
-  size = "adapt",
+  size = "medium",
   ...props
 }: PosterImageProps): JSX.Element => {
   const classes = useStyles();
@@ -136,7 +140,7 @@ export const PosterImage = ({
     } else if (onScreen && src) {
       setHide(false);
     } else if (!src) {
-      const onLoad = () => {
+      const onLoad = (): void => {
         setSrc(poster.src);
       };
       if (onScreen && id) {

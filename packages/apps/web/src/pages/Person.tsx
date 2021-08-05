@@ -13,7 +13,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
-import { CreditListitem } from "~/components/CreditListItem";
+import { CreditByTitleListItem } from "~/components/CreditByTitleListItem";
 import { PersonDebugBox } from "~/components/PersonDebugBox";
 import { TitleCard } from "~/components/TitleCard";
 import { HEMBIO_API_URL } from "~/constants";
@@ -284,8 +284,7 @@ export const Person = (): JSX.Element => {
               gap: 2,
               gridAutoFlow: "row",
               gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))",
-              // justifyItems: "stretch",
-              alignItems: "center",
+              alignItems: "top",
             }}
           >
             {person &&
@@ -294,13 +293,12 @@ export const Person = (): JSX.Element => {
                 <>
                   <Box
                     sx={{
-                      width: "200px",
                       display: "grid",
                       gap: 2,
                       gridAutoFlow: "row",
                       gridTemplateColumns:
-                        "repeat(auto-fit, 200px minmax(450px, 1fr))",
-                      alignItems: "center",
+                        "repeat(auto-fit, 140px minmax(250px, 1fr))",
+                      alignItems: "top",
                     }}
                   >
                     <TitleCard
@@ -311,7 +309,7 @@ export const Person = (): JSX.Element => {
                     <Box>
                       {title &&
                         title.credits.map((credit, idx) => (
-                          <CreditListitem
+                          <CreditByTitleListItem
                             key={credit ? credit.id : idx}
                             credit={{ ...credit, person }}
                           />

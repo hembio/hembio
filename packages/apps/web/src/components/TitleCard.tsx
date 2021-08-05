@@ -26,10 +26,6 @@ const useStyles = makeStyles(
             color: "#fff",
           },
         },
-        "& .PosterImage-root": {
-          width: "200px",
-          height: "300px",
-        },
         "&.resize": {
           [theme.breakpoints.up("xl")]: {
             width: "calc(9.7vw - 16px)",
@@ -87,11 +83,11 @@ interface Props {
   title?: Pick<TitleFragment, "id" | "thumb" | "name" | "year">;
   skeleton?: boolean;
   setRef?: React.Dispatch<HTMLDivElement>;
-  size?: "adapt" | "small" | "large" | "tiny";
+  size?: "adapt" | "tiny" | "small" | "medium" | "large";
 }
 
 export const TitleCard = forwardRef<HTMLDivElement, Props>(
-  ({ title, skeleton, size = "small" }, ref) => {
+  ({ title, skeleton, size = "medium" }, ref) => {
     const classes = useStyles();
     const randomWidth = !title || skeleton ? Math.random() * 60 + 20 : 0;
     return (

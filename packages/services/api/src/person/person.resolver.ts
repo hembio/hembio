@@ -36,7 +36,11 @@ export class PersonResolver {
     for (const credit of credits) {
       const title = credit.title;
       const entry = titles.get(title.id) || new CreditsByTitle();
-      titles.set(title.id, { ...title, credits: [...entry.credits, credit] });
+      // Lazy way of putting actor credits first
+      const nextCredits = credit.character
+        ? [credit, ...entry.credits]
+        : [...entry.credits, credit];
+      titles.set(title.id, { ...title, credits: nextCredits });
     }
     return Array.from(titles.values()).sort((a, b) => b.year - a.year);
   }

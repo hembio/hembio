@@ -210,10 +210,8 @@ export class CreditsService {
           }
 
           // this.logger.debug({ person });
-          const { character, order } = cast as Cast;
-          const { job } = cast as Crew;
-
-          const department = cast.known_for_department;
+          const { character, order, known_for_department } = cast as Cast;
+          const { job, department } = cast as Crew;
 
           if (person) {
             const existingCredit = await creditRepo.findOne({
@@ -240,7 +238,9 @@ export class CreditsService {
               order: order,
               job: job || "Actor",
               character,
-              department,
+              department: character
+                ? "Acting"
+                : department || known_for_department,
             });
             try {
               title.credits.add(credit);
@@ -278,6 +278,7 @@ export class CreditsService {
       type: TaskType.CREDITS,
       ref: titleId,
       priority: 10,
+      waitUntil: new Date(),
     });
 
     if (task) {
