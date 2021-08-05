@@ -90,5 +90,6 @@
       "prettier --write"
     ],
     "*.{md,html,css,yml,yaml}": "prettier --write"
-  }
+  },
+  "packageManager": "yarn@3.0.0"
 }
