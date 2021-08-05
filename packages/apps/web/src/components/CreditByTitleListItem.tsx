@@ -61,9 +61,7 @@ export function CreditByTitleListItem({
             <Skeleton variant="text" width={`${randomWidthSecondary}%`} />
           ) : credit.department && cast.character ? (
             "Starring"
-          ) : (
-            credit.department
-          )
+          ) : undefined
         }
         secondaryTypographyProps={{ fontSize: "16px" }}
       />

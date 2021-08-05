@@ -306,7 +306,7 @@ export const Person = (): JSX.Element => {
                       key={title?.id || idx}
                       title={title}
                     />
-                    <Box>
+                    <Box sx={{ mt: -2 }}>
                       {title &&
                         title.credits.map((credit, idx) => (
                           <CreditByTitleListItem
