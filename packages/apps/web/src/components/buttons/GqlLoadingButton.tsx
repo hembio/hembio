@@ -17,7 +17,7 @@ export function GqlLoadingButton<T, V>({
   onDone,
 }: Props<V>): JSX.Element {
   const [execute, { loading, data, error }] = useMutation<T, V>(mutation);
-  const handle = async () => {
+  const handle = async (): Promise<void> => {
     try {
       await execute({ variables });
     } catch {
@@ -25,10 +25,11 @@ export function GqlLoadingButton<T, V>({
     }
   };
   useEffect(() => {
-    if (onDone && (error || data)) {
+    if (onDone && !loading && (error || data)) {
       onDone(error, data);
     }
-  }, [error, data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, error, data]);
 
   return (
     <LoadingButton variant="contained" loading={loading} onClick={handle}>
