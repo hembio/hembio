@@ -30,6 +30,7 @@ import {
   UpdateTitleImagesMutation,
   UpdateTitleImagesMutationVariables,
 } from "~/generated/graphql";
+import { useSnackbar } from "~/snackbar/use-snackbar.hook";
 
 interface Props {
   title: TitleWithFilesFragment;
@@ -41,6 +42,7 @@ export function TitleDebugBox({ title, reload, refetch }: Props): JSX.Element {
   const [openIdentityDialog, setOpenIdentityDialog] = useState(false);
   const [open, setOpen] = useState(false);
   const { cache } = useApolloClient();
+  const { addSnackbar } = useSnackbar();
   const { files, id: titleId } = title;
   return (
     <Paper>
@@ -68,115 +70,125 @@ export function TitleDebugBox({ title, reload, refetch }: Props): JSX.Element {
           </FormGroup>
         </Box>
 
-        <Box sx={{ display: open ? "block" : "none" }}>
-          <Box sx={{ mb: 2 }} />
-          {files.map((file) => (
-            <Box key={file.id} sx={{ mb: 2 }}>
-              <Link to={`/play/${file.id}`}>
-                <Button variant="contained">Play {file.id}</Button>
-              </Link>
+        {open && (
+          <Box sx={{ mt: 2 }}>
+            <Box sx={{ mb: 2 }} />
+            {files.map((file) => (
+              <Box key={file.id} sx={{ mb: 2 }}>
+                <Link to={`/play/${file.id}`}>
+                  <Button variant="contained">Play {file.id}</Button>
+                </Link>
+              </Box>
+            ))}
+            <Box sx={{ mb: 2 }}>
+              <GqlLoadingButton<
+                UpdateTitleImagesMutation,
+                UpdateTitleImagesMutationVariables
+              >
+                mutation={UpdateTitleImagesDocument}
+                variables={{ id: titleId }}
+                onDone={(error, _data) => {
+                  if (error) {
+                    console.error(error);
+                    addSnackbar(error.message, { severity: "error" });
+                    return;
+                  }
+                  addSnackbar("Queued images update of title");
+                  refetch();
+                }}
+              >
+                Update images
+              </GqlLoadingButton>
             </Box>
-          ))}
-          <Box sx={{ mb: 2 }}>
-            <GqlLoadingButton<
-              UpdateTitleImagesMutation,
-              UpdateTitleImagesMutationVariables
-            >
-              mutation={UpdateTitleImagesDocument}
-              variables={{ id: titleId }}
-              onDone={(error, _data) => {
-                if (error) {
-                  console.error(error);
-                  return;
-                }
-                refetch();
-              }}
-            >
-              Update images
-            </GqlLoadingButton>
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <GqlLoadingButton<
-              UpdateMetadataMutation,
-              UpdateMetadataMutationVariables
-            >
-              mutation={UpdateMetadataDocument}
-              variables={{ id: titleId }}
-              onDone={(error, _data) => {
-                if (error) {
-                  console.error(error);
-                  return;
-                }
-                refetch();
-              }}
-            >
-              Update metadata
-            </GqlLoadingButton>
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <GqlLoadingButton<
-              UpdateCreditsMutation,
-              UpdateCreditsMutationVariables
-            >
-              mutation={UpdateCreditsDocument}
-              variables={{ id: titleId }}
-              onDone={(error, _data) => {
-                if (error) {
-                  console.error(error);
-                  return;
-                }
-                refetch();
-              }}
-            >
-              Update credits
-            </GqlLoadingButton>
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <GqlLoadingButton<DeleteTitleMutation, DeleteTitleMutationVariables>
-              mutation={DeleteTitleDocument}
-              variables={{ id: titleId }}
-              onDone={(error, data) => {
-                if (error) {
-                  console.error(error);
-                  return;
-                }
-                const deletedId = data.deleteTitle.id;
-                cache.evict({ id: `TitleEntity:${deletedId}` });
-                cache.evict({ id: `TitleFragment:${deletedId}` });
-                reload(true);
-              }}
-            >
-              Delete title
-            </GqlLoadingButton>
-          </Box>
-          <Box sx={{ mb: 4 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setOpenIdentityDialog(true)}
-            >
-              Identify
-            </Button>
-            <IdentifyDialog
-              titleId={title.id}
-              open={openIdentityDialog}
-              onClose={() => setOpenIdentityDialog(false)}
-            />
-          </Box>
+            <Box sx={{ mb: 2 }}>
+              <GqlLoadingButton<
+                UpdateMetadataMutation,
+                UpdateMetadataMutationVariables
+              >
+                mutation={UpdateMetadataDocument}
+                variables={{ id: titleId }}
+                onDone={(error, _data) => {
+                  if (error) {
+                    console.error(error);
+                    addSnackbar(error.message, { severity: "error" });
+                    return;
+                  }
+                  addSnackbar("Queued metadata update for title");
+                  refetch();
+                }}
+              >
+                Update metadata
+              </GqlLoadingButton>
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              <GqlLoadingButton<
+                UpdateCreditsMutation,
+                UpdateCreditsMutationVariables
+              >
+                mutation={UpdateCreditsDocument}
+                variables={{ id: titleId }}
+                onDone={(error, _data) => {
+                  if (error) {
+                    addSnackbar(error.message, { severity: "error" });
+                    return;
+                  }
+                  addSnackbar("Queued credits update for title");
+                  refetch();
+                }}
+              >
+                Update credits
+              </GqlLoadingButton>
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              <GqlLoadingButton<
+                DeleteTitleMutation,
+                DeleteTitleMutationVariables
+              >
+                mutation={DeleteTitleDocument}
+                variables={{ id: titleId }}
+                onDone={(error, data) => {
+                  if (error) {
+                    console.error(error);
+                    return;
+                  }
+                  const deletedId = data.deleteTitle.id;
+                  cache.evict({ id: `TitleEntity:${deletedId}` });
+                  cache.evict({ id: `TitleFragment:${deletedId}` });
+                  reload(true);
+                }}
+              >
+                Delete title
+              </GqlLoadingButton>
+            </Box>
+            <Box sx={{ mb: 4 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setOpenIdentityDialog(true)}
+              >
+                Identify
+              </Button>
+              <IdentifyDialog
+                titleId={title.id}
+                open={openIdentityDialog}
+                onClose={() => setOpenIdentityDialog(false)}
+              />
+            </Box>
 
-          <Typography variant="h5">TitleEntity</Typography>
-          <Box
-            sx={{
-              mt: 2,
-              zIndex: 4000,
-              userSelect: "text",
-            }}
-          >
-            <SyntaxHighlighter language="json" style={{ ...coldark }}>
-              {JSON.stringify(title, null, 2)}
-            </SyntaxHighlighter>
+            <Typography variant="h5">TitleEntity</Typography>
+            <Box
+              sx={{
+                mt: 2,
+                zIndex: 4000,
+                userSelect: "text",
+              }}
+            >
+              <SyntaxHighlighter language="json" style={{ ...coldark }}>
+                {JSON.stringify(title, null, 2)}
+              </SyntaxHighlighter>
+            </Box>
           </Box>
-        </Box>
+        )}
       </Container>
     </Paper>
   );
