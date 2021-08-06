@@ -73,10 +73,11 @@ export const aggregatedSearch = async (
     .map((r) => {
       const entry = mergedResults[r.id];
       const idCount = Object.values(entry.ids).filter((id) => !!id).length;
-
+      const idBoost = idCount * 6;
+      const yearBoost = r.year === year ? 30 : 0;
       return {
         ...entry,
-        score: r.score + idCount * 6,
+        score: r.score + idBoost + yearBoost,
       };
     })
     .sort((a, b) => {
