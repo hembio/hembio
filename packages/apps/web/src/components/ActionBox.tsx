@@ -1,5 +1,7 @@
 import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import Zoom from "@material-ui/core/Zoom";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -53,7 +55,18 @@ interface ActionBoxProps {
 
 export function ActionBox({ title }: ActionBoxProps): JSX.Element {
   const [loved, setLoved] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   const classes = useStyles();
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (): void => {
+    setAnchorEl(null);
+  };
+
   return (
     <Grid
       container
@@ -64,17 +77,46 @@ export function ActionBox({ title }: ActionBoxProps): JSX.Element {
       <Grid item>
         <Zoom in={!!title} style={{ transitionDelay: title ? "100ms" : "0ms" }}>
           <Fab
+            id="more-button"
             className={clsx([classes.button])}
             color="primary"
+            aria-controls="more-menu"
             aria-label="more"
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
           >
             <MoreHorizIcon />
           </Fab>
         </Zoom>
+        <Menu
+          id="more-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "more-button",
+          }}
+          anchorOrigin={{
+            vertical: "center",
+            horizontal: "center",
+          }}
+          transformOrigin={{
+            vertical: "center",
+            horizontal: "center",
+          }}
+        >
+          <MenuItem onClick={handleClose}>Identify title</MenuItem>
+          <MenuItem onClick={handleClose}>Update images</MenuItem>
+          <MenuItem onClick={handleClose}>Update metadata</MenuItem>
+          <MenuItem onClick={handleClose}>Update credits</MenuItem>
+          <MenuItem onClick={handleClose}>Remove title</MenuItem>
+        </Menu>
       </Grid>
       <Grid item>
         <Zoom in={!!title} style={{ transitionDelay: title ? "50ms" : "0ms" }}>
           <Fab
+            id="favorite-button"
             onClick={() => setLoved(!loved)}
             className={clsx([classes.button])}
             color="primary"
@@ -88,6 +130,7 @@ export function ActionBox({ title }: ActionBoxProps): JSX.Element {
       <Grid item>
         <Zoom in={!!title}>
           <Fab
+            id="play-button"
             className={clsx([classes.button, "big"])}
             color="primary"
             aria-label="play"
