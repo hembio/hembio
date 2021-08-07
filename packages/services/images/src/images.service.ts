@@ -481,7 +481,7 @@ export class ImagesService {
         person.image = `/${person.id}.jpg`;
         await personRepo.persistAndFlush(person);
         this.logger.debug(
-          `Downloading image for person(${person.id}): ${person.name} - ${img}`,
+          `Downloaded image for person(${person.id}): ${person.name} - ${img}`,
         );
         return true;
       } catch (e) {
