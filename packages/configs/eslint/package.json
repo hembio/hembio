@@ -18,7 +18,7 @@
     "@emotion/eslint-plugin": "^11.2.0",
     "@types/eslint": "^7.28.0",
     "eslint-plugin-jest": "^24.4.0",
-    "eslint-plugin-json": "^3.0.0",
+    "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-workspaces": "^0.6.2"

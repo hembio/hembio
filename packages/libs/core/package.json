@@ -21,7 +21,7 @@
     "migration:pending": "mikro-orm migration:pending"
   },
   "dependencies": {
-    "@apollo/gateway": "^0.36.0",
+    "@apollo/gateway": "^0.37.0",
     "@hembio/logger": "workspace:packages/libs/logger",
     "@mikro-orm/core": "^4.5.7",
     "@mikro-orm/knex": "^4.5.7",
