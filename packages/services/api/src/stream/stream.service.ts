@@ -1,8 +1,8 @@
 import { createReadStream, ReadStream, Stats } from "fs";
-import { stat } from "fs/promises";
+import { stat, unlink } from "fs/promises";
 import path from "path";
 import { Transform } from "stream";
-import { EntityManager, FileEntity, LibraryEntity } from "@hembio/core";
+import { EntityManager, FileEntity, getCwd, LibraryEntity } from "@hembio/core";
 import { createLogger } from "@hembio/logger";
 import {
   Injectable,
@@ -10,7 +10,16 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from "@nestjs/common";
+import { FFmpeggy } from "ffmpeggy";
 import { parse, stringify } from "subtitle";
+import tempfile from "tempfile";
+
+FFmpeggy.DefaultConfig = {
+  ...FFmpeggy.DefaultConfig,
+  overwriteExisting: true,
+  ffmpegBin: path.join(getCwd(), "bin/win64/ffmpeg/ffmpeg.exe"),
+  ffprobeBin: path.join(getCwd(), "bin/win64/ffmpeg/ffprobe.exe"),
+};
 
 @Injectable()
 export class StreamService {
@@ -75,8 +84,10 @@ export class StreamService {
   ): Promise<Transform | ReadStream> {
     const em = this.em.fork(false);
     const file = await em.findOneOrFail(FileEntity, fileId, {
-      fields: ["id", "library.path", "path"],
+      populate: ["library"],
     });
+
+    console.log("file", file);
 
     if (!file.library) {
       throw new InternalServerErrorException(
@@ -101,35 +112,45 @@ export class StreamService {
       }
     }
 
-    // try {
-    //   // Attempt to extract subtitles
-    //   const ffmpeg = new FFmpeg();
-    //   const filePath = path.join(file.title.library.path, file.path);
-    //   const vttFile = tempfile(".vtt");
-    //   ffmpeg.setInput(filePath);
-    //   ffmpeg.setGlobalOptions(["-y"]);
-    //   ffmpeg.setOutputOptions(["-f webvtt"]);
-    //   ffmpeg.setOutput(vttFile);
-    //   ffmpeg.run();
+    try {
+      // Attempt to extract subtitles
+      const filePath = path.join(file.library.path, file.path);
+      const vttFile = tempfile(".vtt");
+      const ffmpeggy = new FFmpeggy({
+        input: filePath,
+        outputOptions: ["-map 0:s:0", "-f webvtt"],
+        output: vttFile,
+      });
 
-    //   return new Promise((resolve, reject) => {
-    //     ffmpeg.on("error", (e) => {
-    //       this.logger.error(e);
-    //       reject(e);
-    //     });
+      return new Promise((resolve, reject) => {
+        ffmpeggy.on("error", (e) => {
+          this.logger.error(e);
+          reject(e);
+        });
 
-    //     ffmpeg.on("done", () => {
-    //       const readStream = createReadStream(vttFile);
-    //       readStream.on("close", async () => {
-    //         await unlink(vttFile);
-    //       });
-    //       resolve(readStream);
-    //     });
-    //   });
-    // } catch (e) {
-    //   this.logger.error(e);
-    //   throw e;
-    // }
+        ffmpeggy.on("start", (args) => {
+          this.logger.debug(args, "ffmpeggy:start");
+        });
+
+        ffmpeggy.on("progress", (progress) => {
+          this.logger.debug(progress, "ffmpeggy:progress");
+        });
+
+        ffmpeggy.on("done", () => {
+          this.logger.debug("ffmpeggy:done");
+          const readStream = createReadStream(vttFile);
+          readStream.on("close", async () => {
+            await unlink(vttFile);
+          });
+          resolve(readStream);
+        });
+
+        ffmpeggy.run();
+      });
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
 
     throw new NotFoundException("Subtitle not found");
   }

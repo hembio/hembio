@@ -2746,6 +2746,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffprobe-installer/darwin-x64@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@ffprobe-installer/darwin-x64@npm:5.0.0"
+  checksum: eb725ad4504e8aaaec7302810842a3cbae6ca8cd9183fd6a926be763c1a7085d65eff2d0322622eeced5fd0427cd364f33f39547482d7b6810bebb2ca0e9c190
+  languageName: node
+  linkType: hard
+
 "@ffprobe-installer/ffprobe@npm:^1.1.0":
   version: 1.1.0
   resolution: "@ffprobe-installer/ffprobe@npm:1.1.0"
@@ -2776,10 +2783,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffprobe-installer/ffprobe@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@ffprobe-installer/ffprobe@npm:1.2.0"
+  dependencies:
+    "@ffprobe-installer/darwin-x64": 5.0.0
+    "@ffprobe-installer/linux-arm": 5.0.0
+    "@ffprobe-installer/linux-arm64": 5.0.0
+    "@ffprobe-installer/linux-ia32": 5.0.0
+    "@ffprobe-installer/linux-x64": 5.0.0
+    "@ffprobe-installer/win32-ia32": 5.0.0
+    "@ffprobe-installer/win32-x64": 5.0.0
+  dependenciesMeta:
+    "@ffprobe-installer/darwin-x64":
+      optional: true
+    "@ffprobe-installer/linux-arm":
+      optional: true
+    "@ffprobe-installer/linux-arm64":
+      optional: true
+    "@ffprobe-installer/linux-ia32":
+      optional: true
+    "@ffprobe-installer/linux-x64":
+      optional: true
+    "@ffprobe-installer/win32-ia32":
+      optional: true
+    "@ffprobe-installer/win32-x64":
+      optional: true
+  checksum: 98e2fe7af23325348c4a59b0ac993ee0e610a475ad923407273572a463a4be0e5b0783d037adbec3a83d4d356d53df7c9c51ee0c56ebe22ed4ff45f8d2653561
+  languageName: node
+  linkType: hard
+
 "@ffprobe-installer/linux-arm64@npm:4.3.2":
   version: 4.3.2
   resolution: "@ffprobe-installer/linux-arm64@npm:4.3.2"
   checksum: 75bd576de1e6731d865a4deedfb4f5b78a9fde70be88396253df26600ea5173f37e9f81b5a1ad29957b91aff2cb1ccca5af4c16064c1256521ab757bbdf7bd0d
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/linux-arm64@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@ffprobe-installer/linux-arm64@npm:5.0.0"
+  checksum: b681146dfac3eb1a07c09f5e98ed27fdc9f29540e38b156f86b00260fb2086c2633de75c72bdebea10b21f630d568e1b9c8e3dba78379ef8e2003a5189089817
   languageName: node
   linkType: hard
 
@@ -2790,10 +2834,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffprobe-installer/linux-arm@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@ffprobe-installer/linux-arm@npm:5.0.0"
+  checksum: db5f90ae526a3ea4d6232aae24b1191f3a7e420b1415cd950793bfd76a46bd06b53a55410688a02c8be846eff676d0bb2cadba6e48e92ebd2c662b8d5e401fa7
+  languageName: node
+  linkType: hard
+
 "@ffprobe-installer/linux-ia32@npm:4.1.0":
   version: 4.1.0
   resolution: "@ffprobe-installer/linux-ia32@npm:4.1.0"
   checksum: ccea010a7243f546bca81f45fbc8b48b558efc2c416e890b8f43d47d981bfef3bb6f6dc9d61cd69ff08af4ada67d86469f8b49815370c45cd68693907d3d006e
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/linux-ia32@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@ffprobe-installer/linux-ia32@npm:5.0.0"
+  checksum: 0d85654140cd1125de01b21544e454b3a784bfddfc4b1097beb9b77ecf04383193d82c136390b83bfaff7a37368e24573ca8415c8078f078328dcb5eac89e044
   languageName: node
   linkType: hard
 
@@ -2804,6 +2862,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffprobe-installer/linux-x64@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@ffprobe-installer/linux-x64@npm:5.0.0"
+  checksum: 66421fa5585aa0757ac0ad02bb71ebdaaccbaa37e3f1f452e3bd51e3ca4e7805f97b653a3473657fbb8c033b904519bcc189fb48d7fbbbe9e4de4f3f88f7ae96
+  languageName: node
+  linkType: hard
+
 "@ffprobe-installer/win32-ia32@npm:4.1.0":
   version: 4.1.0
   resolution: "@ffprobe-installer/win32-ia32@npm:4.1.0"
@@ -2811,10 +2876,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffprobe-installer/win32-ia32@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@ffprobe-installer/win32-ia32@npm:5.0.0"
+  checksum: f549dbde83b99e5ce29f06a8cd0b5d32c7ec4e90634950442f9be3c8045896fa8da6e1dc44b88b51238db17e714815e4e8f9bf820f2c596c91137f83ecf026c1
+  languageName: node
+  linkType: hard
+
 "@ffprobe-installer/win32-x64@npm:4.1.0":
   version: 4.1.0
   resolution: "@ffprobe-installer/win32-x64@npm:4.1.0"
   checksum: 4b80c9afef071addabe734feffc23ebd09064625d6a157cdb857bb9f22c7eb33a8e00ab32076a027d938c737da10041e542b427ec4e3ce48563a60d920972f0b
+  languageName: node
+  linkType: hard
+
+"@ffprobe-installer/win32-x64@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@ffprobe-installer/win32-x64@npm:5.0.0"
+  checksum: 908b480d1d849ba6b890a8854f4b6d12ee77703bd7fd6333d3d8ae26544fb726040b2db0d00ce469d926fbba4bc349cd835f1796cbdccfea283d6dd62f70fa16
   languageName: node
   linkType: hard
 
@@ -3417,6 +3496,8 @@ __metadata:
     "@babel/core": ^7.15.0
     "@babel/preset-env": ^7.15.0
     "@babel/preset-typescript": ^7.15.0
+    "@ffmpeg-installer/ffmpeg": ^1.1.0
+    "@ffprobe-installer/ffprobe": ^1.2.0
     "@graphql-codegen/add": ^3.0.0
     "@graphql-codegen/cli": ^2.0.1
     "@graphql-codegen/typescript": ^2.0.0
@@ -3475,7 +3556,7 @@ __metadata:
     fastify-jwt: ^3.0.1
     fastify-rate-limit: ^5.6.0
     fastify-websocket: ^3.2.0
-    ffmpeggy: ^2.0.0
+    ffmpeggy: ^2.0.1
     file-loader: ^6.2.0
     graphql: ^15.5.1
     graphql-tools: ^8.1.0
@@ -3506,7 +3587,7 @@ __metadata:
     rxjs: ^7.3.0
     socket.io: ^4.1.3
     subtitle: ^4.1.0
-    tempfile: ^4.0.0
+    tempfile: ^3.0.0
     through2: ^4.0.2
     to-utf-8: ^1.3.0
     ts-loader: ^9.2.5
@@ -3612,7 +3693,7 @@ __metadata:
     electron-wix-msi: ^3.2.0
     eslint: ^7.32.0
     eslint-plugin-import: ^2.23.4
-    exe-icon-extractor: ^1.0.8
+    exe-icon-extractor: "github:bitdisaster/exe-icon-extractor"
     file-loader: ^6.2.0
     fork-ts-checker-webpack-plugin: ^6.3.1
     node-loader: ^2.0.0
@@ -3741,7 +3822,7 @@ __metadata:
     chokidar: ^3.5.2
     diacritics: ^1.3.0
     eventemitter3: ^4.0.7
-    ffmpeggy: ^2.0.0
+    ffmpeggy: ^2.0.1
     html-entities: ^2.3.2
     jest: ^27.0.6
     mobx: ^6.3.2
@@ -3880,7 +3961,7 @@ __metadata:
     "@types/node": ^16.4.13
     "@types/rimraf": ^3.0.1
     execa: ^5.1.1
-    ffmpeggy: ^2.0.0
+    ffmpeggy: ^2.0.1
     jest: ^27.0.6
     mobx: ^6.3.2
     mobx-utils: ^6.0.4
@@ -12544,12 +12625,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"exe-icon-extractor@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "exe-icon-extractor@npm:1.0.8"
-  dependencies:
-    node-gyp: latest
-  checksum: e00da08f8a95048253632798d4c265b52f9fa0416477ff09ae3f02d63272972ef22e08d46ad314f35dd2c9171d4702bd024ba59a0d2149695166697a213ae5c4
+"exe-icon-extractor@github:bitdisaster/exe-icon-extractor":
+  version: 1.0.10
+  resolution: "exe-icon-extractor@https://github.com/bitdisaster/exe-icon-extractor.git#commit=b96e5354f0568276d37be229551491b65f852e02"
+  checksum: a33cd4874aa8af7529e0ca9f23e834a8fb6f8e1723c788f7b9ab078a05cf77f4ddab9b563b47683f80547832e04fd51574d97e80a4f87761e51bd9bec19a033b
   languageName: node
   linkType: hard
 
@@ -13238,9 +13317,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ffmpeggy@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "ffmpeggy@npm:2.0.0"
+"ffmpeggy@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "ffmpeggy@npm:2.0.1"
   dependencies:
     "@ffmpeg-installer/ffmpeg": ^1.1.0
     "@ffprobe-installer/ffprobe": ^1.1.0
@@ -13252,7 +13331,7 @@ __metadata:
       optional: true
     "@ffprobe-installer/ffprobe":
       optional: true
-  checksum: 749de56fc5ea52272ad62f1f99e88ee83327b9fd722578fa38c8dc48e0d7f19f37ce80f171eabd1a1eeb8f378f8133c6fc08773c80add43ba2d4bf98d7516241
+  checksum: 1608afb2ab7149c1f070460e1748ee51780c2fcf759b940e216db2fb6ca7680eb9d6f9c54deb2e2ca0dde97042d6b8f2363e7af0f04ed92983b3a51ad3cb806a
   languageName: node
   linkType: hard
 
@@ -24169,13 +24248,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tempfile@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "tempfile@npm:4.0.0"
+"tempfile@npm:^3":
+  version: 3.0.0
+  resolution: "tempfile@npm:3.0.0"
   dependencies:
     temp-dir: ^2.0.0
-    uuid: ^8.3.2
-  checksum: 6229dfc12dd5a15123b8d7e8ce2c9cacdf9424b303dd070c358c8eec0a6e14db61732bafd4ea4738924ad421bc3157751ac6e7c77ad6d2c49d1bef2eab928aa4
+    uuid: ^3.3.2
+  checksum: ebf07b7e580ab0a0673093d84007783f3d3bef9f82108e463c353974382296ba2d3309c8ac9574efba0dec8c99c27c5392f11b3de85d3f3a88a22850e9f782ef
   languageName: node
   linkType: hard
 

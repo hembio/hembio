@@ -135,7 +135,7 @@ async function bootstrap() {
             "img-src 'self' data:",
             "media-src 'self' 'unsafe-inline' hembio.local",
             "script-src 'self' 'unsafe-inline' hembio.local",
-            "style-src 'self' 'unsafe-inline' hembio.local",
+            "style-src 'self' 'unsafe-inline' hembio.local fonts.googleapis.com",
             "style-src-elem 'self' 'unsafe-inline' hembio.local fonts.googleapis.com",
             "font-src 'self' fonts.gstatic.com",
           ].join("; "),

@@ -5,7 +5,8 @@ export interface Audio {
   long?: string;
 }
 
-const rxp = /(?<code>(DTS(-HD)?\.?(?:MA)?|[A-Z3-]+))\.?(?<channels>[0-9]\.[0-9])?\.?(?<atmos>ATMOS)?/;
+const rxp =
+  /(?<code>(DTS(-HD)?\.?(?:MA)?|[A-Z3-]+))\.?(?<channels>[0-9]\.[0-9])?\.?(?<atmos>ATMOS)?/;
 
 export function normalizeAudio(input: string): Audio {
   const result: Audio = {};

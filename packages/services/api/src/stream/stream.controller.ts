@@ -270,7 +270,9 @@ export class StreamController {
   @Get("/:fileId/subtitles/:language")
   public async subtitles(
     @Param() { fileId, language }: { fileId: string; language: string },
+    @Res({ passthrough: true }) res: FastifyReply,
   ): Promise<Transform | ReadStream> {
+    res.header("content-type", "text/vtt");
     return this.streamService.getSubtitle(fileId, language);
   }
 }
