@@ -27,7 +27,7 @@ export class AuthStore {
     });
 
     this.client.interceptors.request.use((req) => {
-      if (this.accessToken) {
+      if (this.accessToken && req.headers) {
         req.headers["Authorization"] = `Bearer ${this.accessToken}`;
       }
       return req;
@@ -78,7 +78,8 @@ export class AuthStore {
         this.fetchQrCode();
         return;
       }
-    } catch (e) {
+    } catch (err) {
+      const e = err as Error;
       this.setError(e);
     }
     this.setAuthenticated(undefined);
@@ -95,7 +96,8 @@ export class AuthStore {
         this.setAuthenticated(res.data);
         return;
       }
-    } catch (e) {
+    } catch (err) {
+      const e = err as Error;
       this.setError(e);
     }
     this.setTwoFactorNeeded(false);

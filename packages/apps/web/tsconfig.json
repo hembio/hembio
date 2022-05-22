@@ -5,7 +5,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "noEmit": true,
     "incremental": true,
-    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "allowJs": true,
     "module": "esnext",
     "isolatedModules": true,

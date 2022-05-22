@@ -1,8 +1,8 @@
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import { Theme } from "@material-ui/core/styles";
-import { makeStyles, createStyles } from "@material-ui/styles";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { Theme } from "@mui/material/styles";
+import { makeStyles, createStyles } from "@mui/styles";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useStores } from "~/stores";

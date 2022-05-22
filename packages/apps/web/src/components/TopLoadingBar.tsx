@@ -1,6 +1,6 @@
-import Fade from "@material-ui/core/Fade";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import { styled } from "@material-ui/styles";
+import { styled } from "@mui/styles";
+import Fade from "@mui/material/Fade";
+import LinearProgress from "@mui/material/LinearProgress";
 import { Observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useApolloNetworkStatus } from "~/client";

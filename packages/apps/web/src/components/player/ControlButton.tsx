@@ -1,5 +1,5 @@
-import { Fab } from "@material-ui/core";
-import { withStyles } from "@material-ui/styles";
+import { withStyles } from "@mui/styles";
+import { Fab } from "@mui/material";
 
 export const ControlButton = withStyles({
   root: {

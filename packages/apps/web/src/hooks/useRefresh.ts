@@ -1,15 +1,15 @@
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function useRefresh(): () => void {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
-  const refresh = () => {
+  const refresh = (): void => {
     const newLoc = {
       ...location,
       state: undefined,
       key: Date.now().toString(),
     };
-    history.replace(newLoc);
+    navigate(newLoc);
   };
   return refresh;
 }

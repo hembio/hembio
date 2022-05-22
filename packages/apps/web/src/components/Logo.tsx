@@ -1,5 +1,5 @@
-import Typography, { TypographyProps } from "@material-ui/core/Typography";
-import { styled } from "@material-ui/system";
+import Typography, { TypographyProps } from "@mui/material/Typography";
+import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 
 const LogoTypography = styled(Typography)({

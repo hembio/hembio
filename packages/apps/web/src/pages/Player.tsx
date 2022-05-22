@@ -1,7 +1,7 @@
-import Alert from "@material-ui/core/Alert";
-import AlertTitle from "@material-ui/core/AlertTitle";
-import Container from "@material-ui/core/Container";
-import { makeStyles, createStyles } from "@material-ui/styles";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Container from "@mui/material/Container";
+import { makeStyles, createStyles } from "@mui/styles";
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";

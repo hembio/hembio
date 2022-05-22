@@ -8,16 +8,16 @@
   },
   "dependencies": {
     "@nestjs/common": "^7.6.18",
-    "@nestjs/config": "^1.0.1",
+    "@nestjs/config": "^1.2.1",
     "@nestjs/core": "^7.6.18",
     "internal-ip": "^6.2.0",
-    "multicast-dns": "^7.2.3",
+    "multicast-dns": "^7.2.5",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.3.0"
+    "rxjs": "^7.5.5"
   },
   "devDependencies": {
     "@types/multicast-dns": "^7.2.1",
-    "jest": "^27.0.6",
-    "typescript": "^4.3.5"
+    "jest": "^28.1.0",
+    "typescript": "^4.6.4"
   }
 }

@@ -1,8 +1,8 @@
-import { Tooltip } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import PauseIcon from "@material-ui/icons/Pause";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import { Tooltip } from "@mui/material";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Observer } from "mobx-react-lite";
 import { memo, useEffect, useState } from "react";
 import { ControlButton } from "./ControlButton";

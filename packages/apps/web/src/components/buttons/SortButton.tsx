@@ -1,13 +1,13 @@
-import Box from "@material-ui/core/Box";
-import IconButton from "@material-ui/core/IconButton";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import Typography from "@material-ui/core/Typography";
-import Check from "@material-ui/icons/Check";
-import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Typography from "@mui/material/Typography";
+import Check from "@mui/icons-material/Check";
+import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import { useState } from "react";
 
 interface SortButtonProps {

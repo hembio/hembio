@@ -1,6 +1,6 @@
 import { prettyDuration } from "@hembio/core";
-import { Typography } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
+import { Typography } from "@mui/material";
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../stores";

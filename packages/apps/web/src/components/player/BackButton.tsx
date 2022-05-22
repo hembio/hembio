@@ -1,7 +1,7 @@
-import { Tooltip } from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Tooltip } from "@mui/material";
 import { memo, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ControlButton } from "./ControlButton";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const BackButton = memo(({ showUI }: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [showTooltip, setTooltip] = useState(false);
   useEffect(() => {
     if (showUI === false) {
@@ -29,7 +29,7 @@ export const BackButton = memo(({ showUI }: Props) => {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          history.goBack();
+          navigate(-1);
         }}
       >
         <ArrowBackIcon />

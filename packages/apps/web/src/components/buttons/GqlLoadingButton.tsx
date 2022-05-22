@@ -1,5 +1,5 @@
 import { useMutation, DocumentNode } from "@apollo/client";
-import LoadingButton from "@material-ui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { ReactNode, useEffect } from "react";
 
 interface Props<V> {

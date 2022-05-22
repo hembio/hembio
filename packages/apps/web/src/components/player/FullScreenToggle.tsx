@@ -1,6 +1,6 @@
-import { Tooltip } from "@material-ui/core";
-import FullscreenIcon from "@material-ui/icons/Fullscreen";
-import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
+import { Tooltip } from "@mui/material";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import { Observer } from "mobx-react-lite";
 import { memo, useEffect, useState } from "react";
 import { useStores } from "../../stores";

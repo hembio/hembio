@@ -1,6 +1,6 @@
-import Box from "@material-ui/core/Box";
-import MuiRating from "@material-ui/core/Rating";
-import StarIcon from "@material-ui/icons/Star";
+import Box from "@mui/material/Box";
+import MuiRating from "@mui/material/Rating";
+import StarIcon from "@mui/icons-material/Star";
 
 export function Rating({ rating = 0 }: { rating?: number }): JSX.Element {
   const value = Math.round(rating) / 2;

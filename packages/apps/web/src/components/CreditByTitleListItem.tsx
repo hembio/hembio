@@ -1,8 +1,8 @@
-import Avatar from "@material-ui/core/Avatar";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemText from "@material-ui/core/ListItemText";
-import Skeleton from "@material-ui/core/Skeleton";
+import Avatar from "@mui/material/Avatar";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
+import Skeleton from "@mui/material/Skeleton";
 import { CreditIcon } from "./CreditIcon";
 import { CastFragment, CrewFragment } from "~/generated/graphql";
 

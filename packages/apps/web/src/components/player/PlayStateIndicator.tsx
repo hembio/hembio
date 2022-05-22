@@ -1,11 +1,9 @@
-/** @jsxImportSource @emotion/react */
-/** @jsx jsx */
 import { css, keyframes } from "@emotion/react";
-import Box from "@material-ui/core/Box";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { useTheme } from "@material-ui/core/styles";
-import PauseCircleFilledTwoToneIcon from "@material-ui/icons/PauseCircleFilledTwoTone";
-import PlayCircleFilledTwoToneIcon from "@material-ui/icons/PlayCircleFilledTwoTone";
+import PauseCircleFilledTwoToneIcon from "@mui/icons-material/PauseCircleFilledTwoTone";
+import PlayCircleFilledTwoToneIcon from "@mui/icons-material/PlayCircleFilledTwoTone";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useTheme } from "@mui/material/styles";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useStores } from "~/stores";

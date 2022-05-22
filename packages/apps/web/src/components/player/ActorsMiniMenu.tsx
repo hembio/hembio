@@ -1,7 +1,7 @@
-import { Tooltip } from "@material-ui/core";
-import Menu from "@material-ui/core/Menu";
-import MenuList from "@material-ui/core/MenuList";
-import PeopleIcon from "@material-ui/icons/People";
+import { Tooltip } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import MenuList from "@mui/material/MenuList";
+import PeopleIcon from "@mui/icons-material/People";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { CreditListitem } from "../CreditListItem";

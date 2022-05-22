@@ -1,6 +1,6 @@
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { RestLoadingButton } from "~/components/buttons/RestLoadingButton";
 import { AddLibraryDialog } from "~/dialogs/AddLibraryDialog";

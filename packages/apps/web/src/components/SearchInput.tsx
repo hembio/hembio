@@ -1,9 +1,9 @@
-import InputBase from "@material-ui/core/InputBase";
-import { experimentalStyled as styled, alpha } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
+import { experimentalStyled as styled, alpha } from "@mui/material/styles";
 import { useEffect, useRef, useState } from "react";
-import { SearchResult } from "./SearchResult";
 import { useSearchTitlesQuery } from "~/generated/graphql";
+import { SearchResult } from "./SearchResult";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

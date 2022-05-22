@@ -2,7 +2,7 @@ module.exports = {
   client: {
     service: {
       name: "hembio",
-      url: "http://localhost:4000/graphql",
+      url: "https://hembio.local:3443/graphql",
       includes: ["./packages/apps/**/*.ts"],
       excludes: ["**/__tests__/**"],
     },

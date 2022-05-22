@@ -1,8 +1,8 @@
-import Avatar from "@material-ui/core/Avatar";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemButton from "@material-ui/core/ListItemButton";
-import ListItemText from "@material-ui/core/ListItemText";
-import Skeleton from "@material-ui/core/Skeleton";
+import Avatar from "@mui/material/Avatar";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Skeleton from "@mui/material/Skeleton";
 import { Link } from "react-router-dom";
 import { CreditIcon } from "./CreditIcon";
 import { HEMBIO_API_URL } from "~/constants";

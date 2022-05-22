@@ -1,8 +1,8 @@
-import Alert from "@material-ui/core/Alert";
-import AlertTitle from "@material-ui/core/AlertTitle";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Container from "@material-ui/core/Container";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import CircularProgress from "@mui/material/CircularProgress";
+import Container from "@mui/material/Container";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { TitleCard } from "../components/TitleCard";

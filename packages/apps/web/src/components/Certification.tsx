@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import gRating from "$/certification/g.svg";
 import nc17Rating from "$/certification/nc-17.svg";
 import nrRating from "$/certification/nr.svg";

@@ -57,6 +57,10 @@ async function bootstrap() {
     await ensureHost(domain, ip);
   } catch (e) {
     // Ignore
+    // logger.error(
+    //   "Domain could not be added to hosts file. Manually run `yarn dlx hostile set 127.0.0.1 hembio.local` as root/admin to add it.",
+    // );
+    // process.exit(1);
   }
 
   // Get key/cert for domain (will generate one if it doesn't already exist)
@@ -109,7 +113,7 @@ async function bootstrap() {
             hostname: "hembio.local",
             port: 4000,
             protocol: "https",
-            path: req.url.substr(4),
+            path: req.url.substring(4),
           },
           defaultWebHandler,
         );
@@ -151,7 +155,7 @@ async function bootstrap() {
         req,
         res,
         {
-          hostname: "localhost",
+          hostname: "hembio.local",
           port: 3000,
           onRes,
         },
@@ -174,22 +178,22 @@ async function bootstrap() {
           hostname: "hembio.local",
           port: 4000,
           protocol: "https",
-          path: req.url.substr(4),
+          path: req.url.substring(4),
         },
         defaultWSHandler,
       );
       return;
     }
-    proxy.ws(
-      req,
-      socket,
-      head,
-      {
-        hostname: "localhost",
-        port: 3000,
-      },
-      defaultWSHandler,
-    );
+    // proxy.ws(
+    //   req,
+    //   socket,
+    //   head,
+    //   {
+    //     hostname: "hembio.local",
+    //     port: 3000,
+    //   },
+    //   defaultWSHandler,
+    // );
     return;
   });
 

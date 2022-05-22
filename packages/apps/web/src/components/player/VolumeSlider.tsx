@@ -1,14 +1,14 @@
-import Grid from "@material-ui/core/Grid";
-import Tooltip from "@material-ui/core/Tooltip";
-import VolumeDown from "@material-ui/icons/VolumeDown";
-import VolumeOffIcon from "@material-ui/icons/VolumeOff";
-import VolumeUp from "@material-ui/icons/VolumeUp";
-import { makeStyles, styled } from "@material-ui/styles";
+import VolumeDown from "@mui/icons-material/VolumeDown";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import VolumeUp from "@mui/icons-material/VolumeUp";
+import { makeStyles, styled } from "@mui/styles";
+import Grid from "@mui/material/Grid";
+import Tooltip from "@mui/material/Tooltip";
 import { Observer } from "mobx-react-lite";
 import { memo, useState } from "react";
+import { useStores } from "~/stores";
 import { ControlButton } from "./ControlButton";
 import { Slider } from "./Slider";
-import { useStores } from "~/stores";
 
 export const SmallSlider = styled(Slider)({
   root: {

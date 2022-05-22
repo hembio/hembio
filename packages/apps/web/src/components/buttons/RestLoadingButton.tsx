@@ -1,4 +1,4 @@
-import LoadingButton from "@material-ui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 import { ReactNode, useState } from "react";
 import { HEMBIO_API_URL } from "~/constants";

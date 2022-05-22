@@ -1,8 +1,8 @@
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import clsx from "clsx";
 import { observer, useObserver } from "mobx-react-lite";
 import { useRef, useState } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { TopBar } from "~/components/TopBar";
 import { BottomBar } from "~/components/player/BottomBar";
 import { PlayStateIndicator } from "~/components/player/PlayStateIndicator";
@@ -55,7 +55,7 @@ export const PlayerOverlay = observer(() => {
   const windowRef = useRef(window);
   const { playerStore } = useStores();
   const [showUI, setShowUI] = useState(true);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const startHideTimer = () => {
     if (hideUITimer.current) {
@@ -102,7 +102,7 @@ export const PlayerOverlay = observer(() => {
       let seeked = false;
       switch (key) {
         case "Backspace":
-          history.go(-1);
+          navigate(-1);
           handled = true;
           break;
         case "l":

@@ -1,15 +1,15 @@
+import confusedTravolta from "$/404.gif";
+import movieRollStorage from "$/404_bg.jpg";
 import {
   Button,
   Card,
   CardContent,
   Container,
   Typography,
-} from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/styles";
+} from "@mui/material";
+import { makeStyles, createStyles } from "@mui/styles";
 import { memo } from "react";
-import { useHistory } from "react-router-dom";
-import confusedTravolta from "$/404.gif";
-import movieRollStorage from "$/404_bg.jpg";
+import { useNavigate } from "react-router-dom";
 
 const quotes = [
   [
@@ -113,7 +113,7 @@ const useStyles = makeStyles(
 );
 
 export const NotFound = memo(() => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const classes = useStyles();
   const [quote, character, actor, movie, year] =
     quotes[Math.floor(Math.random() * quotes.length)];
@@ -162,7 +162,7 @@ export const NotFound = memo(() => {
                   variant="contained"
                   color="secondary"
                   size="large"
-                  onClick={() => history.goBack()}
+                  onClick={() => navigate(-1)}
                   sx={{ ml: 1, mr: 1 }}
                 >
                   Go back
@@ -172,7 +172,7 @@ export const NotFound = memo(() => {
                   variant="contained"
                   color="primary"
                   size="large"
-                  onClick={() => history.push("/")}
+                  onClick={() => navigate("/")}
                   sx={{ ml: 1, mr: 1 }}
                 >
                   Go Home

@@ -1,21 +1,18 @@
-import Divider from "@material-ui/core/Divider";
-import MuiDrawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import {
-  experimentalStyled as styled,
-  useTheme,
-} from "@material-ui/core/styles";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import HomeIcon from "@material-ui/icons/Home";
-import MusicNoteIcon from "@material-ui/icons/MusicNote";
-import SettingsIcon from "@material-ui/icons/Settings";
-import TheatersIcon from "@material-ui/icons/Theaters";
-import TvIcon from "@material-ui/icons/Tv";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import HomeIcon from "@mui/icons-material/Home";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import SettingsIcon from "@mui/icons-material/Settings";
+import TheatersIcon from "@mui/icons-material/Theaters";
+import TvIcon from "@mui/icons-material/Tv";
+import Divider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { experimentalStyled as styled, useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useLibrariesQuery } from "../generated/graphql";
 

@@ -1,7 +1,7 @@
-import { Theme } from "@material-ui/core";
-import Skeleton from "@material-ui/core/Skeleton";
-import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
+import { createStyles, makeStyles } from "@mui/styles";
+import { Theme } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 import clsx from "clsx";
 import { ImgHTMLAttributes, useEffect, useRef, useState } from "react";
 import { HEMBIO_API_URL } from "../constants";

@@ -1,30 +1,29 @@
 import { TitleGenreLiterals } from "@hembio/core/src";
-import { Theme } from "@material-ui/core";
-import Alert from "@material-ui/core/Alert";
-import AlertTitle from "@material-ui/core/AlertTitle";
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Skeleton from "@material-ui/core/Skeleton";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles, createStyles } from "@material-ui/styles";
+import { Theme } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
+import Typography from "@mui/material/Typography";
+import { makeStyles, createStyles } from "@mui/styles";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router";
-import { useParams } from "react-router-dom";
-import { ActionBox } from "../components/ActionBox";
-import { Certification } from "../components/Certification";
-import { CreditsBox } from "../components/CreditsBox";
-import { TitleDebugBox } from "../components/TitleDebugBox";
-import { HEMBIO_API_URL } from "../constants";
-import { NotFound } from "./NotFound";
+import { useParams, useNavigate } from "react-router-dom";
 import { BackgroundPortal } from "~/components/BackgroundPortal";
 import { PosterImage } from "~/components/PosterImage";
 import { Rating } from "~/components/Rating";
 import { TitleLogo } from "~/components/TitleLogo";
 import { TitleWithFilesFragment, useTitleQuery } from "~/generated/graphql";
 import { useRefresh } from "~/hooks/useRefresh";
+import { ActionBox } from "../components/ActionBox";
+import { Certification } from "../components/Certification";
+import { CreditsBox } from "../components/CreditsBox";
+import { TitleDebugBox } from "../components/TitleDebugBox";
+import { HEMBIO_API_URL } from "../constants";
+import { NotFound } from "./NotFound";
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -109,11 +108,11 @@ const useStyles = makeStyles(
 
 export const Title = (): JSX.Element => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const refresh = useRefresh();
   const { t } = useTranslation("genres");
 
-  const { titleId } = useParams<{ titleId: string }>();
+  const { titleId = "" } = useParams<{ titleId: string }>();
   const { data, error, refetch } = useTitleQuery({
     variables: { id: titleId },
   });
@@ -140,7 +139,7 @@ export const Title = (): JSX.Element => {
     }
     setTimeout(() => {
       if (goBack) {
-        history.goBack();
+        navigate(-1);
       } else {
         refresh();
       }

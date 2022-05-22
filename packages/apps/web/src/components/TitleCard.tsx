@@ -1,9 +1,9 @@
-import { Theme } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
-import Skeleton from "@material-ui/core/Skeleton";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { Theme } from "@mui/material";
+import Link from "@mui/material/Link";
+import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { createStyles, makeStyles } from "@mui/styles";
 import { forwardRef } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import type { TitleFragment } from "../generated/graphql";

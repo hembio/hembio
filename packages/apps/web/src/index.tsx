@@ -1,6 +1,6 @@
 import { ApolloProvider } from "@apollo/client";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { StyledEngineProvider, ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import { StrictMode } from "react";
 import { render } from "react-dom";
 import { I18nextProvider } from "react-i18next";

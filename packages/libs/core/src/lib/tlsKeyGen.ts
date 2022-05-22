@@ -193,7 +193,8 @@ async function keychainGetDefault() {
     const { stdout: keychain } = await execa(command);
     return keychain.trim().replace(/^"(.+)"$/, "$1");
   } catch (error) {
-    throw error.stdout ? new Error(error.stdout) : error;
+    const e = error as any;
+    throw e.stdout ? new Error(e.stdout) : error;
   }
 }
 
@@ -213,10 +214,9 @@ async function keychainAddTrusted(keychain: string, cert: string) {
   try {
     await execa(command);
   } catch (error) {
+    const e = error as any;
     const message =
-      (error.stdout && error.stdout) ||
-      (error.stderr && error.stderr.split("\n")[1]) ||
-      "";
+      (e.stdout && e.stdout) || (e.stderr && e.stderr.split("\n")[1]) || "";
     throw message ? new Error(message) : error;
   }
 }
@@ -271,16 +271,17 @@ async function generateLocalhostPairWindows(
       // Ignore
     }
   } catch (error) {
+    const e = error as any;
     const nodeCommand = /Command failed:/;
-    if (nodeCommand.test(error.message)) {
-      error.message = error.message
+    if (nodeCommand.test(e.message)) {
+      e.message = e.message
         .split("\n")
         .filter((line: string) => !nodeCommand.test(line))
         .join("\n");
     }
     const isOpensslError = /:error:/;
-    if (isOpensslError.test(error.message)) {
-      error.message = error.message
+    if (isOpensslError.test(e.message)) {
+      e.message = e.message
         .split("\n")
         .filter((line: string) => isOpensslError.test(line))
         .join("\n");
@@ -360,7 +361,8 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
   try {
     profiles = await readdir(firefoxProfiles);
   } catch (error) {
-    if (error.code === "ENOENT") {
+    const e = error as any;
+    if (e.code === "ENOENT") {
       return;
     } else {
       throw error;
@@ -409,8 +411,9 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
     try {
       await execa(command);
     } catch (error) {
-      if (!/SEC_ERROR_BAD_DATABASE/.test(error.stderr)) {
-        console.warn(error.stderr);
+      const e = error as any;
+      if (!/SEC_ERROR_BAD_DATABASE/.test(e.stderr)) {
+        console.warn(e.stderr);
       }
       continue;
     }
@@ -432,7 +435,7 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
     // Differs slightly from Firefox but accepted nonetheless
     // Ported from: https://github.com/Osmose/firefox-cert-override
     const { serial } = certificate;
-    const issuer = Buffer.from(certificate.issuer);
+    const issuer = Buffer.from(certificate.issuer.toString());
     const serialLength = Buffer.alloc(4);
     serialLength.writeIntBE(serial.length, 0, serial.length);
     const issuerLength = Buffer.alloc(4);
@@ -442,7 +445,7 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
       Buffer.alloc(4),
       serialLength,
       issuerLength,
-      new TextEncoder().encode(serial),
+      new TextEncoder().encode(serial.toString()),
       issuer,
     ]).toString("base64");
 

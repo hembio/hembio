@@ -1,9 +1,9 @@
-import { Theme } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { Theme } from "@mui/material";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { createStyles, makeStyles } from "@mui/styles";
 import clsx from "clsx";
 import { useCallback, useRef, useState } from "react";
 import { TitleCard } from "~/components/TitleCard";

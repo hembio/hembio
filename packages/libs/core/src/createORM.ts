@@ -2,10 +2,10 @@ import fs from "fs";
 import path from "path";
 import { MikroORM, Options } from "@mikro-orm/core";
 import { SqliteDriver } from "@mikro-orm/sqlite";
+import { getCwd } from "~/utils/getCwd";
 import { UserEntity } from "./entities";
 import mikroORMConfig from "./mikro-orm.config";
 import { seedDatabase } from "./seedDatabase";
-import { getCwd } from "~/utils/getCwd";
 
 export async function createORM(
   options?: Options<SqliteDriver>,

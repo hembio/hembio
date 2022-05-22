@@ -1,5 +1,5 @@
-import { alpha, Slider as MuiSlider, Theme } from "@material-ui/core";
-import { styled } from "@material-ui/styles";
+import { styled } from "@mui/styles";
+import { alpha, Slider as MuiSlider, Theme } from "@mui/material";
 
 export const Slider = styled(MuiSlider)(({ theme }: { theme: Theme }) => ({
   color:

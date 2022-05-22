@@ -1,11 +1,11 @@
-import Alert from "@material-ui/core/Alert";
-import AlertTitle from "@material-ui/core/AlertTitle";
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Pagination from "@material-ui/core/Pagination";
-import PaginationItem from "@material-ui/core/PaginationItem";
-import Typography from "@material-ui/core/Typography";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
+import Typography from "@mui/material/Typography";
 import {
   Dispatch,
   memo,
@@ -14,7 +14,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { TitleCard } from "~/components/TitleCard";
 import { FilterButton } from "~/components/buttons/FilterButton";
 import { SortButton } from "~/components/buttons/SortButton";
@@ -137,7 +137,7 @@ const SearchPagination = memo(
             component={Link}
             to={createSearchURL({
               ...searchParams,
-              page: item.page,
+              page: item.page || 0,
             })}
             {...item}
           />
@@ -154,7 +154,7 @@ interface TitleListProps {
 export const TitleList = ({
   libraryId,
 }: TitleListProps): JSX.Element | null => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { searchParams, setters } = useSearchParams();
   const { orderBy, orderDirection, filter, page } = searchParams;
   const { setOrderBy, setOrderDirection, setFilter, setPage } = setters;
@@ -211,7 +211,7 @@ export const TitleList = ({
     (nextPage: number): void => {
       setPage(nextPage);
       rootRef.current?.scrollTo(0, 0);
-      history.push(createSearchURL({ ...searchParams, page: nextPage + 1 }));
+      navigate(createSearchURL({ ...searchParams, page: nextPage + 1 }));
     },
     [],
     300,
@@ -223,7 +223,7 @@ export const TitleList = ({
       setOrderDirection(direction);
       setPage(0);
       rootRef.current?.scrollTo(0, 0);
-      history.push(
+      navigate(
         createSearchURL({
           ...searchParams,
           page: 1,

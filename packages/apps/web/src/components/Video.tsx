@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import clsx from "clsx";
 import { memo, useEffect, useRef } from "react";
 import type { FileWithTitleFragment } from "../generated/graphql";
@@ -99,7 +99,7 @@ export const Video = memo(({ file }: Props) => {
             label={code}
             kind="captions"
             srcLang={code}
-            src={`https://localhost:4000/subtitles/${file.id}/${code}`}
+            src={`https://hembio.local:4000/subtitles/${file.id}/${code}`}
             default={code === "English"}
           ></track>
         ))}

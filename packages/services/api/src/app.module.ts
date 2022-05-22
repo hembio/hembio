@@ -96,14 +96,33 @@ export class AppModule implements NestModule {
     private readonly em: EntityManager,
   ) {}
 
-  public configure(consumer: MiddlewareConsumer): void {
+  public async configure(consumer: MiddlewareConsumer): Promise<void> {
+    await this.orm.isConnected();
+    try {
+      const userCount = await this.em.count(UserEntity);
+      console.log("userCount", userCount);
+      if (userCount === 0) {
+        this.logger.info("First time running. Seeding database...");
+        await seedDatabase(this.orm);
+      }
+    } catch (e) {
+      try {
+        this.logger.info("First time running. Seeding database...");
+        await seedDatabase(this.orm);
+      } catch (e) {
+        this.logger.error(e, "Failed to seed database!");
+      }
+      // Ignore
+    }
     consumer.apply(MikroORMMiddleware).forRoutes("graphql");
   }
 
   public async onApplicationBootstrap(): Promise<void> {
+    console.log("onApplicationBootstrap");
     await this.orm.isConnected();
     try {
       const userCount = await this.em.count(UserEntity);
+      console.log("userCount", userCount);
       if (userCount === 0) {
         this.logger.info("First time running. Seeding database...");
         await seedDatabase(this.orm);

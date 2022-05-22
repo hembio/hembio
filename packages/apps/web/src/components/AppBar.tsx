@@ -1,18 +1,16 @@
-import MuiAppBar, {
-  AppBarProps as MuiAppBarProps,
-} from "@material-ui/core/AppBar";
-import Badge from "@material-ui/core/Badge";
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
-import Toolbar from "@material-ui/core/Toolbar";
-import { experimentalStyled as styled } from "@material-ui/core/styles";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import MenuIcon from "@material-ui/icons/Menu";
-import MoreIcon from "@material-ui/icons/More";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import { experimentalStyled as styled } from "@mui/material/styles";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import MoreIcon from "@mui/icons-material/More";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import { isElectron } from "../utils/isElectron";
 import { Logo } from "./Logo";

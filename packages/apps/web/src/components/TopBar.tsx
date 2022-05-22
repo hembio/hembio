@@ -1,10 +1,10 @@
-import { Theme } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
+import { Theme } from "@mui/material";
+import Box from "@mui/material/Box";
 import clsx from "clsx";
 import { memo } from "react";
-import { TitleLogo } from "./TitleLogo";
 import type { TitleFragment } from "~/generated/graphql";
+import { TitleLogo } from "./TitleLogo";
 
 const useStyles = makeStyles(
   (theme: Theme) =>

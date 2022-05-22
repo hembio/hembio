@@ -1,5 +1,5 @@
-import Alert, { AlertColor } from "@material-ui/core/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
+import Alert, { AlertColor } from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useState } from "react";
 import { SnackbarApi } from "./snackbar-api.interface";
 import { SnackbarContext } from "./snackbar.context";

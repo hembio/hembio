@@ -1,14 +1,10 @@
-import { Theme, Toolbar } from "@material-ui/core";
-import { experimentalStyled as styled } from "@material-ui/core/styles";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { Theme, Toolbar } from "@mui/material";
+import { experimentalStyled as styled } from "@mui/material/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { observer } from "mobx-react-lite";
 import { useLayoutEffect, useState } from "react";
-import { Route, Switch, useLocation, useRouteMatch } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { Credits } from "../pages/Credits";
-import { Profile } from "../pages/Profile";
-import { Footer } from "./Footer";
-import { ProtectedRoute } from "./ProtectedRoute";
 import { AppBar } from "~/components/AppBar";
 import { BackgroundPortal } from "~/components/BackgroundPortal";
 import { Drawer } from "~/components/Drawer";
@@ -22,6 +18,10 @@ import { Settings } from "~/pages/Settings";
 import { SignIn } from "~/pages/SignIn";
 import { Title } from "~/pages/Title";
 import { useStores } from "~/stores";
+import { Credits } from "../pages/Credits";
+import { Profile } from "../pages/Profile";
+import { Footer } from "./Footer";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 const drawerWidth = 240;
 
@@ -131,49 +131,66 @@ export const AppContainer = observer(() => {
           classNames="PageTransition"
           timeout={300}
         >
-          <Switch>
-            <ProtectedRoute
+          <Routes>
+            <Route
               path="/"
-              exact
-              render={(props) => <Home key={props.location.key} {...props} />}
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
             />
-            <ProtectedRoute path="/library">
-              <LibraryRoutes />
-            </ProtectedRoute>
-            <ProtectedRoute
+            <Route
+              path="/library/:id"
+              element={
+                <ProtectedRoute>
+                  <LibraryRoutes />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/play/:fileId"
-              exact
-              render={(props) => <Player key={props.location.key} {...props} />}
+              element={
+                <ProtectedRoute>
+                  <Player />
+                </ProtectedRoute>
+              }
             />
-            <ProtectedRoute path="/title">
-              <TitleRoutes />
-            </ProtectedRoute>
-            <ProtectedRoute
-              path={`/person/:personId`}
-              exact
-              render={(props) => <Person key={props.location.key} {...props} />}
+            <Route
+              path="/title/:titleId"
+              element={
+                <ProtectedRoute>
+                  <TitleRoutes />
+                </ProtectedRoute>
+              }
             />
-            <ProtectedRoute
+            <Route
+              path="/person/:personId"
+              element={
+                <ProtectedRoute>
+                  <Person />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/profile"
-              exact
-              render={(props) => (
-                <Profile key={props.location.key} {...props} />
-              )}
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
             />
-            <ProtectedRoute
+            <Route
               path="/settings"
-              exact
-              render={(props) => (
-                <Settings key={props.location.key} {...props} />
-              )}
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/sign-in" exact>
-              <SignIn />
-            </Route>
-            <Route path="*">
-              <NotFound />
-            </Route>
-          </Switch>
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </CSSTransition>
         <Footer />
       </Main>
@@ -184,38 +201,20 @@ export const AppContainer = observer(() => {
 });
 
 function LibraryRoutes(): JSX.Element {
-  const { path } = useRouteMatch();
+  const { libraryId } = useParams();
   return (
-    <Switch>
-      <Route exact path={path}>
-        <h3>Please select a library</h3>
-      </Route>
-      <Route
-        path={`${path}/:libraryId`}
-        exact
-        render={(props) => {
-          const libraryId = props.match.params.libraryId;
-          return <Library key={libraryId} {...props} />;
-        }}
-      />
-    </Switch>
+    <Routes>
+      <Route path={"/"} element={<Library key={libraryId} />} />
+    </Routes>
   );
 }
 
 function TitleRoutes(): JSX.Element {
-  const { path } = useRouteMatch();
+  const location = useLocation();
   return (
-    <Switch>
-      <Route
-        path={`${path}/:titleId`}
-        exact
-        render={(props) => <Title key={props.location.key} {...props} />}
-      />
-      <Route
-        path={`${path}/:titleId/credits`}
-        exact
-        render={(props) => <Credits key={props.location.key} {...props} />}
-      />
-    </Switch>
+    <Routes>
+      <Route path={"/"} element={<Title key={location.key} />} />
+      <Route path={"/credits"} element={<Credits key={location.key} />} />
+    </Routes>
   );
 }
