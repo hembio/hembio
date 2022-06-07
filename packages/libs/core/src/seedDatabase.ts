@@ -5,12 +5,20 @@ import { GenreEntity } from "./entities/GenreEntity";
 
 export async function seedDatabase(orm: MikroORM): Promise<void> {
   const generator = orm.getSchemaGenerator();
+
+  try {
+    await generator.dropSchema();
+  } catch {
+    // Ignore
+  }
+
   try {
     await generator.createSchema();
   } catch (e) {
-    // console.error(e);
     // throw Error("Failed to create schema!");
+    // Ignore
   }
+
   try {
     await generator.updateSchema();
   } catch {
