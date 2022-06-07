@@ -141,7 +141,7 @@ async function bootstrap(): Promise<void> {
             "script-src 'self' 'unsafe-inline' hembio.local",
             "style-src 'self' 'unsafe-inline' hembio.local fonts.googleapis.com",
             "style-src-elem 'self' 'unsafe-inline' hembio.local fonts.googleapis.com",
-            "font-src 'self' data: fonts.gstatic.com",
+            "font-src 'self' data: fonts.gstatic.com www.slant.co",
           ].join("; "),
         );
         // https://developer.chrome.com/blog/enabling-shared-array-buffer/
