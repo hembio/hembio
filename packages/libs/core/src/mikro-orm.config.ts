@@ -32,6 +32,9 @@ type Config = Options<SqliteDriver> &
 const storage = new AsyncLocalStorage<EntityManager>();
 
 const config: Config = {
+  // TODO: Remove once we've fixed the underlying issue
+  // Reference: https://mikro-orm.io/docs/identity-map#global-identity-map
+  allowGlobalContext: true,
   entities: [
     CreditEntity,
     FileEntity,
