@@ -2,7 +2,7 @@ import { ApolloProvider } from "@apollo/client";
 import CssBaseline from "@mui/material/CssBaseline";
 import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import { StrictMode } from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
 import { createApolloClient } from "./client";
@@ -14,7 +14,12 @@ import { theme } from "./theme";
 
 async function bootstrap(): Promise<void> {
   const client = await createApolloClient();
-  render(
+  const container = document.getElementById("root");
+  if (!container) {
+    throw new Error("No root element found");
+  }
+  const root = createRoot(container);
+  root.render(
     <StrictMode>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
@@ -33,7 +38,6 @@ async function bootstrap(): Promise<void> {
         </ThemeProvider>
       </StyledEngineProvider>
     </StrictMode>,
-    document.getElementById("root"),
   );
 }
 
