@@ -44,7 +44,7 @@ const createWindow = async (): Promise<void> => {
       "style-src-elem 'self' 'unsafe-inline' hembio.local fonts.googleapis.com",
       "img-src 'self' data: hembio.local",
       "media-src 'self' 'unsafe-inline' hembio.local",
-      "font-src 'self' fonts.gstatic.com",
+      "font-src 'self' data: fonts.gstatic.com",
     ].join("; ");
     callback({
       responseHeaders: {
