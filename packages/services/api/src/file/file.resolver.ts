@@ -1,7 +1,7 @@
 import { FileEntity, TitleEntity } from "@hembio/core";
 import { Query, Resolver, Args, ResolveField, Parent } from "@nestjs/graphql";
-import { FileService } from "./file.service";
 import { IndexerService } from "~/indexer/indexer.service";
+import { FileService } from "./file.service";
 
 @Resolver(() => FileEntity)
 export class FileResolver {

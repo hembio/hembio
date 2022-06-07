@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { GqlContextType } from "@nestjs/graphql";
-import { GqlExecutionContext } from "nestjs-mercurius";
+import { GqlContextType, GqlExecutionContext } from "@nestjs/graphql";
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {

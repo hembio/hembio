@@ -9,9 +9,9 @@ import {
   LoadStrategy,
 } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { TitleEntity } from "./TitleEntity";
 import { GENRE_NAMESPACE } from "~/namespaces";
 import { generateNamespacedUuid } from "~/utils/generateUuid";
+import { TitleEntity } from "./TitleEntity";
 
 @ObjectType()
 @Entity({ tableName: "genres" })

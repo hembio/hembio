@@ -4,10 +4,10 @@ import Container from "@mui/material/Container";
 import { makeStyles, createStyles } from "@mui/styles";
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
-import { NotFound } from "./NotFound";
 import { Video } from "~/components/Video";
 import { PlayerOverlay } from "~/containers/PlayerOverlay";
 import { useFileQuery } from "~/generated/graphql";
+import { NotFound } from "./NotFound";
 
 const useStyles = makeStyles(
   createStyles({
@@ -32,7 +32,7 @@ const useStyles = makeStyles(
 );
 
 export const Player = observer(() => {
-  const { fileId } = useParams<{ fileId: string }>();
+  const { fileId = "" } = useParams<{ fileId: string }>();
   const classes = useStyles();
 
   const { data, loading, error } = useFileQuery({ variables: { fileId } });

@@ -7,7 +7,7 @@ import pinoPretty from "pino-pretty";
 export class BrowserLogger {
   private loggers: pino.Logger[] = [];
 
-  constructor(private namespace: string) {
+  public constructor(private namespace: string) {
     this.loggers.push(
       pino({
         name: this.namespace,
@@ -18,29 +18,29 @@ export class BrowserLogger {
     );
   }
 
-  log(message: string): void;
-  log(firstArg: unknown, ...rest: unknown[]): void {
+  public log(message: string): void;
+  public log(firstArg: unknown, ...rest: unknown[]): void {
     for (const logger of this.loggers) {
       logger.log(firstArg as any, ...rest);
     }
   }
 
-  info(message: string): void;
-  info(firstArg: unknown, ...rest: unknown[]): void {
+  public info(message: string): void;
+  public info(firstArg: unknown, ...rest: unknown[]): void {
     for (const logger of this.loggers) {
       logger.info(firstArg as any, ...rest);
     }
   }
 
-  debug(message: string): void;
-  debug(firstArg: unknown, ...rest: unknown[]): void {
+  public debug(message: string): void;
+  public debug(firstArg: unknown, ...rest: unknown[]): void {
     for (const logger of this.loggers) {
       logger.debug(firstArg as any, ...rest);
     }
   }
 
-  error(message: string): void;
-  error(firstArg: unknown, ...rest: unknown[]): void {
+  public error(message: string): void;
+  public error(firstArg: unknown, ...rest: unknown[]): void {
     for (const logger of this.loggers) {
       logger.error(firstArg as any, ...rest);
     }

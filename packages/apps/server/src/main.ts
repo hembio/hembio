@@ -6,11 +6,10 @@ import {
 } from "http2";
 import { Socket } from "net";
 import path from "path";
-import { getCwd, getEnv, getPki } from "@hembio/core";
+import { getCwd, getEnv, getPki, internalIp } from "@hembio/core";
 import { createLogger } from "@hembio/logger";
 import finalhandler from "finalhandler";
 import proxy from "http2-proxy";
-import internalIp from "internal-ip";
 import { HEMBIO_BANNER } from "./constants";
 import { ensureHost } from "./ensureHost";
 import { monkeyPatchTls } from "./monkeyPatchTls";
@@ -42,9 +41,10 @@ const defaultWSHandler = (
   }
 };
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const env = getEnv();
   const domain = env.HEMBIO_SERVER_DOMAIN || "hembio.local";
+
   const ip = env.HEMBIO_SERVER_IP || (await internalIp.v4()) || "127.0.0.1";
   const port = Number(env.HEMBIO_SERVER_PORT) || 443;
 
@@ -73,7 +73,7 @@ async function bootstrap() {
   monkeyPatchTls(selfSignedCert);
 
   // https://nodejs.org/api/http2.html#http2_alpn_negotiation
-  function onRequest(req: Http2ServerRequest, res: Http2ServerResponse) {
+  function onRequest(req: Http2ServerRequest, res: Http2ServerResponse): void {
     // Detects if it is a HTTPS request or HTTP/2
     const {
       socket: { alpnProtocol },

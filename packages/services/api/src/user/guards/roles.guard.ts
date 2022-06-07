@@ -1,8 +1,7 @@
 import { UserRole } from "@hembio/core";
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { GqlContextType } from "@nestjs/graphql";
-import { GqlExecutionContext } from "nestjs-mercurius";
+import { GqlContextType, GqlExecutionContext } from "@nestjs/graphql";
 import { UserService } from "../user.service";
 
 @Injectable()

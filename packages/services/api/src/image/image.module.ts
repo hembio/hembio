@@ -1,9 +1,9 @@
 import { MikroOrmModule, TitleEntity } from "@hembio/core";
 import { Module } from "@nestjs/common";
+import { getServiceClientProxy } from "~/utils/getServiceClientProxy";
 import { ImageController } from "./image.controller";
 import { ImageResolver } from "./image.resolver";
 import { ImageService } from "./image.service";
-import { getServiceClientProxy } from "~/utils/getServiceClientProxy";
 
 const ImagesClientProxy = getServiceClientProxy("images");
 

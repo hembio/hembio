@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { WatcherService } from "./watcher.service";
 import { LibraryModule } from "~/library/library.module";
+import { WatcherService } from "./watcher.service";
 
 @Module({
   imports: [LibraryModule],

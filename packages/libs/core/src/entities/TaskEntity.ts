@@ -5,6 +5,7 @@ import {
   Filter,
   Index,
   JsonType,
+  OptionalProps,
   PrimaryKey,
   Property,
 } from "@mikro-orm/core";
@@ -27,6 +28,8 @@ export enum TaskType {
   args: false,
 })
 export class TaskEntity {
+  public [OptionalProps]?: "createdAt" | "waitUntil" | "payload";
+
   @Field(() => ID)
   @PrimaryKey()
   public id!: string;

@@ -28,7 +28,7 @@ export function getColorFromNumber(
   return getColorFromString(x + "", darkColors, accentColors);
 }
 
-function djb2(str: string) {
+function djb2(str: string): number {
   let hash = 5381;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);

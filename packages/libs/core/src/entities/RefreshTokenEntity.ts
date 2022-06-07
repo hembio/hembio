@@ -1,17 +1,25 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import {
+  Entity,
+  ManyToOne,
+  OptionalProps,
+  PrimaryKey,
+  Property,
+} from "@mikro-orm/core";
 import { ID, Field, ObjectType } from "@nestjs/graphql";
 import { UserEntity } from "./UserEntity";
 
 @ObjectType()
 @Entity({ tableName: "refresh_tokens" })
 export class RefreshTokenEntity {
+  public [OptionalProps]? = "expires";
+
   @Field(() => ID)
   @PrimaryKey()
   public id!: string;
 
   @Field(() => Boolean)
   @Property({ nullable: false, default: false })
-  public blacklisted!: boolean;
+  public blacklisted? = false;
 
   @Field(() => UserEntity)
   @ManyToOne({ entity: () => UserEntity, nullable: true, lazy: true })

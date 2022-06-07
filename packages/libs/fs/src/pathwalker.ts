@@ -1,7 +1,10 @@
+import type { Stats } from "fs";
 import { readdir, lstat } from "fs/promises";
 import path from "path";
 
-async function* walkPath(basePath: string) {
+async function* walkPath(
+  basePath: string,
+): AsyncIterableIterator<{ path: string; stat: Promise<Stats> }> {
   try {
     for (const currentPath of await readdir(path.normalize(basePath))) {
       const fullPath = path.resolve(basePath, currentPath);

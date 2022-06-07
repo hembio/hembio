@@ -20,7 +20,7 @@ export class AppService {
   @Cron("0 0 3 * * *", {
     name: "vacuum_sqlite",
   })
-  public async vacuumSqlite(): Promise<EntityData<AnyEntity<unknown>>> {
+  public async vacuumSqlite(): Promise<EntityData<AnyEntity<any>>> {
     const conn = this.em.getConnection();
     const res = await conn.execute("VACUUM;");
     return res;

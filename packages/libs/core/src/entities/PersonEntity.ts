@@ -9,12 +9,13 @@ import {
   BeforeUpdate,
   Cascade,
   LoadStrategy,
+  OptionalProps,
 } from "@mikro-orm/core";
 import { Field, ID, ObjectType, Int } from "@nestjs/graphql";
-import { CreditEntity } from "./CreditEntity";
 import { PERSON_NAMESPACE } from "~/namespaces";
 import { UnixTimestamp } from "~/types/UnixTimestamp";
 import { generateNamespacedUuid } from "~/utils/generateUuid";
+import { CreditEntity } from "./CreditEntity";
 
 @ObjectType()
 class PersonExternalIds {
@@ -28,6 +29,8 @@ class PersonExternalIds {
 @ObjectType()
 @Entity({ tableName: "people" })
 export class PersonEntity {
+  public [OptionalProps]?: "createdAt" | "updatedAt" | "externalIds";
+
   @Field(() => ID)
   @PrimaryKey()
   public id!: string;

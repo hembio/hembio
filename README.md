@@ -6,23 +6,23 @@
 
 > ⚠️ This is under heavy development and considered experimental. You have been warned!
 
-This is the main [Yarn v3][yarn] monorepo for hembio.
+This is the main [Yarn v2][yarn] monorepo for hembio.
 
 ## Tech stack
 
-- [Node.js v16][node] or later
+- [Node.js v14][node] or later
 - Backend:
   - [Nestjs v7][nestjs]
   - [MikroORM v4][mikroorm]
   - [Mercurius v8][mercurius]
 - Frontend:
-  - [React v18][react]
-  - [MUI v5][mui]
+  - [React v17][react]
+  - [Material UI v5][material-ui]
 - Tooling:
-  - [Yarn v3][yarn]
+  - [Yarn v2][yarn]
   - [Jest][jest]
   - [Vite v2][vite]
-  - [Electron v18][electron]
+  - [Electron v13][electron]
 
 ## File structure
 
@@ -67,7 +67,7 @@ Current license is proprietary (i.e. non-free) and all rights are reserved. We a
 [mercurius]: https://mercurius.dev/
 [vite]: https://vitejs.dev/
 [react]: https://reactjs.org/
-[mui]: https://mui.com/
+[material-ui]: https://next.material-ui.com/
 [electron]: https://www.electronjs.org/
 [yarn]: https://yarnpkg.com/
 [jest]: https://jestjs.io/

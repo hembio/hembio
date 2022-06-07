@@ -1,9 +1,9 @@
-import "reflect-metadata";
+import "ts-morph";
 import path from "path";
 import { FileEntity, MikroORMConfig } from "@hembio/core";
-import { MikroORM } from "@mikro-orm/core";
+import { Connection, IDatabaseDriver, MikroORM } from "@mikro-orm/core";
 
-async function createORM() {
+async function createORM(): Promise<MikroORM<IDatabaseDriver<Connection>>> {
   return await MikroORM.init({
     debug: false,
     ...MikroORMConfig,

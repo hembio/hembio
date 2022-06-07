@@ -56,7 +56,7 @@ export class LibraryService {
     }, 1000);
   }
 
-  private async runner(name: string, fn: () => Promise<void>) {
+  private async runner(name: string, fn: () => Promise<void>): Promise<void> {
     if (this.runners.has(name)) {
       return;
     }
@@ -87,7 +87,7 @@ export class LibraryService {
     this.logger.info("Checking for new titles and files...");
     this.runners.add(runnerName);
 
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const libraryRepo = em.getRepository(LibraryEntity);
 
     const library = await libraryRepo.findOne(libraryId);
@@ -116,7 +116,7 @@ export class LibraryService {
     library: LibraryEntity,
     dirPath: string,
   ): Promise<void> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const titleRepo = em.getRepository(TitleEntity);
     const fileRepo = em.getRepository(FileEntity);
     const relDirPath = path.relative(library.path, dirPath);
@@ -175,7 +175,7 @@ export class LibraryService {
     libraryId: string,
     titlePath: string,
   ): Promise<TitleEntity | undefined> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const libraryRepo = em.getRepository(LibraryEntity);
     const titleRepo = em.getRepository(TitleEntity);
     const fileRepo = em.getRepository(FileEntity);
@@ -300,7 +300,7 @@ export class LibraryService {
       if (tasks.length > 0) {
         this.logger.debug(`Running ${tasks.length} indexer tasks`);
 
-        const em = this.em.fork(false);
+        const em = this.em.fork();
         const libraryRepo = em.getRepository(LibraryEntity);
         const fileRepo = em.getRepository(FileEntity);
         const titleRepo = em.getRepository(TitleEntity);
@@ -405,7 +405,7 @@ export class LibraryService {
   }
 
   public async removeTitle(titleId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const title = await em.findOne(TitleEntity, titleId);
     if (!title) {
       return false;
@@ -435,7 +435,7 @@ export class LibraryService {
   }
 
   public async removeFile(fileId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const file = await em.findOne(FileEntity, fileId);
     if (!file) {
       return false;
@@ -457,7 +457,7 @@ export class LibraryService {
     }
     this.logger.info("Removing deleted filed and titles...");
     this.runners.add(runnerName);
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const libraryRepo = em.getRepository(LibraryEntity);
     const titleRepo = em.getRepository(TitleEntity);
     const libraries = await libraryRepo.findAll();

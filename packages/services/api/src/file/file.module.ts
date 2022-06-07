@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
+import { IndexerModule } from "~/indexer/indexer.module";
 import { FileResolver } from "./file.resolver";
 import { FileService } from "./file.service";
-import { IndexerModule } from "~/indexer/indexer.module";
 
 @Module({
   imports: [IndexerModule],

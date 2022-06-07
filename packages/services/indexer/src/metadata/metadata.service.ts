@@ -93,7 +93,7 @@ export class MetadataService {
   }
 
   public async lookupMetadata(titleId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const titleRepo = em.getRepository(TitleEntity);
     const genreRepo = em.getRepository(GenreEntity);
 
@@ -274,7 +274,7 @@ export class MetadataService {
   }
 
   public async queueMetadataUpdate(titleId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const count = await em.count(TitleEntity, titleId);
     if (count === 0) {
       throw Error("Title not found");

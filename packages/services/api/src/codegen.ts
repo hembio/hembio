@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import "reflect-metadata";
+import "ts-morph";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { generate } from "@graphql-codegen/cli";

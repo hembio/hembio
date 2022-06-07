@@ -1,4 +1,4 @@
-export const prettyTime = (time = new Date(), showSeconds = true) => {
+export function prettyTime(time = new Date(), showSeconds = true): string {
   const HH = time.getHours().toString().padStart(2, "0");
   const MM = time.getMinutes().toString().padStart(2, "0");
   if (!showSeconds) {
@@ -6,4 +6,4 @@ export const prettyTime = (time = new Date(), showSeconds = true) => {
   }
   const SS = time.getSeconds().toString().padStart(2, "0");
   return `${HH}:${MM}:${SS}`;
-};
+}

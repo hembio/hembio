@@ -8,10 +8,10 @@ import {
   Property,
 } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { TitleEntity } from "./TitleEntity";
 import { IMAGE_NAMESPACE } from "~/namespaces";
 import { UnixTimestamp } from "~/types/UnixTimestamp";
 import { generateNamespacedUuid } from "~/utils/generateUuid";
+import { TitleEntity } from "./TitleEntity";
 
 export enum ImageType {
   POSTER = "poster",

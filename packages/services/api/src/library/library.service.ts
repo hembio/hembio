@@ -25,11 +25,13 @@ export class LibraryService {
     name: string,
     type: LibraryType,
     path: string,
+    matcher: string,
   ): Promise<LibraryEntity | null> {
     const library = this.libraryRepo.create({
       name,
       type,
       path,
+      matcher,
     });
     try {
       await this.libraryRepo.persistAndFlush(library);

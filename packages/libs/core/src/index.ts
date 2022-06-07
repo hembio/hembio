@@ -1,6 +1,5 @@
 import {
   MikroORM,
-  Repository,
   QueryOrder,
   EntityData,
   AnyEntity,
@@ -25,7 +24,6 @@ export {
   MikroORMConfig,
   MikroORM,
   MikroOrmModule,
-  Repository,
   EntityManager,
   EntityRepository,
   SqliteDriver,

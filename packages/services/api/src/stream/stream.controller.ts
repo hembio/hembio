@@ -13,7 +13,6 @@ import {
 } from "@nestjs/common";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import parseRange from "range-parser";
-import { StreamService } from "./stream.service";
 import { contentRange } from "~/utils/contentRange";
 import { isCachable } from "~/utils/isCachable";
 import { isConditionalGET } from "~/utils/isConditionalGET";
@@ -21,6 +20,7 @@ import { isFresh } from "~/utils/isFresh";
 import { isPreconditionFailure } from "~/utils/isPreconditionFailure";
 import { isRangeFresh } from "~/utils/isRangeFresh";
 import { removeContentHeaderFields } from "~/utils/removeContentHeaderFields";
+import { StreamService } from "./stream.service";
 
 const BYTES_RANGE_REGEXP = /^ *bytes=/;
 

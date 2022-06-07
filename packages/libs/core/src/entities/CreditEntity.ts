@@ -8,10 +8,10 @@ import {
   Property,
 } from "@mikro-orm/core";
 import { Field, ID, ObjectType, Int } from "@nestjs/graphql";
-import { PersonEntity } from "./PersonEntity";
-import { TitleEntity } from "./TitleEntity";
 import { CREDIT_NAMESPACE } from "~/namespaces";
 import { generateNamespacedUuid } from "~/utils/generateUuid";
+import { PersonEntity } from "./PersonEntity";
+import { TitleEntity } from "./TitleEntity";
 
 @ObjectType()
 @Entity({ tableName: "credits" })

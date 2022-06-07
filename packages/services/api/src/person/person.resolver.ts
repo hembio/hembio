@@ -7,10 +7,10 @@ import {
   ResolveField,
   Parent,
 } from "@nestjs/graphql";
-import { CreditsByTitle } from "./models/credits-by-title.model";
-import { PersonService } from "./person.service";
 import { UpdateMutationModel } from "~/common/models/update-mutation.model";
 import { ImageService } from "~/image/image.service";
+import { CreditsByTitle } from "./models/credits-by-title.model";
+import { PersonService } from "./person.service";
 
 @Resolver(() => PersonEntity)
 export class PersonResolver {

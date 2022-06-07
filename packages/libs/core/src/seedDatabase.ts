@@ -7,8 +7,9 @@ export async function seedDatabase(orm: MikroORM): Promise<void> {
   const generator = orm.getSchemaGenerator();
   try {
     await generator.createSchema();
-  } catch {
-    throw Error("Failed to create schema!");
+  } catch (e) {
+    // console.error(e);
+    // throw Error("Failed to create schema!");
   }
   try {
     await generator.updateSchema();
@@ -16,8 +17,12 @@ export async function seedDatabase(orm: MikroORM): Promise<void> {
     throw Error("Failed to update schema!");
   }
 
+  const em = orm.em.fork();
+  const userRepo = em.getRepository(UserEntity);
+  const libraryRepo = em.getRepository(LibraryEntity);
+  const genreRepo = em.getRepository(GenreEntity);
+
   // create default admin user
-  const userRepo = orm.em.getRepository(UserEntity);
   const user = userRepo.create({
     username: "admin",
     password: "admin",
@@ -26,17 +31,15 @@ export async function seedDatabase(orm: MikroORM): Promise<void> {
   userRepo.persist(user);
 
   // create default media libraries
-  const libraryRepo = orm.em.getRepository(LibraryEntity);
   const movieLibrary = libraryRepo.create({
     type: LibraryType.MOVIES,
     name: "Movies",
     titles: [],
+    files: [],
     matcher: "*.{mkv,mp4,avi,xvid,mov,wmv}",
     path: path.resolve("G:\\My Drive\\media\\Movies"),
   });
   libraryRepo.persist(movieLibrary);
-
-  const genreRepo = orm.em.getRepository(GenreEntity);
 
   const genres = {
     action: "Action",
@@ -76,6 +79,6 @@ export async function seedDatabase(orm: MikroORM): Promise<void> {
     genreRepo.persist(genre);
   });
 
-  await orm.em.flush();
+  await em.flush();
   console.log(await userRepo.findAll());
 }

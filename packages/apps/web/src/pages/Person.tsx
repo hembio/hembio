@@ -1,3 +1,4 @@
+import PersonIcon from "@mui/icons-material/Person";
 import { Theme } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -9,15 +10,14 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
-import PersonIcon from "@mui/icons-material/Person";
 import { makeStyles, createStyles } from "@mui/styles";
 import { useParams } from "react-router-dom";
-import { NotFound } from "./NotFound";
 import { CreditByTitleListItem } from "~/components/CreditByTitleListItem";
 import { PersonDebugBox } from "~/components/PersonDebugBox";
 import { TitleCard } from "~/components/TitleCard";
 import { HEMBIO_API_URL } from "~/constants";
 import { usePersonQuery } from "~/generated/graphql";
+import { NotFound } from "./NotFound";
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -104,8 +104,10 @@ export const Person = (): JSX.Element => {
   const classes = useStyles();
   const { personId } = useParams<{ personId: string }>();
   const { data, error, refetch } = usePersonQuery({
-    variables: { id: personId },
+    variables: { id: personId || "" },
   });
+
+  console.log("DATA", data);
 
   if (error) {
     if (error.message === "Person not found") {
@@ -275,53 +277,55 @@ export const Person = (): JSX.Element => {
         </Container>
       </Paper>
 
-      <Container>
-        <Paper>
-          <Box
-            sx={{
-              p: 4,
-              display: "grid",
-              gap: 2,
-              gridAutoFlow: "row",
-              gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))",
-              alignItems: "top",
-            }}
-          >
-            {person &&
-              person.creditsByTitle &&
-              person.creditsByTitle.map((title, idx) => (
-                <>
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gap: 2,
-                      gridAutoFlow: "row",
-                      gridTemplateColumns:
-                        "repeat(auto-fit, 140px minmax(250px, 1fr))",
-                      alignItems: "top",
-                    }}
-                  >
-                    <TitleCard
-                      size="small"
-                      key={title?.id || idx}
-                      title={title}
-                    />
-                    <Box sx={{ mt: -2 }}>
-                      {title &&
-                        title.credits.map((credit, idx) => (
-                          <CreditByTitleListItem
-                            key={credit ? credit.id : idx}
-                            credit={{ ...credit, person }}
-                          />
-                        ))}
+      {person && (
+        <Container key={"person-credits-box-" + person.id}>
+          <Paper>
+            <Box
+              sx={{
+                p: 4,
+                display: "grid",
+                gap: 2,
+                gridAutoFlow: "row",
+                gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))",
+                alignItems: "top",
+              }}
+            >
+              {person &&
+                person.creditsByTitle &&
+                person.creditsByTitle.map((title) => (
+                  <>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gap: 2,
+                        gridAutoFlow: "row",
+                        gridTemplateColumns:
+                          "repeat(auto-fit, 140px minmax(250px, 1fr))",
+                        alignItems: "top",
+                      }}
+                    >
+                      <TitleCard
+                        size="small"
+                        key={title.id + "-" + person.id}
+                        title={title}
+                      />
+                      <Box sx={{ mt: -2 }}>
+                        {title &&
+                          title.credits.map((credit) => (
+                            <CreditByTitleListItem
+                              key={credit.id}
+                              credit={{ ...credit, person }}
+                            />
+                          ))}
+                      </Box>
                     </Box>
-                  </Box>
-                </>
-              ))}
-          </Box>
-        </Paper>
-        <Box sx={{ pt: 3 }} />
-      </Container>
+                  </>
+                ))}
+            </Box>
+          </Paper>
+          <Box sx={{ pt: 3 }} />
+        </Container>
+      )}
 
       <Container
         className={classes.root}

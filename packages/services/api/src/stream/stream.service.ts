@@ -26,9 +26,9 @@ export class StreamService {
   private readonly logger = createLogger("stream");
   public constructor(private readonly em: EntityManager) {}
 
-  public async getVideoStream(fileId: string, offset = 0): Promise<any> {
-    const em = this.em.fork(false);
-    const file = await em.findOneOrFail(FileEntity, fileId, {
+  public async getVideoStream(fileId: string, offset = 0): Promise<void> {
+    const repo = this.em.fork().getRepository(FileEntity);
+    const file = await repo.findOneOrFail(fileId, {
       fields: ["id", "library", "path"],
       populate: ["library"],
     });
@@ -36,9 +36,9 @@ export class StreamService {
     return;
   }
 
-  public async getAudioStream(fileId: string, offset = 0): Promise<any> {
-    const em = this.em.fork(false);
-    const file = await em.findOneOrFail(FileEntity, fileId, {
+  public async getAudioStream(fileId: string, offset = 0): Promise<void> {
+    const repo = this.em.fork().getRepository(FileEntity);
+    const file = await repo.findOneOrFail(fileId, {
       fields: ["id", "library", "path"],
       populate: ["library"],
     });
@@ -47,8 +47,8 @@ export class StreamService {
   }
 
   public async statFile(fileId: string): Promise<Stats> {
-    const em = this.em.fork(false);
-    const file = await em.findOneOrFail(FileEntity, fileId, {
+    const repo = this.em.fork().getRepository(FileEntity);
+    const file = await repo.findOneOrFail(fileId, {
       fields: ["id", "library", "path"],
       populate: ["library"],
     });
@@ -82,7 +82,7 @@ export class StreamService {
     language: string,
     external = true,
   ): Promise<Transform | ReadStream> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const file = await em.findOneOrFail(FileEntity, fileId, {
       populate: ["library"],
     });

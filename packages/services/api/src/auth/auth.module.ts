@@ -3,11 +3,11 @@ import { Module } from "@nestjs/common";
 import { HttpAdapterHost } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
 import { FastifyInstance } from "fastify";
+import { HEMBIO_JWT_SECRET } from "~/constants";
+import { UserModule } from "~/user/user.module";
 import { AuthController } from "./auth.controller";
 import { AuthResolver } from "./auth.resolver";
 import { AuthService } from "./auth.service";
-import { HEMBIO_JWT_SECRET } from "~/constants";
-import { UserModule } from "~/user/user.module";
 
 @Module({
   imports: [

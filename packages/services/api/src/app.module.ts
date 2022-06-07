@@ -15,10 +15,11 @@ import {
   Provider,
 } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { GraphQLModule } from "@nestjs/graphql";
+import { MercuriusDriver, MercuriusDriverConfig } from "@nestjs/mercurius";
 import { ScheduleModule } from "@nestjs/schedule";
 import GraphQLJSON from "graphql-type-json";
 import { CookieModule } from "nest-cookies";
-import { MercuriusModule } from "nestjs-mercurius";
 import { config } from "../../../../config";
 import { AppController as AppController } from "./app.controller";
 import { AppService as AppService } from "./app.service";
@@ -49,8 +50,8 @@ const AppConfigModule = ConfigModule.forRoot({
     AppConfigModule,
     ScheduleModule.forRoot(),
     MikroOrmModule.forRoot(MikroORMConfig),
-    MercuriusModule.forRoot({
-      graphiql: true,
+    GraphQLModule.forRoot<MercuriusDriverConfig>({
+      driver: MercuriusDriver,
       resolvers: { JSON: GraphQLJSON },
       autoSchemaFile: path.resolve(__dirname, "../generated/schema.graphql"),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,7 +101,6 @@ export class AppModule implements NestModule {
     await this.orm.isConnected();
     try {
       const userCount = await this.em.count(UserEntity);
-      console.log("userCount", userCount);
       if (userCount === 0) {
         this.logger.info("First time running. Seeding database...");
         await seedDatabase(this.orm);
@@ -118,7 +118,6 @@ export class AppModule implements NestModule {
   }
 
   public async onApplicationBootstrap(): Promise<void> {
-    console.log("onApplicationBootstrap");
     await this.orm.isConnected();
     try {
       const userCount = await this.em.count(UserEntity);

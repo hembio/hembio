@@ -7,16 +7,16 @@ import {
   Parent,
   Mutation,
 } from "@nestjs/graphql";
-import { AddLibraryArgs } from "./args/add-library.args";
-import { LibraryService } from "./library.service";
-import { AddLibraryResponse } from "./models/add-library-response.model";
-import { PaginatedTitleResponse } from "./models/paginated-title-response.model";
 import { Auth } from "~/auth/auth.decorator";
 import { PaginationArgs } from "~/common/args";
 import { UpdateMutationModel } from "~/common/models/update-mutation.model";
 import { IndexerService } from "~/indexer/indexer.service";
 import { GetTitleArgs } from "~/library/args/get-titles.args";
 import { TitleService } from "~/title/title.service";
+import { AddLibraryArgs } from "./args/add-library.args";
+import { LibraryService } from "./library.service";
+import { AddLibraryResponse } from "./models/add-library-response.model";
+import { PaginatedTitleResponse } from "./models/paginated-title-response.model";
 
 @Auth(UserRole.USER)
 @Resolver(() => LibraryEntity)
@@ -86,9 +86,14 @@ export class LibraryResolver {
 
   @Mutation(() => AddLibraryResponse)
   public async addLibrary(
-    @Args() { name, type, path }: AddLibraryArgs,
+    @Args() { name, type, path, matcher }: AddLibraryArgs,
   ): Promise<LibraryEntity | null> {
-    const library = await this.libraryService.addLibrary(name, type, path);
+    const library = await this.libraryService.addLibrary(
+      name,
+      type,
+      path,
+      matcher,
+    );
     return library;
   }
 

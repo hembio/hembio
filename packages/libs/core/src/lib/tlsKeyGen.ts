@@ -12,7 +12,7 @@ import {
 import { homedir, platform } from "os";
 import { dirname, join } from "path";
 import commandExists from "command-exists";
-import execa from "execa";
+import execa, { ExecaError } from "execa";
 import Powershell from "node-powershell";
 import { parseCertificate } from "sshpk";
 import tempWrite from "temp-write";
@@ -48,7 +48,7 @@ challengePassword_min		= 4
 challengePassword_max		= 20
 `;
 
-async function fileExists(path: string) {
+async function fileExists(path: string): Promise<boolean> {
   try {
     const stats = await stat(path);
     return stats.isFile();
@@ -57,7 +57,7 @@ async function fileExists(path: string) {
   }
 }
 
-async function directoryExists(path: string) {
+async function directoryExists(path: string): Promise<boolean> {
   try {
     const stats = await stat(path);
     return stats.isDirectory();
@@ -80,7 +80,7 @@ function opensslArgs({
   out,
   commonName,
   config,
-}: OpenSSLArgs) {
+}: OpenSSLArgs): string[] {
   const args = [
     // https://wiki.openssl.org/index.php/Manual:Req(1)
     "req",
@@ -136,7 +136,7 @@ type ArrayElement<ArrayType extends readonly unknown[]> =
 async function findAsync<T extends Array<any>>(
   arr: T,
   asyncCallback: (v: ArrayElement<T>) => Promise<boolean>,
-) {
+): Promise<ArrayElement<T> | undefined> {
   const promises = arr.map(asyncCallback);
   const results = await Promise.all(promises);
   const index = results.findIndex((result) => result);
@@ -148,7 +148,7 @@ async function generateLocalhostPairUnix(
   cert: string,
   commonName: string,
   subjectAltNames: string[],
-) {
+): Promise<void> {
   const configFiles: string[] = [
     // OPENSSL config(3)
     process.env.OPENSSL_CONF || "",
@@ -187,18 +187,21 @@ async function generateLocalhostPairUnix(
   }
 }
 
-async function keychainGetDefault() {
+async function keychainGetDefault(): Promise<string> {
   const command = "security default-keychain";
   try {
     const { stdout: keychain } = await execa(command);
     return keychain.trim().replace(/^"(.+)"$/, "$1");
-  } catch (error) {
-    const e = error as any;
-    throw e.stdout ? new Error(e.stdout) : error;
+  } catch (err) {
+    const e = err as ExecaError;
+    throw e.stdout ? new Error(e.stdout) : err;
   }
 }
 
-async function keychainAddTrusted(keychain: string, cert: string) {
+async function keychainAddTrusted(
+  keychain: string,
+  cert: string,
+): Promise<void> {
   const command = shellEscape([
     "security",
     "-v",
@@ -214,19 +217,19 @@ async function keychainAddTrusted(keychain: string, cert: string) {
   try {
     await execa(command);
   } catch (error) {
-    const e = error as any;
+    const e = error as ExecaError;
     const message =
       (e.stdout && e.stdout) || (e.stderr && e.stderr.split("\n")[1]) || "";
     throw message ? new Error(message) : error;
   }
 }
 
-async function nssVerifyDb() {
+async function nssVerifyDb(): Promise<boolean> {
   const db = join(userHome, ".pki", "nssdb");
   return directoryExists(db);
 }
 
-async function nssVerifyCertUtil() {
+async function nssVerifyCertUtil(): Promise<void> {
   if (!(await commandExists("certutil"))) {
     throw new Error("certutil not found");
   }
@@ -237,7 +240,7 @@ async function generateLocalhostPairWindows(
   cert: string,
   commonName: string,
   subjectAltNames: string[],
-) {
+): Promise<void> {
   const openSSLConf = await tmpFile();
   await writeFile(openSSLConf.path, defaultOpenSSLConfig);
 
@@ -271,7 +274,7 @@ async function generateLocalhostPairWindows(
       // Ignore
     }
   } catch (error) {
-    const e = error as any;
+    const e = error as ExecaError;
     const nodeCommand = /Command failed:/;
     if (nodeCommand.test(e.message)) {
       e.message = e.message
@@ -290,7 +293,7 @@ async function generateLocalhostPairWindows(
   }
 }
 
-async function certUtilAddStore(cert: string) {
+async function certUtilAddStore(cert: string): Promise<void> {
   const ps = new Powershell({
     executionPolicy: "Bypass",
     verbose: false,
@@ -323,7 +326,7 @@ async function certUtilAddStore(cert: string) {
 // List all:
 // certutil -L -d sql:${HOME}/.pki/nssdb
 
-async function nssAddCertificate(cert: string) {
+async function nssAddCertificate(cert: string): Promise<void> {
   const db = join(userHome, ".pki", "nssdb");
   const command = shellEscape([
     "certutil",
@@ -340,7 +343,10 @@ async function nssAddCertificate(cert: string) {
   await execa(command);
 }
 
-async function firefoxAddCertificate(cert: string, commonName: string) {
+async function firefoxAddCertificate(
+  cert: string,
+  commonName: string,
+): Promise<void> {
   const os = platform();
   let firefoxProfiles;
   if (os === "linux") {
@@ -361,7 +367,7 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
   try {
     profiles = await readdir(firefoxProfiles);
   } catch (error) {
-    const e = error as any;
+    const e = error as NodeJS.ErrnoException;
     if (e.code === "ENOENT") {
       return;
     } else {
@@ -411,7 +417,7 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
     try {
       await execa(command);
     } catch (error) {
-      const e = error as any;
+      const e = error as ExecaError;
       if (!/SEC_ERROR_BAD_DATABASE/.test(e.stderr)) {
         console.warn(e.stderr);
       }

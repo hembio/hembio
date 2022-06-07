@@ -11,4 +11,7 @@ export class AddLibraryArgs {
 
   @Field(() => String)
   public path!: string;
+
+  @Field(() => String)
+  public matcher!: string;
 }

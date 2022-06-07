@@ -9,10 +9,10 @@ import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { authenticator } from "@otplib/preset-default";
 import { toDataURL } from "qrcode";
+import { HEMBIO_JWT_SECRET } from "~/constants";
 import { CredentialsDto } from "./dto/credentials.dto";
 import { InvalidUsernameOrPassword } from "./exceptions/invalid-username-or-password.exception";
 import { Token } from "./token.interface";
-import { HEMBIO_JWT_SECRET } from "~/constants";
 
 type SignedToken = string;
 type ExpiryDate = Date;

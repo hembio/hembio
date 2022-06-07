@@ -9,12 +9,13 @@ import {
   OneToMany,
   DateType,
   Cascade,
+  OptionalProps,
 } from "@mikro-orm/core";
 import { ID, Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import * as bcrypt from "bcrypt";
-import { RefreshTokenEntity } from "./RefreshTokenEntity";
 import { USER_NAMESPACE } from "~/namespaces";
 import { generateNamespacedUuid } from "~/utils/generateUuid";
+import { RefreshTokenEntity } from "./RefreshTokenEntity";
 
 export enum UserRole {
   ADMIN = "admin",
@@ -28,6 +29,8 @@ registerEnumType(UserRole, {
 @ObjectType()
 @Entity({ tableName: "users" })
 export class UserEntity {
+  public [OptionalProps]?: "createdAt" | "updatedAt";
+
   @Field(() => ID)
   @PrimaryKey()
   public id!: string;
@@ -56,7 +59,7 @@ export class UserEntity {
     cascade: [Cascade.ALL],
     orphanRemoval: true,
   })
-  public refreshTokens!: RefreshTokenEntity[];
+  public refreshTokens?: RefreshTokenEntity[] = [];
 
   @BeforeCreate()
   public async beforeCreate(): Promise<void> {

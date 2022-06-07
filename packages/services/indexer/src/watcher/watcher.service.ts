@@ -21,7 +21,7 @@ export class WatcherService {
   }
 
   public async watchLibraries(): Promise<void> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const libraryRepo = em.getRepository(LibraryEntity);
     const libraries = await libraryRepo.findAll();
 
@@ -49,7 +49,7 @@ export class WatcherService {
           })
           .on("unlinkDir", async (removedDir) => {
             this.logger.debug(`Detected directory unlink: ${removedDir}`);
-            const em = this.em.fork(false);
+            const em = this.em.fork();
             const relPath = path.relative(library.path, removedDir);
             const found = await em.findOne(TitleEntity, { path: relPath });
             if (found) {
@@ -62,7 +62,7 @@ export class WatcherService {
           })
           .on("unlink", async (removedFile) => {
             if (library.matcherRegEx.test(removedFile)) {
-              const em = this.em.fork(false);
+              const em = this.em.fork();
               this.logger.debug(`Detected file unlink: ${removedFile}`);
               const relPath = path.relative(library.path, removedFile);
               const found = await em.findOne(FileEntity, { path: relPath });

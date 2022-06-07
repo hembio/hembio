@@ -12,7 +12,7 @@ import {
 import { homedir } from "os";
 import { dirname, join } from "path";
 import commandExists from "command-exists";
-import execa from "execa";
+import execa, { ExecaError } from "execa";
 import Powershell from "node-powershell";
 import { parseCertificate } from "sshpk";
 import tempWrite from "temp-write";
@@ -23,7 +23,7 @@ const userHome = homedir();
 
 const CERT_EXPIRE_DAYS = "365";
 
-function getCSRConfig(commonName: string) {
+function getCSRConfig(commonName: string): string {
   // https://github.com/openssl/openssl/blob/master/apps/openssl.cnf
   return `
 [req]
@@ -41,7 +41,7 @@ CN = ${commonName}
 `;
 }
 
-function getExtConfig(subjectAltNames: string[]) {
+function getExtConfig(subjectAltNames: string[]): string {
   return `
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -50,7 +50,7 @@ subjectAltName = ${subjectAltNames.join(",")}
 `;
 }
 
-async function fileExists(path: string) {
+async function fileExists(path: string): Promise<boolean> {
   try {
     const stats = await stat(path);
     return stats.isFile();
@@ -59,7 +59,7 @@ async function fileExists(path: string) {
   }
 }
 
-async function directoryExists(path: string) {
+async function directoryExists(path: string): Promise<boolean> {
   try {
     const stats = await stat(path);
     return stats.isDirectory();
@@ -68,17 +68,21 @@ async function directoryExists(path: string) {
   }
 }
 
-async function keychainGetDefault() {
+async function keychainGetDefault(): Promise<string> {
   const command = "security default-keychain";
   try {
     const { stdout: keychain } = await execa(command);
     return keychain.trim().replace(/^"(.+)"$/, "$1");
   } catch (error) {
-    throw error.stdout ? new Error(error.stdout) : error;
+    const e = error as ExecaError;
+    throw e.stdout ? new Error(e.stdout) : error;
   }
 }
 
-async function keychainAddTrusted(keychain: string, cert: string) {
+async function keychainAddTrusted(
+  keychain: string,
+  cert: string,
+): Promise<void> {
   const command = shellEscape([
     "security",
     "-v",
@@ -94,20 +98,19 @@ async function keychainAddTrusted(keychain: string, cert: string) {
   try {
     await execa(command);
   } catch (error) {
+    const e = error as ExecaError;
     const message =
-      (error.stdout && error.stdout) ||
-      (error.stderr && error.stderr.split("\n")[1]) ||
-      "";
+      (e.stdout && e.stdout) || (e.stderr && e.stderr.split("\n")[1]) || "";
     throw message ? new Error(message) : error;
   }
 }
 
-async function nssVerifyDb() {
+async function nssVerifyDb(): Promise<boolean> {
   const db = join(userHome, ".pki", "nssdb");
   return directoryExists(db);
 }
 
-async function nssVerifyCertUtil() {
+async function nssVerifyCertUtil(): Promise<void> {
   if (!(await commandExists("certutil"))) {
     throw new Error("certutil not found");
   }
@@ -204,7 +207,8 @@ async function generateSelfSignedCerts(
     await rename(caKeyFile, caKey);
     console.debug(`Moving ${caCertFile.path} => ${caCert}`);
     await rename(caCertFile.path, caCert);
-  } catch (error) {
+  } catch (e) {
+    const error = e as ExecaError;
     const nodeCommand = /Command failed:/;
     if (nodeCommand.test(error.message)) {
       error.message = error.message
@@ -236,7 +240,7 @@ async function generateSelfSignedCerts(
   }
 }
 
-async function certUtilAddStore(cert: string) {
+async function certUtilAddStore(cert: string): Promise<void> {
   const ps = new Powershell({
     executionPolicy: "Bypass",
     verbose: false,
@@ -269,7 +273,7 @@ async function certUtilAddStore(cert: string) {
 // List all:
 // certutil -L -d sql:${HOME}/.pki/nssdb
 
-async function nssAddCertificate(cert: string) {
+async function nssAddCertificate(cert: string): Promise<void> {
   const db = join(userHome, ".pki", "nssdb");
   const command = shellEscape([
     "certutil",
@@ -286,7 +290,10 @@ async function nssAddCertificate(cert: string) {
   await execa(command);
 }
 
-async function firefoxAddCertificate(cert: string, commonName: string) {
+async function firefoxAddCertificate(
+  cert: string,
+  commonName: string,
+): Promise<void> {
   const { platform } = process;
   let firefoxProfiles;
   if (platform === "linux") {
@@ -306,11 +313,12 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
   let profiles;
   try {
     profiles = await readdir(firefoxProfiles);
-  } catch (error) {
-    if (error.code === "ENOENT") {
+  } catch (err) {
+    const e = err as NodeJS.ErrnoException;
+    if (e.code === "ENOENT") {
       return;
     } else {
-      throw error;
+      throw e;
     }
   }
   const certificate = parseCertificate(await readFile(cert), "pem");
@@ -356,9 +364,10 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
     ]);
     try {
       await execa(command);
-    } catch (error) {
-      if (!/SEC_ERROR_BAD_DATABASE/.test(error.stderr)) {
-        console.warn(error.stderr);
+    } catch (err) {
+      const e = err as ExecaError;
+      if (!/SEC_ERROR_BAD_DATABASE/.test(e.stderr)) {
+        console.warn(e.stderr);
       }
       continue;
     }
@@ -380,7 +389,7 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
     // Differs slightly from Firefox but accepted nonetheless
     // Ported from: https://github.com/Osmose/firefox-cert-override
     const { serial } = certificate;
-    const issuer = Buffer.from(certificate.issuer);
+    const issuer = Buffer.from(certificate.issuer.toString());
     const serialLength = Buffer.alloc(4);
     serialLength.writeIntBE(serial.length, 0, serial.length);
     const issuerLength = Buffer.alloc(4);
@@ -390,7 +399,7 @@ async function firefoxAddCertificate(cert: string, commonName: string) {
       Buffer.alloc(4),
       serialLength,
       issuerLength,
-      new TextEncoder().encode(serial),
+      new TextEncoder().encode(serial.toString()),
       issuer,
     ]).toString("base64");
 

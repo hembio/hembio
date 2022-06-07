@@ -72,7 +72,7 @@ export class Matcher {
     }
   }
 
-  private match(input: string) {
+  private match(input: string): void {
     let all = input;
 
     // Try to match only the last occurring year
@@ -92,11 +92,11 @@ export class Matcher {
     }
 
     // Try to match season and episode
-    const seriesMatcher = /[. ](S(?<season>[0-9]{1,2}))(E(?<episode>[0-9]{1,3}))?/i.exec(
-      all,
-    );
+    const seriesMatcher =
+      /[. ](S(?<season>[0-9]{1,2}))(E(?<episode>[0-9]{1,3}))?/i.exec(all);
     if (seriesMatcher?.groups) {
-      const { season, episode } = seriesMatcher?.groups;
+      const groups = seriesMatcher?.groups;
+      const { season, episode } = groups;
       matchIndex = seriesMatcher.index;
       all = all.replace(seriesMatcher[0], "");
       if (season) {
@@ -126,7 +126,8 @@ export class Matcher {
       rest = rest.replace(codec, "").replace("  ", " ").trim();
     }
 
-    const audioRxp = /(?<audio>MP3|FLAC|DD[P]?[25]\.?[01]|DTS(?:-HD)?\.?(?:MA)?\.?(?:5\.1|6\.1|7\.1|7\.2)|TrueHD\.?(?:5\.1|6\.1|7\.1|7\.2)\.(?:ATMOS)?|ATMOS|AAC[.-]LC|AAC(?:\.?2\.0)?|AC3(?:\.5\.1)?)/i;
+    const audioRxp =
+      /(?<audio>MP3|FLAC|DD[P]?[25]\.?[01]|DTS(?:-HD)?\.?(?:MA)?\.?(?:5\.1|6\.1|7\.1|7\.2)|TrueHD\.?(?:5\.1|6\.1|7\.1|7\.2)\.(?:ATMOS)?|ATMOS|AAC[.-]LC|AAC(?:\.?2\.0)?|AC3(?:\.5\.1)?)/i;
     let audioMatches: RegExpExecArray | null = null;
     while ((audioMatches = audioRxp.exec(rest))) {
       if (audioMatches?.groups) {
@@ -288,7 +289,7 @@ export class Matcher {
   }
 }
 
-function parseExtension(input: string) {
+function parseExtension(input: string): string | undefined {
   const match = new RegExp(`(.${extensions.join("|")})$`, "i").exec(input);
   return match ? match[0] : undefined;
 }

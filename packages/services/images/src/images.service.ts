@@ -497,7 +497,7 @@ export class ImagesService {
   }
 
   public async queueTitleImagesUpdate(titleId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const count = await em.count(TitleEntity, titleId);
     if (count === 0) {
       throw Error("Title not found");
@@ -519,7 +519,7 @@ export class ImagesService {
   }
 
   public async queuePersonImageUpdate(personId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const count = await em.count(PersonEntity, personId);
     if (count === 0) {
       throw Error("Person not found");

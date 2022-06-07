@@ -6,14 +6,17 @@
 import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions = {};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -34,42 +37,43 @@ export type AddLibraryResponse = {
 
 export type CreditEntity = {
   __typename?: "CreditEntity";
-  id: Scalars["ID"];
-  order?: Maybe<Scalars["Int"]>;
-  job?: Maybe<Scalars["String"]>;
   character?: Maybe<Scalars["String"]>;
   department: Scalars["String"];
+  id: Scalars["ID"];
+  job?: Maybe<Scalars["String"]>;
+  order?: Maybe<Scalars["Int"]>;
   person: PersonEntity;
   title: TitleEntity;
 };
 
 export type CreditsByTitle = {
   __typename?: "CreditsByTitle";
+  credits: Array<CreditEntity>;
   id: Scalars["ID"];
   name: Scalars["String"];
-  year: Scalars["Float"];
   thumb?: Maybe<Scalars["String"]>;
-  credits: Array<CreditEntity>;
+  year: Scalars["Float"];
 };
 
 export type FileEntity = {
   __typename?: "FileEntity";
-  id: Scalars["ID"];
-  path: Scalars["String"];
-  edition: Scalars["String"];
-  mediainfo: Scalars["String"];
-  library: LibraryEntity;
-  title: TitleEntity;
-  subtitles: Array<Subtitle>;
   ctime: Scalars["Int"];
-  mtime: Scalars["Int"];
+  edition: Scalars["String"];
   files?: Maybe<Array<FileEntity>>;
+  id: Scalars["ID"];
+  library: LibraryEntity;
+  mediainfo: Scalars["String"];
+  mtime: Scalars["Int"];
+  path: Scalars["String"];
   probe?: Maybe<Scalars["Boolean"]>;
+  size: Scalars["Int"];
+  subtitles: Array<Subtitle>;
+  title: TitleEntity;
 };
 
 export type FilterInput = {
-  year?: Maybe<Array<Scalars["Int"]>>;
-  genre?: Maybe<Scalars["JSON"]>;
+  genre?: InputMaybe<Scalars["JSON"]>;
+  year?: InputMaybe<Array<Scalars["Int"]>>;
 };
 
 export type GenreModel = {
@@ -80,82 +84,83 @@ export type GenreModel = {
 
 export type IdentityModel = {
   __typename?: "IdentityModel";
-  provider: Scalars["String"];
   externalId: Scalars["String"];
-  type: Scalars["String"];
   name: Scalars["String"];
+  provider: Scalars["String"];
+  type: Scalars["String"];
   year: Scalars["String"];
 };
 
 export type ImageEntity = {
   __typename?: "ImageEntity";
-  id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
-  path: Scalars["String"];
+  id: Scalars["ID"];
   originalUrl: Scalars["String"];
+  path: Scalars["String"];
   title: TitleEntity;
 };
 
 export type LibraryEntity = {
   __typename?: "LibraryEntity";
-  id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
-  slug: Scalars["String"];
-  name: Scalars["String"];
-  type: LibraryType;
-  path: Scalars["String"];
-  watch: Scalars["Boolean"];
+  id: Scalars["ID"];
   matcher: Scalars["String"];
-  titles: PaginatedTitleResponse;
+  name: Scalars["String"];
   newlyAdded: PaginatedTitleResponse;
-};
-
-export type LibraryEntityTitlesArgs = {
-  skip?: Maybe<Scalars["Int"]>;
-  take?: Maybe<Scalars["Int"]>;
-  ids?: Maybe<Array<Scalars["String"]>>;
-  name?: Maybe<Scalars["String"]>;
-  year?: Maybe<Scalars["Int"]>;
-  orderBy?: Maybe<Scalars["String"]>;
-  orderDirection?: Maybe<Scalars["String"]>;
-  filter?: Maybe<FilterInput>;
+  path: Scalars["String"];
+  slug: Scalars["String"];
+  titles: PaginatedTitleResponse;
+  type: LibraryType;
+  watch: Scalars["Boolean"];
 };
 
 export type LibraryEntityNewlyAddedArgs = {
-  skip?: Maybe<Scalars["Int"]>;
-  take?: Maybe<Scalars["Int"]>;
+  skip?: InputMaybe<Scalars["Int"]>;
+  take?: InputMaybe<Scalars["Int"]>;
+};
+
+export type LibraryEntityTitlesArgs = {
+  filter?: InputMaybe<FilterInput>;
+  ids?: InputMaybe<Array<Scalars["String"]>>;
+  name?: InputMaybe<Scalars["String"]>;
+  orderBy?: InputMaybe<Scalars["String"]>;
+  orderDirection?: InputMaybe<Scalars["String"]>;
+  skip?: InputMaybe<Scalars["Int"]>;
+  take?: InputMaybe<Scalars["Int"]>;
+  year?: InputMaybe<Scalars["Int"]>;
 };
 
 export enum LibraryType {
   Movies = "MOVIES",
-  Tvshows = "TVSHOWS",
   Music = "MUSIC",
-  Podcasts = "PODCASTS",
   Photos = "PHOTOS",
+  Podcasts = "PODCASTS",
+  Tvshows = "TVSHOWS",
 }
 
 export type Mutation = {
   __typename?: "Mutation";
   addLibrary: AddLibraryResponse;
   checkLibrary: UpdateMutationModel;
-  updatePersonImages: UpdateMutationModel;
+  deleteTitle: UpdateMutationModel;
   updateCredits: UpdateMutationModel;
   updateMetadata: UpdateMutationModel;
+  updatePersonImages: UpdateMutationModel;
   updateTitleImages: UpdateMutationModel;
-  deleteTitle: UpdateMutationModel;
 };
 
 export type MutationAddLibraryArgs = {
+  matcher: Scalars["String"];
   name: Scalars["String"];
-  type: LibraryType;
   path: Scalars["String"];
+  type: LibraryType;
 };
 
 export type MutationCheckLibraryArgs = {
   id: Scalars["String"];
 };
 
-export type MutationUpdatePersonImagesArgs = {
+export type MutationDeleteTitleArgs = {
   id: Scalars["String"];
 };
 
@@ -167,11 +172,11 @@ export type MutationUpdateMetadataArgs = {
   id: Scalars["String"];
 };
 
-export type MutationUpdateTitleImagesArgs = {
+export type MutationUpdatePersonImagesArgs = {
   id: Scalars["String"];
 };
 
-export type MutationDeleteTitleArgs = {
+export type MutationUpdateTitleImagesArgs = {
   id: Scalars["String"];
 };
 
@@ -183,19 +188,19 @@ export type PaginatedTitleResponse = {
 
 export type PersonEntity = {
   __typename?: "PersonEntity";
-  id: Scalars["ID"];
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
-  externalIds: PersonExternalIds;
-  idImdb?: Maybe<Scalars["String"]>;
-  idTmdb?: Maybe<Scalars["String"]>;
-  name: Scalars["String"];
   bio?: Maybe<Scalars["String"]>;
   birthday?: Maybe<Scalars["String"]>;
-  placeOfBirth?: Maybe<Scalars["String"]>;
-  image?: Maybe<Scalars["String"]>;
+  createdAt: Scalars["DateTime"];
   credits: Array<CreditEntity>;
   creditsByTitle?: Maybe<Array<CreditsByTitle>>;
+  externalIds: PersonExternalIds;
+  id: Scalars["ID"];
+  idImdb?: Maybe<Scalars["String"]>;
+  idTmdb?: Maybe<Scalars["String"]>;
+  image?: Maybe<Scalars["String"]>;
+  name: Scalars["String"];
+  placeOfBirth?: Maybe<Scalars["String"]>;
+  updatedAt: Scalars["DateTime"];
 };
 
 export type PersonExternalIds = {
@@ -207,14 +212,14 @@ export type PersonExternalIds = {
 export type Query = {
   __typename?: "Query";
   file?: Maybe<FileEntity>;
-  library?: Maybe<LibraryEntity>;
   libraries: Array<LibraryEntity>;
+  library?: Maybe<LibraryEntity>;
   person?: Maybe<PersonEntity>;
+  search: Array<TitleEntity>;
   stats: StatsModel;
   title?: Maybe<TitleEntity>;
-  search: Array<TitleEntity>;
-  users: Array<UserEntity>;
   user?: Maybe<UserEntity>;
+  users: Array<UserEntity>;
 };
 
 export type QueryFileArgs = {
@@ -229,12 +234,12 @@ export type QueryPersonArgs = {
   id: Scalars["String"];
 };
 
-export type QueryTitleArgs = {
-  id: Scalars["String"];
-};
-
 export type QuerySearchArgs = {
   query: Scalars["String"];
+};
+
+export type QueryTitleArgs = {
+  id: Scalars["String"];
 };
 
 export type QueryUserArgs = {
@@ -243,87 +248,87 @@ export type QueryUserArgs = {
 
 export type RefreshTokenEntity = {
   __typename?: "RefreshTokenEntity";
-  id: Scalars["ID"];
   blacklisted: Scalars["Boolean"];
-  user: UserEntity;
-  expires: Scalars["Float"];
   device: Scalars["String"];
+  expires: Scalars["Float"];
+  id: Scalars["ID"];
   ip: Scalars["String"];
+  user: UserEntity;
 };
 
 export type StatsModel = {
   __typename?: "StatsModel";
-  time: Scalars["Int"];
-  uptime: Scalars["Int"];
   cpuUsage: Scalars["Int"];
-  totalMem: Scalars["Int"];
   freeMem: Scalars["Int"];
+  time: Scalars["Int"];
   totalFiles: Scalars["Int"];
+  totalMem: Scalars["Int"];
   totalTitles: Scalars["Int"];
+  uptime: Scalars["Int"];
 };
 
 export enum Subtitle {
-  Swedish = "Swedish",
   English = "English",
+  Swedish = "Swedish",
 }
 
 export type TitleEntity = {
   __typename?: "TitleEntity";
-  id: Scalars["ID"];
-  type: TitleType;
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
-  slug: Scalars["String"];
-  path: Scalars["String"];
-  externalIds: TitleExternalIds;
-  ratings: TitleRatings;
-  thumb?: Maybe<Scalars["String"]>;
-  dominantColor?: Maybe<Scalars["String"]>;
-  name: Scalars["String"];
-  tagline?: Maybe<Scalars["String"]>;
-  overview?: Maybe<Scalars["String"]>;
+  cast: Array<CreditEntity>;
   certification?: Maybe<Scalars["String"]>;
-  year: Scalars["Int"];
+  createdAt: Scalars["DateTime"];
+  credits: Array<CreditEntity>;
+  crew: Array<CreditEntity>;
+  dominantColor?: Maybe<Scalars["String"]>;
+  externalIds: TitleExternalIds;
+  files: Array<FileEntity>;
+  genres: Array<GenreModel>;
+  id: Scalars["ID"];
+  identify: Array<IdentityModel>;
+  images: Array<ImageEntity>;
+  name: Scalars["String"];
+  overview?: Maybe<Scalars["String"]>;
+  path: Scalars["String"];
+  ratings: TitleRatings;
   releaseDate?: Maybe<Scalars["DateTime"]>;
   runtime?: Maybe<Scalars["Int"]>;
-  credits: Array<CreditEntity>;
-  images: Array<ImageEntity>;
-  files: Array<FileEntity>;
-  identify: Array<IdentityModel>;
-  genres: Array<GenreModel>;
+  slug: Scalars["String"];
+  tagline?: Maybe<Scalars["String"]>;
+  thumb?: Maybe<Scalars["String"]>;
   topBilling: Array<CreditEntity>;
-  cast: Array<CreditEntity>;
-  crew: Array<CreditEntity>;
+  type: TitleType;
+  updatedAt: Scalars["DateTime"];
+  year: Scalars["Int"];
 };
 
 export type TitleEntityTopBillingArgs = {
-  take?: Maybe<Scalars["Int"]>;
+  take?: InputMaybe<Scalars["Int"]>;
 };
 
 export type TitleExternalIds = {
   __typename?: "TitleExternalIds";
   imdb?: Maybe<Scalars["String"]>;
-  trakt?: Maybe<Scalars["Int"]>;
-  tmdb?: Maybe<Scalars["Int"]>;
   omdb?: Maybe<Scalars["Int"]>;
-  tvrage?: Maybe<Scalars["Int"]>;
+  tmdb?: Maybe<Scalars["Int"]>;
+  trakt?: Maybe<Scalars["Int"]>;
   tvdb?: Maybe<Scalars["Int"]>;
+  tvrage?: Maybe<Scalars["Int"]>;
 };
 
 export type TitleRatings = {
   __typename?: "TitleRatings";
-  imdb?: Maybe<Scalars["Float"]>;
-  tmdb?: Maybe<Scalars["Float"]>;
-  rotten?: Maybe<Scalars["Float"]>;
-  metacritic?: Maybe<Scalars["Float"]>;
-  trakt?: Maybe<Scalars["Float"]>;
   aggregated?: Maybe<Scalars["Float"]>;
+  imdb?: Maybe<Scalars["Float"]>;
+  metacritic?: Maybe<Scalars["Float"]>;
+  rotten?: Maybe<Scalars["Float"]>;
+  tmdb?: Maybe<Scalars["Float"]>;
+  trakt?: Maybe<Scalars["Float"]>;
 };
 
 export enum TitleType {
   Movie = "MOVIE",
-  Tvshow = "TVSHOW",
   Music = "MUSIC",
+  Tvshow = "TVSHOW",
 }
 
 export type UpdateMutationModel = {
@@ -333,11 +338,11 @@ export type UpdateMutationModel = {
 
 export type UserEntity = {
   __typename?: "UserEntity";
-  id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
-  username: Scalars["String"];
-  role: UserRole;
+  id: Scalars["ID"];
   refreshTokens: RefreshTokenEntity;
+  role: UserRole;
+  username: Scalars["String"];
 };
 
 export enum UserRole {
@@ -345,331 +350,572 @@ export enum UserRole {
   User = "USER",
 }
 
-export type FileWithTitleFragment = { __typename?: "FileEntity" } & Pick<
-  FileEntity,
-  "id" | "path" | "subtitles"
-> & {
-    title: { __typename?: "TitleEntity" } & {
-      topBilling: Array<{ __typename?: "CreditEntity" } & CastFragment>;
-    } & TitleFragment;
+export type FileWithTitleFragment = {
+  __typename?: "FileEntity";
+  id: string;
+  path: string;
+  subtitles: Array<Subtitle>;
+  title: {
+    __typename?: "TitleEntity";
+    id: string;
+    createdAt: any;
+    slug: string;
+    thumb?: string | null;
+    name: string;
+    year: number;
+    releaseDate?: any | null;
+    topBilling: Array<{
+      __typename?: "CreditEntity";
+      id: string;
+      department: string;
+      order?: number | null;
+      character?: string | null;
+      person: {
+        __typename?: "PersonEntity";
+        id: string;
+        name: string;
+        image?: string | null;
+      };
+    }>;
   };
+};
 
 export type FileQueryVariables = Exact<{
   fileId: Scalars["String"];
 }>;
 
-export type FileQuery = { __typename?: "Query" } & {
-  file?: Maybe<{ __typename?: "FileEntity" } & FileWithTitleFragment>;
+export type FileQuery = {
+  __typename?: "Query";
+  file?: {
+    __typename?: "FileEntity";
+    id: string;
+    path: string;
+    subtitles: Array<Subtitle>;
+    title: {
+      __typename?: "TitleEntity";
+      id: string;
+      createdAt: any;
+      slug: string;
+      thumb?: string | null;
+      name: string;
+      year: number;
+      releaseDate?: any | null;
+      topBilling: Array<{
+        __typename?: "CreditEntity";
+        id: string;
+        department: string;
+        order?: number | null;
+        character?: string | null;
+        person: {
+          __typename?: "PersonEntity";
+          id: string;
+          name: string;
+          image?: string | null;
+        };
+      }>;
+    };
+  } | null;
 };
 
 export type ProbeFileQueryVariables = Exact<{
   fileId: Scalars["String"];
 }>;
 
-export type ProbeFileQuery = { __typename?: "Query" } & {
-  file?: Maybe<{ __typename?: "FileEntity" } & Pick<FileEntity, "probe">>;
+export type ProbeFileQuery = {
+  __typename?: "Query";
+  file?: { __typename?: "FileEntity"; probe?: boolean | null } | null;
 };
 
-export type LibraryFragment = { __typename?: "LibraryEntity" } & Pick<
-  LibraryEntity,
-  "id" | "type" | "slug" | "name" | "createdAt"
->;
+export type LibraryFragment = {
+  __typename?: "LibraryEntity";
+  id: string;
+  type: LibraryType;
+  slug: string;
+  name: string;
+  createdAt: any;
+};
 
 export type LibrariesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type LibrariesQuery = { __typename?: "Query" } & {
-  libraries: Array<{ __typename?: "LibraryEntity" } & LibraryFragment>;
+export type LibrariesQuery = {
+  __typename?: "Query";
+  libraries: Array<{
+    __typename?: "LibraryEntity";
+    id: string;
+    type: LibraryType;
+    slug: string;
+    name: string;
+    createdAt: any;
+  }>;
 };
 
 export type LibraryQueryVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type LibraryQuery = { __typename?: "Query" } & {
-  library?: Maybe<{ __typename?: "LibraryEntity" } & LibraryFragment>;
+export type LibraryQuery = {
+  __typename?: "Query";
+  library?: {
+    __typename?: "LibraryEntity";
+    id: string;
+    type: LibraryType;
+    slug: string;
+    name: string;
+    createdAt: any;
+  } | null;
 };
 
 export type CheckLibraryMutationVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type CheckLibraryMutation = { __typename?: "Mutation" } & {
-  checkLibrary: { __typename?: "UpdateMutationModel" } & Pick<
-    UpdateMutationModel,
-    "id"
-  >;
+export type CheckLibraryMutation = {
+  __typename?: "Mutation";
+  checkLibrary: { __typename?: "UpdateMutationModel"; id?: string | null };
 };
 
-export type PersonFragment = { __typename?: "PersonEntity" } & Pick<
-  PersonEntity,
-  "id" | "createdAt" | "name" | "image" | "bio" | "birthday" | "placeOfBirth"
-> & {
-    creditsByTitle?: Maybe<
-      Array<
-        { __typename?: "CreditsByTitle" } & Pick<
-          CreditsByTitle,
-          "id" | "name" | "year" | "thumb"
-        > & {
-            credits: Array<
-              { __typename?: "CreditEntity" } & Pick<
-                CreditEntity,
-                "id" | "job" | "character" | "department"
-              >
-            >;
-          }
-      >
-    >;
-    externalIds: { __typename?: "PersonExternalIds" } & Pick<
-      PersonExternalIds,
-      "imdb" | "tmdb"
-    >;
+export type PersonFragment = {
+  __typename?: "PersonEntity";
+  id: string;
+  createdAt: any;
+  name: string;
+  image?: string | null;
+  bio?: string | null;
+  birthday?: string | null;
+  placeOfBirth?: string | null;
+  creditsByTitle?: Array<{
+    __typename?: "CreditsByTitle";
+    id: string;
+    name: string;
+    year: number;
+    thumb?: string | null;
+    credits: Array<{
+      __typename?: "CreditEntity";
+      id: string;
+      job?: string | null;
+      character?: string | null;
+      department: string;
+    }>;
+  }> | null;
+  externalIds: {
+    __typename?: "PersonExternalIds";
+    imdb?: string | null;
+    tmdb?: number | null;
   };
+};
 
 export type PersonQueryVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type PersonQuery = { __typename?: "Query" } & {
-  person?: Maybe<{ __typename?: "PersonEntity" } & PersonFragment>;
+export type PersonQuery = {
+  __typename?: "Query";
+  person?: {
+    __typename?: "PersonEntity";
+    id: string;
+    createdAt: any;
+    name: string;
+    image?: string | null;
+    bio?: string | null;
+    birthday?: string | null;
+    placeOfBirth?: string | null;
+    creditsByTitle?: Array<{
+      __typename?: "CreditsByTitle";
+      id: string;
+      name: string;
+      year: number;
+      thumb?: string | null;
+      credits: Array<{
+        __typename?: "CreditEntity";
+        id: string;
+        job?: string | null;
+        character?: string | null;
+        department: string;
+      }>;
+    }> | null;
+    externalIds: {
+      __typename?: "PersonExternalIds";
+      imdb?: string | null;
+      tmdb?: number | null;
+    };
+  } | null;
 };
 
 export type UpdatePersonImagesMutationVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type UpdatePersonImagesMutation = { __typename?: "Mutation" } & {
-  updatePersonImages: { __typename?: "UpdateMutationModel" } & Pick<
-    UpdateMutationModel,
-    "id"
-  >;
+export type UpdatePersonImagesMutation = {
+  __typename?: "Mutation";
+  updatePersonImages: {
+    __typename?: "UpdateMutationModel";
+    id?: string | null;
+  };
 };
 
 export type StatsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type StatsQuery = { __typename?: "Query" } & {
-  stats: { __typename?: "StatsModel" } & Pick<
-    StatsModel,
-    "time" | "uptime" | "cpuUsage" | "totalMem" | "freeMem"
-  >;
+export type StatsQuery = {
+  __typename?: "Query";
+  stats: {
+    __typename?: "StatsModel";
+    time: number;
+    uptime: number;
+    cpuUsage: number;
+    totalMem: number;
+    freeMem: number;
+  };
 };
 
-export type CastFragment = { __typename?: "CreditEntity" } & Pick<
-  CreditEntity,
-  "id" | "department" | "order" | "character"
-> & {
-    person: { __typename?: "PersonEntity" } & Pick<
-      PersonEntity,
-      "id" | "name" | "image"
-    >;
+export type CastFragment = {
+  __typename?: "CreditEntity";
+  id: string;
+  department: string;
+  order?: number | null;
+  character?: string | null;
+  person: {
+    __typename?: "PersonEntity";
+    id: string;
+    name: string;
+    image?: string | null;
   };
+};
 
-export type CrewFragment = { __typename?: "CreditEntity" } & Pick<
-  CreditEntity,
-  "id" | "department" | "job"
-> & {
-    person: { __typename?: "PersonEntity" } & Pick<
-      PersonEntity,
-      "id" | "name" | "image"
-    >;
+export type CrewFragment = {
+  __typename?: "CreditEntity";
+  id: string;
+  department: string;
+  job?: string | null;
+  person: {
+    __typename?: "PersonEntity";
+    id: string;
+    name: string;
+    image?: string | null;
   };
+};
 
-export type TitleWithFilesFragment = { __typename?: "TitleEntity" } & Pick<
-  TitleEntity,
-  | "id"
-  | "createdAt"
-  | "updatedAt"
-  | "type"
-  | "slug"
-  | "thumb"
-  | "dominantColor"
-  | "name"
-  | "tagline"
-  | "overview"
-  | "certification"
-  | "year"
-  | "runtime"
-  | "releaseDate"
-> & {
-    externalIds: { __typename?: "TitleExternalIds" } & Pick<
-      TitleExternalIds,
-      "imdb" | "trakt" | "omdb" | "tmdb" | "tvrage" | "tvdb"
-    >;
-    ratings: { __typename?: "TitleRatings" } & Pick<
-      TitleRatings,
-      "imdb" | "tmdb" | "trakt" | "rotten" | "metacritic" | "aggregated"
-    >;
-    genres: Array<{ __typename?: "GenreModel" } & Pick<GenreModel, "slug">>;
-    files: Array<
-      { __typename?: "FileEntity" } & Pick<FileEntity, "id" | "path">
-    >;
+export type TitleWithFilesFragment = {
+  __typename?: "TitleEntity";
+  id: string;
+  createdAt: any;
+  updatedAt: any;
+  type: TitleType;
+  slug: string;
+  thumb?: string | null;
+  dominantColor?: string | null;
+  name: string;
+  tagline?: string | null;
+  overview?: string | null;
+  certification?: string | null;
+  year: number;
+  runtime?: number | null;
+  releaseDate?: any | null;
+  externalIds: {
+    __typename?: "TitleExternalIds";
+    imdb?: string | null;
+    trakt?: number | null;
+    omdb?: number | null;
+    tmdb?: number | null;
+    tvrage?: number | null;
+    tvdb?: number | null;
   };
+  ratings: {
+    __typename?: "TitleRatings";
+    imdb?: number | null;
+    tmdb?: number | null;
+    trakt?: number | null;
+    rotten?: number | null;
+    metacritic?: number | null;
+    aggregated?: number | null;
+  };
+  genres: Array<{ __typename?: "GenreModel"; slug: string }>;
+  files: Array<{ __typename?: "FileEntity"; id: string; path: string }>;
+};
 
 export type TitleQueryVariables = Exact<{
   id: Scalars["String"];
-  take?: Maybe<Scalars["Int"]>;
+  take?: InputMaybe<Scalars["Int"]>;
 }>;
 
-export type TitleQuery = { __typename?: "Query" } & {
-  title?: Maybe<
-    { __typename?: "TitleEntity" } & {
-      topBilling: Array<{ __typename?: "CreditEntity" } & CastFragment>;
-    } & TitleWithFilesFragment
-  >;
+export type TitleQuery = {
+  __typename?: "Query";
+  title?: {
+    __typename?: "TitleEntity";
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    type: TitleType;
+    slug: string;
+    thumb?: string | null;
+    dominantColor?: string | null;
+    name: string;
+    tagline?: string | null;
+    overview?: string | null;
+    certification?: string | null;
+    year: number;
+    runtime?: number | null;
+    releaseDate?: any | null;
+    topBilling: Array<{
+      __typename?: "CreditEntity";
+      id: string;
+      department: string;
+      order?: number | null;
+      character?: string | null;
+      person: {
+        __typename?: "PersonEntity";
+        id: string;
+        name: string;
+        image?: string | null;
+      };
+    }>;
+    externalIds: {
+      __typename?: "TitleExternalIds";
+      imdb?: string | null;
+      trakt?: number | null;
+      omdb?: number | null;
+      tmdb?: number | null;
+      tvrage?: number | null;
+      tvdb?: number | null;
+    };
+    ratings: {
+      __typename?: "TitleRatings";
+      imdb?: number | null;
+      tmdb?: number | null;
+      trakt?: number | null;
+      rotten?: number | null;
+      metacritic?: number | null;
+      aggregated?: number | null;
+    };
+    genres: Array<{ __typename?: "GenreModel"; slug: string }>;
+    files: Array<{ __typename?: "FileEntity"; id: string; path: string }>;
+  } | null;
 };
 
 export type TitleCreditsQueryVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type TitleCreditsQuery = { __typename?: "Query" } & {
-  title?: Maybe<
-    { __typename?: "TitleEntity" } & {
-      cast: Array<{ __typename?: "CreditEntity" } & CastFragment>;
-      crew: Array<{ __typename?: "CreditEntity" } & CrewFragment>;
-    }
-  >;
+export type TitleCreditsQuery = {
+  __typename?: "Query";
+  title?: {
+    __typename?: "TitleEntity";
+    cast: Array<{
+      __typename?: "CreditEntity";
+      id: string;
+      department: string;
+      order?: number | null;
+      character?: string | null;
+      person: {
+        __typename?: "PersonEntity";
+        id: string;
+        name: string;
+        image?: string | null;
+      };
+    }>;
+    crew: Array<{
+      __typename?: "CreditEntity";
+      id: string;
+      department: string;
+      job?: string | null;
+      person: {
+        __typename?: "PersonEntity";
+        id: string;
+        name: string;
+        image?: string | null;
+      };
+    }>;
+  } | null;
 };
 
-export type SearchTitleFragment = { __typename?: "TitleEntity" } & Pick<
-  TitleEntity,
-  | "id"
-  | "createdAt"
-  | "slug"
-  | "thumb"
-  | "name"
-  | "year"
-  | "releaseDate"
-  | "runtime"
-> & { genres: Array<{ __typename?: "GenreModel" } & Pick<GenreModel, "slug">> };
+export type SearchTitleFragment = {
+  __typename?: "TitleEntity";
+  id: string;
+  createdAt: any;
+  slug: string;
+  thumb?: string | null;
+  name: string;
+  year: number;
+  releaseDate?: any | null;
+  runtime?: number | null;
+  genres: Array<{ __typename?: "GenreModel"; slug: string }>;
+};
 
 export type SearchTitlesQueryVariables = Exact<{
   query: Scalars["String"];
 }>;
 
-export type SearchTitlesQuery = { __typename?: "Query" } & {
-  search: Array<{ __typename?: "TitleEntity" } & SearchTitleFragment>;
+export type SearchTitlesQuery = {
+  __typename?: "Query";
+  search: Array<{
+    __typename?: "TitleEntity";
+    id: string;
+    createdAt: any;
+    slug: string;
+    thumb?: string | null;
+    name: string;
+    year: number;
+    releaseDate?: any | null;
+    runtime?: number | null;
+    genres: Array<{ __typename?: "GenreModel"; slug: string }>;
+  }>;
 };
 
 export type IdentifyTitleQueryVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type IdentifyTitleQuery = { __typename?: "Query" } & {
-  title?: Maybe<
-    { __typename?: "TitleEntity" } & {
-      identify: Array<
-        { __typename?: "IdentityModel" } & Pick<
-          IdentityModel,
-          "provider" | "externalId" | "type" | "name" | "year"
-        >
-      >;
-    }
-  >;
+export type IdentifyTitleQuery = {
+  __typename?: "Query";
+  title?: {
+    __typename?: "TitleEntity";
+    identify: Array<{
+      __typename?: "IdentityModel";
+      provider: string;
+      externalId: string;
+      type: string;
+      name: string;
+      year: string;
+    }>;
+  } | null;
 };
 
-export type TitleFragment = { __typename?: "TitleEntity" } & Pick<
-  TitleEntity,
-  "id" | "createdAt" | "slug" | "thumb" | "name" | "year" | "releaseDate"
->;
+export type TitleFragment = {
+  __typename?: "TitleEntity";
+  id: string;
+  createdAt: any;
+  slug: string;
+  thumb?: string | null;
+  name: string;
+  year: number;
+  releaseDate?: any | null;
+};
 
 export type TitlesQueryVariables = Exact<{
   libraryId: Scalars["String"];
-  skip?: Maybe<Scalars["Int"]>;
-  take?: Maybe<Scalars["Int"]>;
-  orderBy?: Maybe<Scalars["String"]>;
-  orderDirection?: Maybe<Scalars["String"]>;
-  filter?: Maybe<FilterInput>;
+  skip?: InputMaybe<Scalars["Int"]>;
+  take?: InputMaybe<Scalars["Int"]>;
+  orderBy?: InputMaybe<Scalars["String"]>;
+  orderDirection?: InputMaybe<Scalars["String"]>;
+  filter?: InputMaybe<FilterInput>;
 }>;
 
-export type TitlesQuery = { __typename?: "Query" } & {
-  library?: Maybe<
-    { __typename?: "LibraryEntity" } & Pick<LibraryEntity, "id"> & {
-        titles: { __typename?: "PaginatedTitleResponse" } & Pick<
-          PaginatedTitleResponse,
-          "totalCount"
-        > & { edges: Array<{ __typename?: "TitleEntity" } & TitleFragment> };
-      }
-  >;
+export type TitlesQuery = {
+  __typename?: "Query";
+  library?: {
+    __typename?: "LibraryEntity";
+    id: string;
+    titles: {
+      __typename?: "PaginatedTitleResponse";
+      totalCount: number;
+      edges: Array<{
+        __typename?: "TitleEntity";
+        id: string;
+        createdAt: any;
+        slug: string;
+        thumb?: string | null;
+        name: string;
+        year: number;
+        releaseDate?: any | null;
+      }>;
+    };
+  } | null;
 };
 
 export type NewlyAddedTitlesQueryVariables = Exact<{
   libraryId: Scalars["String"];
-  skip?: Maybe<Scalars["Int"]>;
-  take?: Maybe<Scalars["Int"]>;
+  skip?: InputMaybe<Scalars["Int"]>;
+  take?: InputMaybe<Scalars["Int"]>;
 }>;
 
-export type NewlyAddedTitlesQuery = { __typename?: "Query" } & {
-  library?: Maybe<
-    { __typename?: "LibraryEntity" } & Pick<LibraryEntity, "id"> & {
-        newlyAdded: { __typename?: "PaginatedTitleResponse" } & Pick<
-          PaginatedTitleResponse,
-          "totalCount"
-        > & { edges: Array<{ __typename?: "TitleEntity" } & TitleFragment> };
-      }
-  >;
+export type NewlyAddedTitlesQuery = {
+  __typename?: "Query";
+  library?: {
+    __typename?: "LibraryEntity";
+    id: string;
+    newlyAdded: {
+      __typename?: "PaginatedTitleResponse";
+      totalCount: number;
+      edges: Array<{
+        __typename?: "TitleEntity";
+        id: string;
+        createdAt: any;
+        slug: string;
+        thumb?: string | null;
+        name: string;
+        year: number;
+        releaseDate?: any | null;
+      }>;
+    };
+  } | null;
 };
 
 export type DeleteTitleMutationVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type DeleteTitleMutation = { __typename?: "Mutation" } & {
-  deleteTitle: { __typename?: "UpdateMutationModel" } & Pick<
-    UpdateMutationModel,
-    "id"
-  >;
+export type DeleteTitleMutation = {
+  __typename?: "Mutation";
+  deleteTitle: { __typename?: "UpdateMutationModel"; id?: string | null };
 };
 
 export type UpdateCreditsMutationVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type UpdateCreditsMutation = { __typename?: "Mutation" } & {
-  updateCredits: { __typename?: "UpdateMutationModel" } & Pick<
-    UpdateMutationModel,
-    "id"
-  >;
+export type UpdateCreditsMutation = {
+  __typename?: "Mutation";
+  updateCredits: { __typename?: "UpdateMutationModel"; id?: string | null };
 };
 
 export type UpdateMetadataMutationVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type UpdateMetadataMutation = { __typename?: "Mutation" } & {
-  updateMetadata: { __typename?: "UpdateMutationModel" } & Pick<
-    UpdateMutationModel,
-    "id"
-  >;
+export type UpdateMetadataMutation = {
+  __typename?: "Mutation";
+  updateMetadata: { __typename?: "UpdateMutationModel"; id?: string | null };
 };
 
 export type UpdateTitleImagesMutationVariables = Exact<{
   id: Scalars["String"];
 }>;
 
-export type UpdateTitleImagesMutation = { __typename?: "Mutation" } & {
-  updateTitleImages: { __typename?: "UpdateMutationModel" } & Pick<
-    UpdateMutationModel,
-    "id"
-  >;
+export type UpdateTitleImagesMutation = {
+  __typename?: "Mutation";
+  updateTitleImages: { __typename?: "UpdateMutationModel"; id?: string | null };
 };
 
-export type UserFragment = { __typename?: "UserEntity" } & Pick<
-  UserEntity,
-  "id" | "username" | "role"
->;
+export type UserFragment = {
+  __typename?: "UserEntity";
+  id: string;
+  username: string;
+  role: UserRole;
+};
 
 export type UserQueryVariables = Exact<{
   userId: Scalars["String"];
 }>;
 
-export type UserQuery = { __typename?: "Query" } & {
-  user?: Maybe<{ __typename?: "UserEntity" } & UserFragment>;
+export type UserQuery = {
+  __typename?: "Query";
+  user?: {
+    __typename?: "UserEntity";
+    id: string;
+    username: string;
+    role: UserRole;
+  } | null;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
 
-export type UsersQuery = { __typename?: "Query" } & {
-  users: Array<{ __typename?: "UserEntity" } & UserFragment>;
+export type UsersQuery = {
+  __typename?: "Query";
+  users: Array<{
+    __typename?: "UserEntity";
+    id: string;
+    username: string;
+    role: UserRole;
+  }>;
 };
 
 export const TitleFragmentDoc = gql`
@@ -865,7 +1111,7 @@ export function useFileLazyQuery(
 export type FileQueryHookResult = ReturnType<typeof useFileQuery>;
 export type FileLazyQueryHookResult = ReturnType<typeof useFileLazyQuery>;
 export type FileQueryResult = Apollo.QueryResult<FileQuery, FileQueryVariables>;
-export function refetchFileQuery(variables?: FileQueryVariables) {
+export function refetchFileQuery(variables: FileQueryVariables) {
   return { query: FileDocument, variables: variables };
 }
 export const ProbeFileDocument = gql`
@@ -921,7 +1167,7 @@ export type ProbeFileQueryResult = Apollo.QueryResult<
   ProbeFileQuery,
   ProbeFileQueryVariables
 >;
-export function refetchProbeFileQuery(variables?: ProbeFileQueryVariables) {
+export function refetchProbeFileQuery(variables: ProbeFileQueryVariables) {
   return { query: ProbeFileDocument, variables: variables };
 }
 export const LibrariesDocument = gql`
@@ -1035,7 +1281,7 @@ export type LibraryQueryResult = Apollo.QueryResult<
   LibraryQuery,
   LibraryQueryVariables
 >;
-export function refetchLibraryQuery(variables?: LibraryQueryVariables) {
+export function refetchLibraryQuery(variables: LibraryQueryVariables) {
   return { query: LibraryDocument, variables: variables };
 }
 export const CheckLibraryDocument = gql`
@@ -1137,7 +1383,7 @@ export type PersonQueryResult = Apollo.QueryResult<
   PersonQuery,
   PersonQueryVariables
 >;
-export function refetchPersonQuery(variables?: PersonQueryVariables) {
+export function refetchPersonQuery(variables: PersonQueryVariables) {
   return { query: PersonDocument, variables: variables };
 }
 export const UpdatePersonImagesDocument = gql`
@@ -1298,7 +1544,7 @@ export type TitleQueryResult = Apollo.QueryResult<
   TitleQuery,
   TitleQueryVariables
 >;
-export function refetchTitleQuery(variables?: TitleQueryVariables) {
+export function refetchTitleQuery(variables: TitleQueryVariables) {
   return { query: TitleDocument, variables: variables };
 }
 export const TitleCreditsDocument = gql`
@@ -1367,7 +1613,7 @@ export type TitleCreditsQueryResult = Apollo.QueryResult<
   TitleCreditsQueryVariables
 >;
 export function refetchTitleCreditsQuery(
-  variables?: TitleCreditsQueryVariables,
+  variables: TitleCreditsQueryVariables,
 ) {
   return { query: TitleCreditsDocument, variables: variables };
 }
@@ -1431,7 +1677,7 @@ export type SearchTitlesQueryResult = Apollo.QueryResult<
   SearchTitlesQueryVariables
 >;
 export function refetchSearchTitlesQuery(
-  variables?: SearchTitlesQueryVariables,
+  variables: SearchTitlesQueryVariables,
 ) {
   return { query: SearchTitlesDocument, variables: variables };
 }
@@ -1500,7 +1746,7 @@ export type IdentifyTitleQueryResult = Apollo.QueryResult<
   IdentifyTitleQueryVariables
 >;
 export function refetchIdentifyTitleQuery(
-  variables?: IdentifyTitleQueryVariables,
+  variables: IdentifyTitleQueryVariables,
 ) {
   return { query: IdentifyTitleDocument, variables: variables };
 }
@@ -1577,7 +1823,7 @@ export type TitlesQueryResult = Apollo.QueryResult<
   TitlesQuery,
   TitlesQueryVariables
 >;
-export function refetchTitlesQuery(variables?: TitlesQueryVariables) {
+export function refetchTitlesQuery(variables: TitlesQueryVariables) {
   return { query: TitlesDocument, variables: variables };
 }
 export const NewlyAddedTitlesDocument = gql`
@@ -1648,7 +1894,7 @@ export type NewlyAddedTitlesQueryResult = Apollo.QueryResult<
   NewlyAddedTitlesQueryVariables
 >;
 export function refetchNewlyAddedTitlesQuery(
-  variables?: NewlyAddedTitlesQueryVariables,
+  variables: NewlyAddedTitlesQueryVariables,
 ) {
   return { query: NewlyAddedTitlesDocument, variables: variables };
 }
@@ -1895,7 +2141,7 @@ export function useUserLazyQuery(
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
-export function refetchUserQuery(variables?: UserQueryVariables) {
+export function refetchUserQuery(variables: UserQueryVariables) {
   return { query: UserDocument, variables: variables };
 }
 export const UsersDocument = gql`

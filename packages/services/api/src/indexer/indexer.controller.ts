@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
 import { Observable } from "rxjs";
-import { IndexerService } from "./indexer.service";
 import { AccessTokenGuard } from "~/auth/guards/access-token.guard";
+import { IndexerService } from "./indexer.service";
 
 @Controller("indexer")
 @UseGuards(AccessTokenGuard)

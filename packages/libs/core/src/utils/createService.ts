@@ -34,7 +34,7 @@ export async function createService(
       logger,
     },
   );
-  await app.listenAsync();
+  await app.listen();
   // TODO: Remove when the following is fixed https://github.com/nestjs/nest/issues/2343
   // Close the temporary app context since we no longer need it
   appContext.close();

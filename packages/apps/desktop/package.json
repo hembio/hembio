@@ -41,7 +41,7 @@
     "css-loader": "^6.7.1",
     "electron": "^13.6.9",
     "electron-wix-msi": "^3.2.0",
-    "eslint": "^8.16.0",
+    "eslint": "^8.17.0",
     "eslint-plugin-import": "^2.26.0",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.5.2",
@@ -50,8 +50,8 @@
     "react": "^18.1.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.0",
-    "typescript": "^4.6.4",
-    "webpack": "^5.72.1",
+    "typescript": "^4.7.3",
+    "webpack": "^5.73.0",
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {

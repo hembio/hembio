@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { FileLRU, getCwd , FileEntity } from "@hembio/core";
+import { FileLRU, getCwd, FileEntity } from "@hembio/core";
 import { createLogger } from "@hembio/logger";
 import { mediainfo, MediaInfo } from "@hembio/mediainfo";
 import PQueue from "p-queue";
@@ -18,9 +18,12 @@ const cache = new FileLRU<CachePayload>(
   1024,
 );
 
-export const readMediaInfo = async (basePath: string, file: FileEntity) => {
+export async function readMediaInfo(
+  basePath: string,
+  file: FileEntity,
+): Promise<MediaInfo | undefined> {
   const fullPath = path.join(basePath, file.path);
-  const task = async () => {
+  const task = async (): Promise<MediaInfo | undefined> => {
     const stat = await fs.promises.lstat(fullPath);
     let result: MediaInfo | undefined = undefined;
     const cached = cache.get(fullPath);
@@ -53,4 +56,4 @@ export const readMediaInfo = async (basePath: string, file: FileEntity) => {
     return result;
   };
   return queue.add(task);
-};
+}

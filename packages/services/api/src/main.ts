@@ -11,7 +11,7 @@ import { WsAdapter } from "@nestjs/platform-ws";
 import { allowedHeaders } from "./allowedHeaders";
 import { AppModule } from "./app.module";
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const env = getEnv();
   const logger = createLogger("api");
   const ip = env.HEMBIO_SERVER_IP || (await internalIp.v4()) || "127.0.0.1";

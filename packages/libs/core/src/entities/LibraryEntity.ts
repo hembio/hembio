@@ -8,15 +8,16 @@ import {
   DateType,
   BeforeCreate,
   Enum,
+  OptionalProps,
 } from "@mikro-orm/core";
 import { Field, ID, ObjectType, registerEnumType } from "@nestjs/graphql";
 import slug from "slug";
 import { Memoize } from "typescript-memoize";
-import { FileEntity } from "./FileEntity";
-import { TitleEntity } from "./TitleEntity";
 import { LIBRARY_NAMESPACE } from "~/namespaces";
 import { generateNamespacedUuid } from "~/utils/generateUuid";
 import { globToRxp } from "~/utils/globToRxp";
+import { FileEntity } from "./FileEntity";
+import { TitleEntity } from "./TitleEntity";
 
 export enum LibraryType {
   MOVIES = "movies",
@@ -33,6 +34,13 @@ registerEnumType(LibraryType, {
 @ObjectType()
 @Entity({ tableName: "libraries" })
 export class LibraryEntity {
+  public [OptionalProps]?:
+    | "createdAt"
+    | "updatedAt"
+    | "slug"
+    | "watch"
+    | "matcherRegEx";
+
   @Field(() => ID)
   @PrimaryKey()
   public id!: string;

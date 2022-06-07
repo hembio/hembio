@@ -14,6 +14,7 @@ import {
 } from "@nestjs/common";
 import { FastifyRequest } from "fastify";
 import { CookiesInterceptor, NestCookieRequest } from "nest-cookies";
+import { User } from "~/user/decorators/user.decorator";
 import { AuthService } from "./auth.service";
 import { CredentialsDto } from "./dto/credentials.dto";
 import { SignUpDto } from "./dto/sign-up.dto";
@@ -23,7 +24,6 @@ import { AccessTokenGuard } from "./guards/access-token.guard";
 import { RefreshTokenGuard } from "./guards/refresh-token.guard";
 import { AccessTokenResult } from "./interfaces/access-token-result.interface";
 import { TfaNeededResult } from "./interfaces/tfa-needed-result.interface";
-import { User } from "~/user/decorators/user.decorator";
 
 @UseInterceptors(CookiesInterceptor)
 @Controller("auth")
@@ -87,7 +87,8 @@ export class AuthController {
         userId: user.id,
         username: user.username,
       };
-    } catch (e) {
+    } catch (err) {
+      const e = err as Error;
       switch (e.constructor) {
         case InvalidUsernameOrPassword:
           throw new ForbiddenException();

@@ -19,7 +19,10 @@ export async function* findFilesGenerator(
   }
 }
 
-export async function findFiles(basePath: string, matcher?: RegExp) {
+export async function findFiles(
+  basePath: string,
+  matcher?: RegExp,
+): Promise<{ files: string[]; total: number; dirs: number }> {
   try {
     const stat = await fs.lstat(basePath);
     if (!stat.isDirectory()) {
@@ -32,7 +35,7 @@ export async function findFiles(basePath: string, matcher?: RegExp) {
   let total = 0;
   let dirs = 0;
   const files: string[] = [];
-  const readDirRecursive = async (bp: string) => {
+  const readDirRecursive = async (bp: string): Promise<void> => {
     for await (const [fp, stat] of findFilesGenerator(bp)) {
       queue.add(
         async () => {

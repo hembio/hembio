@@ -22,25 +22,31 @@ export class CreditService {
   ): Promise<CreditEntity[]> {
     return this.creditRepo.find(
       { title: titleId, order: { $ne: null } },
-      ["person"],
       {
-        order: QueryOrder.ASC,
+        populate: ["person"],
+        orderBy: [{ order: QueryOrder.ASC }],
+        limit: take,
       },
-      take,
     );
   }
 
   public async getCast(titleId: string): Promise<CreditEntity[]> {
     return this.creditRepo.find(
       { title: titleId, order: { $ne: null } },
-      ["person"],
       {
-        order: QueryOrder.ASC,
+        populate: ["person"],
+        orderBy: [{ order: QueryOrder.ASC }],
       },
     );
   }
 
   public async getCrew(titleId: string): Promise<CreditEntity[]> {
-    return this.creditRepo.find({ title: titleId, order: null }, ["person"]);
+    return this.creditRepo.find(
+      { title: titleId, order: null },
+      {
+        populate: ["person"],
+        orderBy: [{ order: QueryOrder.ASC }],
+      },
+    );
   }
 }

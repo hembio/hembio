@@ -8,12 +8,13 @@ import {
   Enum,
   LoadStrategy,
   JsonType,
+  OptionalProps,
 } from "@mikro-orm/core";
 import { Field, ID, Int, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { LibraryEntity } from "./LibraryEntity";
-import { TitleEntity } from "./TitleEntity";
 import { PERSON_NAMESPACE } from "~/namespaces";
 import { generateNamespacedUuid } from "~/utils/generateUuid";
+import { LibraryEntity } from "./LibraryEntity";
+import { TitleEntity } from "./TitleEntity";
 
 export enum Subtitle {
   Swedish = "se",
@@ -27,6 +28,8 @@ registerEnumType(Subtitle, {
 @ObjectType()
 @Entity({ tableName: "files" })
 export class FileEntity {
+  public [OptionalProps]?: "createdAt" | "updatedAt";
+
   @Field(() => ID)
   @PrimaryKey()
   public id!: string;
@@ -60,7 +63,7 @@ export class FileEntity {
     lazy: true,
     strategy: LoadStrategy.JOINED,
   })
-  public title!: TitleEntity;
+  public title?: TitleEntity;
 
   @Field(() => [Subtitle])
   @Enum({
@@ -68,7 +71,7 @@ export class FileEntity {
     array: true,
     default: [],
   })
-  public subtitles: Subtitle[] = [];
+  public subtitles?: Subtitle[] = [];
 
   @Field(() => Int)
   @Property({ nullable: true })
@@ -77,6 +80,10 @@ export class FileEntity {
   @Field(() => Int)
   @Property({ nullable: true })
   public mtime?: number;
+
+  @Field(() => Int)
+  @Property({ nullable: true })
+  public size?: number;
 
   @OnInit()
   public onInit(): void {

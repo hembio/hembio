@@ -1,14 +1,15 @@
-import { MikroORM, QueryOrder } from "@mikro-orm/core";
-import { UseRequestContext } from "@mikro-orm/nestjs";
+import {
+  MikroORM,
+  QueryOrder,
+  RequiredEntityData,
+  UseRequestContext,
+} from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { TaskEntity, TaskType } from "../../entities/TaskEntity";
 
-interface CreateTask {
+interface CreateTask extends RequiredEntityData<TaskEntity> {
   type: TaskType;
   ref: string;
-  payload?: Record<string, unknown>;
-  priority?: number;
-  waitUntil?: Date;
 }
 
 @Injectable()
@@ -20,7 +21,7 @@ export class TaskService {
     type: TaskType | TaskType[],
     limit = 10,
   ): Promise<TaskEntity[]> {
-    const em = this.orm.em.fork(false);
+    const em = this.orm.em.fork();
     const taskRepo = em.getRepository(TaskEntity);
     try {
       return await taskRepo.find(
@@ -42,7 +43,7 @@ export class TaskService {
     type: TaskType,
     ref: string,
   ): Promise<TaskEntity[]> {
-    const em = this.orm.em.fork(false);
+    const em = this.orm.em.fork();
     const taskRepo = em.getRepository(TaskEntity);
     try {
       return await taskRepo.find({ type, ref });
@@ -53,7 +54,7 @@ export class TaskService {
   }
 
   public async waitUntil(task: TaskEntity, until: Date): Promise<void> {
-    const em = this.orm.em.fork(false);
+    const em = this.orm.em.fork();
     const taskRepo = em.getRepository(TaskEntity);
     task.waitUntil = until;
     task.priority = 0;
@@ -68,7 +69,7 @@ export class TaskService {
     data: CreateTask,
     noCheck = false,
   ): Promise<TaskEntity | undefined> {
-    const em = this.orm.em.fork(false);
+    const em = this.orm.em.fork();
     const taskRepo = em.getRepository(TaskEntity);
     try {
       if (!noCheck) {
@@ -98,7 +99,7 @@ export class TaskService {
 
   @UseRequestContext()
   public async deleteTask(task: TaskEntity): Promise<void> {
-    const em = this.orm.em.fork(false);
+    const em = this.orm.em.fork();
     const taskRepo = em.getRepository(TaskEntity);
     try {
       return await taskRepo.removeAndFlush(task);

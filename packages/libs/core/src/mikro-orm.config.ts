@@ -70,7 +70,7 @@ const config: Config = {
   migrations: {
     tableName: "mikro_orm_migrations", // name of database table with log of executed transactions
     path: path.resolve(__dirname, "./migrations"), // path to the folder with migrations
-    pattern: /^[\w-]+\d+\.ts$/, // regex pattern for the migration files
+    // pattern: /^[\w-]+\d+\.ts$/, // regex pattern for the migration files
     transactional: true, // wrap each migration in a transaction
     disableForeignKeys: true, // wrap statements with `set foreign_key_checks = 0` or equivalent
     allOrNothing: true, // wrap all migrations in master transaction

@@ -1,9 +1,9 @@
 import { UserRole } from "@hembio/core";
 import { applyDecorators, SetMetadata, UseGuards } from "@nestjs/common";
-import { AccessTokenGuard } from "./guards/access-token.guard";
 import { RolesGuard } from "~/user/guards/roles.guard";
+import { AccessTokenGuard } from "./guards/access-token.guard";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function Auth(...roles: UserRole[]) {
   return applyDecorators(
     SetMetadata("roles", roles),

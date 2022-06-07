@@ -1,8 +1,8 @@
 import { existsSync, writeFileSync, readFileSync, mkdirSync } from "fs";
 import fs from "fs/promises";
 import path from "path";
-import { LRU } from "./LRU";
 import { beforeExit } from "~/utils/beforeExit";
+import { LRU } from "./LRU";
 
 export class FileLRU<T> extends LRU<T> {
   public constructor(private filename: string, size = 20, ttl = Infinity) {

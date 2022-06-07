@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { TranscoderController } from "./transcoder.controller";
 import { getServiceClientProxy } from "~/utils/getServiceClientProxy";
+import { TranscoderController } from "./transcoder.controller";
 
 const TranscoderClientProxy = getServiceClientProxy("transcoder");
 

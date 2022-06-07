@@ -2,7 +2,6 @@ import {
   TitleEntity,
   QueryOrderMap,
   FindOptions,
-  Populate,
   EntityManager,
   MikroORM,
   TitleGenreSlugs,
@@ -18,7 +17,7 @@ import { TitleNotFoundException } from "./exceptions/TitleNotFoundException";
 interface Params {
   ids?: string[];
   libraryId?: string;
-  orderBy?: QueryOrderMap;
+  orderBy?: QueryOrderMap<TitleEntity>;
   name?: string | RegExp;
   year?: number | [number, number];
   genre?: Record<TitleGenreLiterals, number>;
@@ -40,10 +39,12 @@ export class TitleService {
   }
 
   public async setGenreBits(): Promise<void> {
-    const em = this.em.fork(false);
-    const titles = await this.em.find(TitleEntity, { genreBits: null }, [
-      "genres",
-    ]);
+    const em = this.em.fork();
+    const titles = await this.em.find(
+      TitleEntity,
+      { genreBits: null },
+      { populate: ["genres"] },
+    );
 
     for (const title of titles) {
       const genres = (await title.genres.init()).getItems();
@@ -62,12 +63,10 @@ export class TitleService {
   }
 
   public async deleteOneById(id: string): Promise<boolean> {
-    const em = this.em.fork(false);
-    const title = await em.findOne(TitleEntity, id, [
-      "images",
-      "credits",
-      "files",
-    ]);
+    const em = this.em.fork();
+    const title = await em.findOne(TitleEntity, id, {
+      populate: ["images", "credits", "files"],
+    });
     if (title) {
       this.logger.debug(`Removing title(${id}): ${title.name} (${title.year})`);
 
@@ -98,14 +97,14 @@ export class TitleService {
 
   public async findAll(params: Params): Promise<[TitleEntity[], number]> {
     const { ids, libraryId, name, year, genre, take, skip, orderBy } = params;
-    const em = this.em.fork(true);
+    const em = this.em.fork();
 
     const $and: Array<string | Record<string, any>> = [];
     if (ids) {
       $and.push({ id: { $in: ids } });
     }
 
-    const options: FindOptions<TitleEntity, Populate<TitleEntity>> = {
+    const options: FindOptions<TitleEntity> = {
       populate: [],
     };
 
@@ -153,8 +152,10 @@ export class TitleService {
   }
 
   public async findOneById(id: string): Promise<TitleEntity> {
-    const em = this.em.fork(true);
-    const title = await em.findOne(TitleEntity, id, ["files", "genres"]);
+    const em = this.em.fork();
+    const title = await em.findOne(TitleEntity, id, {
+      populate: ["files", "genres"],
+    });
     if (!title) {
       throw new TitleNotFoundException();
     }
@@ -162,7 +163,7 @@ export class TitleService {
   }
 
   public async findOneBySlug(slug: string): Promise<TitleEntity> {
-    const em = this.em.fork(true);
+    const em = this.em.fork();
     const title = await em.findOne(TitleEntity, { slug });
     if (!title) {
       throw new TitleNotFoundException();
@@ -182,7 +183,7 @@ export class TitleService {
   }
 
   public async search(query: string): Promise<TitleEntity[]> {
-    const em = this.em.fork(true);
+    const em = this.em.fork();
     const qb = em.createQueryBuilder(TitleEntity);
     const allTitles = await qb.select(["id", "year", "name"]).execute();
 
@@ -202,7 +203,10 @@ export class TitleService {
     // To preserve the order we will find one at a time
     return Promise.all(
       sortedIds.map(
-        (id) => em.findOne(TitleEntity, id, ["genres"]) as Promise<TitleEntity>,
+        (id) =>
+          em.findOne(TitleEntity, id, {
+            populate: ["genres"],
+          }) as Promise<TitleEntity>,
       ),
     );
   }

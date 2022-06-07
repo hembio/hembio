@@ -14,6 +14,7 @@ import {
   Cascade,
   LoadStrategy,
   OnInit,
+  OptionalProps,
 } from "@mikro-orm/core";
 import {
   Field,
@@ -24,14 +25,14 @@ import {
   Float,
 } from "@nestjs/graphql";
 import slug from "slug";
+import { TITLE_NAMESPACE } from "~/namespaces";
+import { UnixTimestamp } from "~/types/UnixTimestamp";
+import { generateNamespacedUuid } from "~/utils/generateUuid";
 import { CreditEntity } from "./CreditEntity";
 import { FileEntity } from "./FileEntity";
 import { GenreEntity } from "./GenreEntity";
 import { ImageEntity } from "./ImageEntity";
 import { LibraryEntity } from "./LibraryEntity";
-import { TITLE_NAMESPACE } from "~/namespaces";
-import { UnixTimestamp } from "~/types/UnixTimestamp";
-import { generateNamespacedUuid } from "~/utils/generateUuid";
 
 export enum TitleType {
   MOVIE = "movie",
@@ -45,6 +46,8 @@ registerEnumType(TitleType, {
 
 @ObjectType()
 class TitleRatings {
+  public [OptionalProps]?: "aggregated";
+
   @Field(() => Float, { nullable: true })
   public imdb?: number;
 
@@ -100,6 +103,13 @@ class TitleExternalIds {
 @ObjectType()
 @Entity({ tableName: "titles" })
 export class TitleEntity {
+  public [OptionalProps]?:
+    | "createdAt"
+    | "updatedAt"
+    | "slug"
+    | "externalIds"
+    | "ratings";
+
   @Field(() => ID)
   @PrimaryKey()
   public id!: string;

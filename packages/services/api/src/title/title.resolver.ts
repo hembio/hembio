@@ -15,8 +15,6 @@ import {
   Parent,
   Int,
 } from "@nestjs/graphql";
-import { IdentityModel } from "./models/identity.model";
-import { TitleService } from "./title.service";
 import { Auth } from "~/auth/auth.decorator";
 import { UpdateMutationModel } from "~/common/models/update-mutation.model";
 import { CreditService } from "~/credit/credit.service";
@@ -24,6 +22,8 @@ import { FileService } from "~/file/file.service";
 import { ImageService } from "~/image/image.service";
 import { IndexerService } from "~/indexer/indexer.service";
 import { GenreModel } from "~/library/models/genre.model";
+import { IdentityModel } from "./models/identity.model";
+import { TitleService } from "./title.service";
 
 @Auth(UserRole.USER)
 @Resolver(() => TitleEntity)

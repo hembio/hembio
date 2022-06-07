@@ -16,7 +16,7 @@ async function readCert({
   cert,
   domain = "localhost",
   ip = "127.0.0.1",
-}: ReadCertProps) {
+}: ReadCertProps): Promise<[string, string]> {
   if (!existsSync(key) || !existsSync(cert)) {
     await keygen({
       key,

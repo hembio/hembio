@@ -141,7 +141,7 @@ export const AppContainer = observer(() => {
               }
             />
             <Route
-              path="/library/:id"
+              path="/library/:libraryId"
               element={
                 <ProtectedRoute>
                   <LibraryRoutes />

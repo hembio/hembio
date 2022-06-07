@@ -1,5 +1,5 @@
 import { FileEntity } from "@hembio/core";
-import { FindOptions, Populate } from "@mikro-orm/core";
+import { FindOptions } from "@mikro-orm/core";
 import { EntityManager, SqliteDriver } from "@mikro-orm/sqlite";
 
 interface Params {
@@ -14,7 +14,7 @@ export async function findFiles(
   const { ids, titleId } = params;
 
   const filter: Record<string, unknown> = {};
-  const options: FindOptions<FileEntity, Populate<FileEntity>> = {};
+  const options: FindOptions<FileEntity> = {};
   const fileRepo = em.getRepository(FileEntity);
 
   if (ids) {

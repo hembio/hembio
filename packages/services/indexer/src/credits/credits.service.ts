@@ -109,7 +109,7 @@ export class CreditsService {
   }
 
   public async lookupCredits(titleId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const titleRepo = em.getRepository(TitleEntity);
     const title = await titleRepo.findOne(titleId);
 
@@ -160,7 +160,7 @@ export class CreditsService {
             return;
           }
 
-          const em = this.em.fork(false);
+          const em = this.em.fork();
           const personRepo = em.getRepository(PersonEntity);
           const creditRepo = em.getRepository(CreditEntity);
 
@@ -176,9 +176,9 @@ export class CreditsService {
               return;
             }
             person = personRepo.create({
-              idTmdb: personInfo.id,
+              idTmdb: personInfo.id || null,
               idImdb: personInfo.imdb_id,
-              name: personInfo.name,
+              name: personInfo.name || null,
               birthday: personInfo.birthday,
               placeOfBirth: personInfo.place_of_birth,
               bio: personInfo.biography,
@@ -240,7 +240,7 @@ export class CreditsService {
               character,
               department: character
                 ? "Acting"
-                : department || known_for_department,
+                : department || known_for_department || null,
             });
             try {
               title.credits.add(credit);
@@ -268,7 +268,7 @@ export class CreditsService {
   }
 
   public async queueCreditsUpdate(titleId: string): Promise<boolean> {
-    const em = this.em.fork(false);
+    const em = this.em.fork();
     const count = await em.count(TitleEntity, titleId);
     if (count === 0) {
       throw Error("Title not found");
