@@ -303,7 +303,11 @@ export const Title = (): JSX.Element => {
                   )}
                 </Box>
               </Box>
-              <ActionBox title={title as TitleWithFilesFragment} />
+              <ActionBox
+                title={title as TitleWithFilesFragment}
+                reload={reload}
+                refetch={refetch}
+              />
             </Grid>
           </Grid>
         </Container>

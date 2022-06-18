@@ -1,18 +1,28 @@
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import Fab from "@mui/material/Fab";
 import Grid from "@mui/material/Grid";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Zoom from "@mui/material/Zoom";
 import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { makeStyles, createStyles } from "@mui/styles";
 import clsx from "clsx";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { TitleWithFilesFragment } from "~/generated/graphql";
+import {
+  TitleWithFilesFragment,
+  UpdateMetadataDocument,
+  UpdateMetadataMutation,
+  UpdateMetadataMutationVariables,
+  UpdateTitleImagesDocument,
+  UpdateTitleImagesMutation,
+  UpdateTitleImagesMutationVariables,
+} from "~/generated/graphql";
+import { useSnackbar } from "~/snackbar";
+import { GqlMenuItem } from "./buttons/GqlMenuItem";
 
 const useStyles = makeStyles(
   createStyles({
@@ -51,11 +61,18 @@ const useStyles = makeStyles(
 
 interface ActionBoxProps {
   title?: TitleWithFilesFragment;
+  reload: (goBack?: boolean) => void;
+  refetch: () => void;
 }
 
-export function ActionBox({ title }: ActionBoxProps): JSX.Element {
+export function ActionBox({
+  title,
+  reload,
+  refetch,
+}: ActionBoxProps): JSX.Element | null {
   const [loved, setLoved] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { addSnackbar } = useSnackbar();
   const open = Boolean(anchorEl);
   const classes = useStyles();
 
@@ -66,6 +83,10 @@ export function ActionBox({ title }: ActionBoxProps): JSX.Element {
   const handleClose = (): void => {
     setAnchorEl(null);
   };
+
+  if (!title) {
+    return null;
+  }
 
   return (
     <Grid
@@ -107,8 +128,41 @@ export function ActionBox({ title }: ActionBoxProps): JSX.Element {
           }}
         >
           <MenuItem onClick={handleClose}>Identify title</MenuItem>
-          <MenuItem onClick={handleClose}>Update images</MenuItem>
-          <MenuItem onClick={handleClose}>Update metadata</MenuItem>
+          <GqlMenuItem<
+            UpdateTitleImagesMutation,
+            UpdateTitleImagesMutationVariables
+          >
+            mutation={UpdateTitleImagesDocument}
+            variables={{ id: title.id }}
+            onDone={(error, _data) => {
+              if (error) {
+                console.error(error);
+                addSnackbar(error.message, { severity: "error" });
+                return;
+              }
+              addSnackbar("Queued images update of title");
+              refetch();
+            }}
+            onClick={handleClose}
+          >
+            Update images
+          </GqlMenuItem>
+          <GqlMenuItem<UpdateMetadataMutation, UpdateMetadataMutationVariables>
+            mutation={UpdateMetadataDocument}
+            variables={{ id: title.id }}
+            onDone={(error, _data) => {
+              if (error) {
+                console.error(error);
+                addSnackbar(error.message, { severity: "error" });
+                return;
+              }
+              addSnackbar("Queued metadata update for title");
+              refetch();
+            }}
+            onClick={handleClose}
+          >
+            Update metadata
+          </GqlMenuItem>
           <MenuItem onClick={handleClose}>Update credits</MenuItem>
           <MenuItem onClick={handleClose}>Remove title</MenuItem>
         </Menu>
