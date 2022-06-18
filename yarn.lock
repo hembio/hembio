@@ -2287,6 +2287,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron/remote@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@electron/remote@npm:2.0.8"
+  peerDependencies:
+    electron: ">= 13.0.0"
+  checksum: d0ef11b3f09d789baf4330c2c021cfc1a997fc5ffdb56e8810ed7fe2fd76cda1a168c0589d2a10284a907fd3829bae14002a58b35c4881473cdd0049f07fbd63
+  languageName: node
+  linkType: hard
+
 "@electron/universal@npm:^1.2.1":
   version: 1.2.1
   resolution: "@electron/universal@npm:1.2.1"
@@ -3492,6 +3501,7 @@ __metadata:
     "@electron-forge/maker-zip": ^6.0.0-beta.64
     "@electron-forge/plugin-webpack": 6.0.0-beta.64
     "@electron-forge/shared-types": ^6.0.0-beta.64
+    "@electron/remote": ^2.0.8
     "@marshallofsound/webpack-asset-relocator-loader": ^0.5.0
     "@types/eslint": ^8.4.3
     "@types/prop-types": ^15.7.5

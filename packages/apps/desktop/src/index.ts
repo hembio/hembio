@@ -1,4 +1,5 @@
 import path from "path";
+import * as electronRemote from "@electron/remote/main";
 import { app, session, BrowserWindow } from "electron";
 import { getPluginEntry } from "./mpv";
 
@@ -13,6 +14,42 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+// Initialize Electron remote bridge
+electronRemote.initialize();
+
+// Disable hardware acceleration to make mpv plugin work
+// app.disableHardwareAcceleration();
+
+// Absolute path to the plugin directory.
+const pluginDir =
+  process.env.ELECTRON_ENV === "development"
+    ? path.join(__dirname, "../../bin/mpv", process.platform)
+    : path.resolve(process.cwd());
+
+// See pitfalls section of mpv.js for details
+// if (process.platform !== "linux") {
+//   process.chdir(pluginDir);
+// }
+
+// Fix for latest Electron to work with mpv
+app.commandLine.appendSwitch("no-sandbox");
+
+// Disable out of blink cors
+app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
+
+// To support a wider number of systems
+app.commandLine.appendSwitch("ignore-gpu-blacklist");
+app.commandLine.appendSwitch(
+  "register-pepper-plugins",
+  getPluginEntry(pluginDir),
+);
+
+// Support high DPI
+app.commandLine.appendSwitch("high-dpi-support", "1");
+
+// https://github.com/electron/electron/issues/18214
+app.commandLine.appendSwitch("disable-site-isolation-trials");
+
 const createWindow = async (): Promise<void> => {
   // Create the browser window.
   let mainWindow = new BrowserWindow({
@@ -26,12 +63,14 @@ const createWindow = async (): Promise<void> => {
       plugins: true,
       webSecurity: false,
       nodeIntegration: true,
-      enableRemoteModule: true,
       contextIsolation: false,
     },
     frame: false,
     titleBarStyle: "hidden",
   });
+
+  // Enable Electron remote bridge
+  electronRemote.enable(mainWindow.webContents);
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     const cspHeaders = [
@@ -100,51 +139,23 @@ const createWindow = async (): Promise<void> => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.whenReady().then(() => {
+  createWindow();
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  app.on("activate", () => {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+
+  // Quit when all windows are closed, except on macOS. There, it's common
+  // for applications and their menu bar to stay active until the user quits
+  // explicitly with Cmd + Q.
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
+  });
 });
-
-app.on("activate", () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
-
-// Absolute path to the plugin directory.
-const pluginDir =
-  process.env.ELECTRON_ENV === "development"
-    ? path.join(__dirname, "../../bin/mpv", process.platform)
-    : path.resolve(process.cwd());
-
-// See pitfalls section of mpv.js for details
-// if (process.platform !== "linux") {
-//   process.chdir(pluginDir);
-// }
-
-// Fix for latest Electron to work with mpv
-app.commandLine.appendSwitch("no-sandbox");
-
-// Disable out of blink cors
-app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
-
-// To support a wider number of systems
-app.commandLine.appendSwitch("ignore-gpu-blacklist");
-app.commandLine.appendSwitch(
-  "register-pepper-plugins",
-  getPluginEntry(pluginDir),
-);
-
-// Support high DPI
-app.commandLine.appendSwitch("high-dpi-support", "1");
-
-// https://github.com/electron/electron/issues/18214
-app.commandLine.appendSwitch("disable-site-isolation-trials");

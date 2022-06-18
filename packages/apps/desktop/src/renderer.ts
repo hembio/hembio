@@ -1,30 +1,31 @@
-import { remote } from "electron";
+import { BrowserWindow } from "@electron/remote";
 import "./index.css";
 
-const currentWindow = remote.getCurrentWindow();
+const mainWindow = BrowserWindow.getFocusedWindow();
+
 const iframe = document.getElementById("iframe");
 const minBtn = document.getElementById("min-btn");
 const maxBtn = document.getElementById("max-btn");
 const closeBtn = document.getElementById("close-btn");
 
 minBtn.onclick = () => {
-  currentWindow.minimize();
+  mainWindow.minimize();
 };
 
 maxBtn.onclick = () => {
-  if (currentWindow.isMaximized()) {
-    currentWindow.unmaximize();
+  if (mainWindow.isMaximized()) {
+    mainWindow.unmaximize();
     maxBtn.innerText = "🗖︎";
   } else {
-    currentWindow.maximize();
+    mainWindow.maximize();
     maxBtn.innerText = "🗗︎";
   }
 };
 
 closeBtn.onclick = () => {
-  const win = remote.BrowserWindow.getFocusedWindow();
+  const win = BrowserWindow.getFocusedWindow();
   win.close();
-  currentWindow.close();
+  mainWindow.close();
 };
 
 iframe.setAttribute("src", "https://hembio.local:3443");
