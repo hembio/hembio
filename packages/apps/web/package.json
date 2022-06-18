@@ -23,7 +23,6 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@hembio/core": "workspace:packages/libs/core",
-    "@hembio/logger": "workspace:packages/libs/logger",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.86",
     "@mui/material": "^5.8.4",

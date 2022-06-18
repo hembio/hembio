@@ -7,7 +7,6 @@ import {
   UserEntity,
   seedDatabase,
 } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import {
   MiddlewareConsumer,
   Module,
@@ -20,6 +19,7 @@ import { MercuriusDriver, MercuriusDriverConfig } from "@nestjs/mercurius";
 import { ScheduleModule } from "@nestjs/schedule";
 import GraphQLJSON from "graphql-type-json";
 import { CookieModule } from "nest-cookies";
+import { LoggerModule, PinoLogger } from "nestjs-pino";
 import { config } from "../../../../config";
 import { AppController as AppController } from "./app.controller";
 import { AppService as AppService } from "./app.service";
@@ -47,6 +47,19 @@ const AppConfigModule = ConfigModule.forRoot({
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: [
+        {
+          level: process.env.NODE_ENV !== "production" ? "debug" : "info",
+          // install 'pino-pretty' package in order to use the following option
+          transport:
+            process.env.NODE_ENV !== "production"
+              ? { target: "pino-pretty" }
+              : undefined,
+        },
+        process.stdout,
+      ],
+    }),
     AppConfigModule,
     ScheduleModule.forRoot(),
     MikroOrmModule.forRoot(MikroORMConfig),
@@ -90,9 +103,8 @@ const AppConfigModule = ConfigModule.forRoot({
   ],
 })
 export class AppModule implements NestModule {
-  private readonly logger = createLogger("api");
-
   public constructor(
+    private readonly logger: PinoLogger,
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
   ) {}

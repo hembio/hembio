@@ -1,10 +1,9 @@
-import { createLogger } from "@hembio/logger";
 import PQueue from "p-queue";
 import { aggregatedSearch, MetadataResult } from "./utils/aggregatedSearch";
 import { matchTitleYear } from "./utils/matchTitleYear";
 
 const queue = new PQueue({ concurrency: 8 });
-const logger = createLogger("metadata");
+const logger = console;
 
 export const fetchMetadata = async (
   titlePath: string,

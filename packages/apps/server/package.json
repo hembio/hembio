@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@hembio/core": "workspace:packages/libs/core",
-    "@hembio/logger": "workspace:packages/libs/logger",
     "chalk": "^5.0.1",
     "fastify": "^3.29.0",
     "fastify-static": "^4.7.0",
@@ -18,7 +17,10 @@
     "hostile": "^1.3.3",
     "http2-proxy": "^5.0.53",
     "http2-wrapper": "^2.1.11",
-    "internal-ip": "^6.2.0"
+    "internal-ip": "^6.2.0",
+    "pino": "^8.0.0",
+    "pino-http": "^8.0.1",
+    "pino-pretty": "^8.0.0"
   },
   "devDependencies": {
     "@types/finalhandler": "^1.1.1",

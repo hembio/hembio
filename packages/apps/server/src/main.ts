@@ -1,29 +1,36 @@
 import { IncomingMessage, ServerResponse } from "http";
-import {
-  createSecureServer,
-  Http2ServerRequest,
-  Http2ServerResponse,
-} from "http2";
+import { createSecureServer } from "http2";
 import { Socket, isIP } from "net";
 import path from "path";
 import { getCwd, getEnv, getPki, internalIp } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import finalhandler from "finalhandler";
 import proxy from "http2-proxy";
+import { pino } from "pino";
+import pinoHttp from "pino-http";
 import { HEMBIO_BANNER } from "./constants";
 import { hasHost, setHost } from "./hosts";
 import { monkeyPatchTls } from "./monkeyPatchTls";
 
-const logger = createLogger("server");
+const logger = pino({
+  transport: {
+    target: "pino-pretty",
+  },
+});
+const httpLogger = pinoHttp({
+  transport: {
+    target: "pino-pretty",
+  },
+});
 
 const defaultWebHandler = (
   err: Error | null,
   req: IncomingMessage,
   res: ServerResponse,
 ): void => {
+  //httpLogger(req, res);
   if (err) {
     req.statusCode = 503;
-    logger.error(err, "Proxy error");
+    httpLogger(req, res);
     finalhandler(req, res)(err);
   }
 };
@@ -89,20 +96,20 @@ async function bootstrap(): Promise<void> {
   monkeyPatchTls(selfSignedCert);
 
   // https://nodejs.org/api/http2.html#http2_alpn_negotiation
-  function onRequest(req: Http2ServerRequest, res: Http2ServerResponse): void {
-    // Detects if it is a HTTPS request or HTTP/2
-    const {
-      socket: { alpnProtocol },
-    }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    any = req.httpVersion === "2.0" ? req.stream.session : req;
-    res.writeHead(200, { "content-type": "application/json" });
-    res.end(
-      JSON.stringify({
-        alpnProtocol,
-        httpVersion: req.httpVersion,
-      }),
-    );
-  }
+  // function onRequest(req: Http2ServerRequest, res: Http2ServerResponse): void {
+  //   // Detects if it is a HTTPS request or HTTP/2
+  //   const {
+  //     socket: { alpnProtocol },
+  //   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   any = req.httpVersion === "2.0" ? req.stream.session : req;
+  //   res.writeHead(200, { "content-type": "application/json" });
+  //   res.end(
+  //     JSON.stringify({
+  //       alpnProtocol,
+  //       httpVersion: req.httpVersion,
+  //     }),
+  //   );
+  // }
 
   logger.debug("Creating HTTP2 server");
   const server = createSecureServer(

@@ -1,11 +1,10 @@
 import fs from "fs";
 import path from "path";
 import { FileLRU, getCwd, FileEntity } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import { mediainfo, MediaInfo } from "@hembio/mediainfo";
 import PQueue from "p-queue";
 
-const logger = createLogger("mediainfo");
+const logger = console;
 
 interface CachePayload {
   stat: { mtimeMs: number; size: number };

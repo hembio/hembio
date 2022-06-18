@@ -21,7 +21,6 @@
     "migration:pending": "mikro-orm migration:pending"
   },
   "dependencies": {
-    "@hembio/logger": "workspace:packages/libs/logger",
     "@mikro-orm/core": "^5.2.0",
     "@mikro-orm/knex": "^5.2.0",
     "@mikro-orm/nestjs": "^5.0.2",
@@ -42,7 +41,9 @@
     "graphql": "^16.5.0",
     "graphql-subscriptions": "^2.0.0",
     "internal-ip": "^6.2.0",
+    "nestjs-pino": "^2.6.0",
     "node-powershell": "^5.0.1",
+    "pino-http": "^8.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.5",
     "slug": "^5.3.0",

@@ -4,10 +4,10 @@ import {
   RefreshTokenEntity,
   UserEntity,
 } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { authenticator } from "@otplib/preset-default";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { toDataURL } from "qrcode";
 import { HEMBIO_JWT_SECRET } from "~/constants";
 import { CredentialsDto } from "./dto/credentials.dto";
@@ -33,10 +33,11 @@ interface SignInResult {
 
 @Injectable()
 export class AuthService {
-  private logger = createLogger("api");
   private pendingTfa = new Map<string, SignInResult>();
 
   public constructor(
+    @InjectPinoLogger(AuthService.name)
+    private readonly logger: PinoLogger,
     @InjectRepository(UserEntity)
     private readonly userRepo: EntityRepository<UserEntity>,
     @InjectRepository(RefreshTokenEntity)

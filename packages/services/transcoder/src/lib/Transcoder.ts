@@ -1,13 +1,12 @@
 import fs from "fs";
 import path from "path";
 import { FileEntity, getCwd } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
-import { FFmpeg, secsToTimer } from "ffmpeggy";
+import { FFmpeggy, secsToTimer } from "ffmpeggy";
 import { action, makeObservable, observable, reaction, when } from "mobx";
 import { now } from "mobx-utils";
 import { waitForFile } from "../utils/waitForFile";
 
-const logger = createLogger("transcoder");
+const logger = console;
 const cache: Record<string, Transcoder> = {};
 const tmpPath = path.resolve(getCwd(), ".transcoding");
 
@@ -26,7 +25,7 @@ export class Transcoder {
   }
 
   public isRunning = false;
-  public ffmpeg = new FFmpeg();
+  public ffmpeg = new FFmpeggy();
   public lastAccessed = Date.now();
   public fullyTranscoded = false;
 

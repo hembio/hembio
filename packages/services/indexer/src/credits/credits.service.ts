@@ -9,16 +9,15 @@ import {
   PersonEntity,
   CreditEntity,
 } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { Cast, Crew } from "moviedb-promise/dist/request-types";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import PQueue from "p-queue";
 import { TMDbProvider, TraktProvider } from "~/providers";
 
 @Injectable()
 export class CreditsService {
-  private logger = createLogger("credit");
   private trakt = new TraktProvider();
   private tmdb = new TMDbProvider();
   private runners = new Set<string>();
@@ -37,6 +36,8 @@ export class CreditsService {
   });
 
   public constructor(
+    @InjectPinoLogger(CreditsService.name)
+    private readonly logger: PinoLogger,
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
     private readonly tasks: TaskService,

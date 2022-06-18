@@ -1,6 +1,5 @@
 import { join } from "path";
 import { getEnv, getPki, internalIp } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import {
@@ -8,12 +7,12 @@ import {
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { WsAdapter } from "@nestjs/platform-ws";
+import { Logger } from "nestjs-pino";
 import { allowedHeaders } from "./allowedHeaders";
 import { AppModule } from "./app.module";
 
 async function bootstrap(): Promise<void> {
   const env = getEnv();
-  const logger = createLogger("api");
   const ip = env.HEMBIO_SERVER_HOST || (await internalIp.v4()) || "127.0.0.1";
   const [key, cert] = await getPki("hembio.local", ip);
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -27,9 +26,11 @@ async function bootstrap(): Promise<void> {
       },
     }),
     {
-      logger,
+      bufferLogs: true,
     },
   );
+  const logger = app.get(Logger);
+  app.useLogger(logger);
   const configService = app.get(ConfigService);
   const port = configService.get<number>("services.api.port") as number;
 
@@ -51,7 +52,7 @@ async function bootstrap(): Promise<void> {
 
   try {
     await app.listen(port, ip);
-    logger.info(`Application is running on: ${await app.getUrl()}`);
+    logger.log(`Application is running on: ${await app.getUrl()}`);
   } catch (e) {
     logger.error(e);
   }

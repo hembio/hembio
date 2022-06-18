@@ -15,9 +15,9 @@ import {
   TitleType,
 } from "@hembio/core";
 import { pathWalker } from "@hembio/fs";
-import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import PQueue from "p-queue";
 import slugify from "slug";
 import { fetchMetadata } from "../fetchMetadata";
@@ -29,7 +29,6 @@ function sleep(ms: number): Promise<void> {
 
 @Injectable()
 export class LibraryService {
-  private logger = createLogger("indexer");
   private runners = new Set<string>();
 
   private tasksPerBatch = 10;
@@ -42,6 +41,8 @@ export class LibraryService {
   });
 
   public constructor(
+    @InjectPinoLogger(LibraryService.name)
+    private readonly logger: PinoLogger,
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
     private readonly tasks: TaskService,

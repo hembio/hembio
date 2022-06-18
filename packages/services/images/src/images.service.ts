@@ -14,12 +14,12 @@ import {
   TaskEntity,
 } from "@hembio/core";
 import { FanartProvider, ImagesResult, TMDbProvider } from "@hembio/indexer";
-import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import axios from "axios";
 import ColorThief from "color-thief-jimp";
 import Jimp from "jimp";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import PQueue from "p-queue";
 
 export interface DownloadTitleImagesResult {
@@ -39,7 +39,6 @@ function numHex(s: number) {
 @Injectable()
 export class ImagesService {
   private isRunning = false;
-  private readonly logger = createLogger("images");
   private readonly http = axios.create({
     timeout: 10000,
     responseType: "arraybuffer",
@@ -76,6 +75,8 @@ export class ImagesService {
   private readonly tmdbProvider = new TMDbProvider();
 
   public constructor(
+    @InjectPinoLogger(ImagesService.name)
+    private readonly logger: PinoLogger,
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
     private readonly tasks: TaskService,
@@ -407,7 +408,7 @@ export class ImagesService {
 
       const bestImage = enImages[0] || allImages[0];
       if (bestImage) {
-        const downloadFile = async () => {
+        const downloadFile = async (): Promise<void> => {
           try {
             this.logger.debug(
               `Downloading ${cat}(${title.id}): ${title.name} (${title.year}) - ${bestImage.url}`,
@@ -419,7 +420,8 @@ export class ImagesService {
             if (cat === "poster") {
               await this.generateThumb(titleRepo, title, imageBuffer);
             }
-          } catch (e) {
+          } catch (err) {
+            const e = err as any;
             if (!e.response) {
               this.logger.error(e, "Failed to download image!");
               return;

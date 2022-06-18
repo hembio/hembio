@@ -3,7 +3,6 @@ import { stat, unlink } from "fs/promises";
 import path from "path";
 import { Transform } from "stream";
 import { EntityManager, FileEntity, getCwd, LibraryEntity } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import {
   Injectable,
   InternalServerErrorException,
@@ -11,6 +10,7 @@ import {
   ServiceUnavailableException,
 } from "@nestjs/common";
 import { FFmpeggy } from "ffmpeggy";
+import { PinoLogger } from "nestjs-pino";
 import { parse, stringify } from "subtitle";
 import tempfile from "tempfile";
 
@@ -23,10 +23,12 @@ FFmpeggy.DefaultConfig = {
 
 @Injectable()
 export class StreamService {
-  private readonly logger = createLogger("stream");
-  public constructor(private readonly em: EntityManager) {}
+  public constructor(
+    private readonly logger: PinoLogger,
+    private readonly em: EntityManager,
+  ) {}
 
-  public async getVideoStream(fileId: string, offset = 0): Promise<void> {
+  public async getVideoStream(fileId: string, _offset = 0): Promise<void> {
     const repo = this.em.fork().getRepository(FileEntity);
     const file = await repo.findOneOrFail(fileId, {
       fields: ["id", "library", "path"],
@@ -36,7 +38,7 @@ export class StreamService {
     return;
   }
 
-  public async getAudioStream(fileId: string, offset = 0): Promise<void> {
+  public async getAudioStream(fileId: string, _offset = 0): Promise<void> {
     const repo = this.em.fork().getRepository(FileEntity);
     const file = await repo.findOneOrFail(fileId, {
       fields: ["id", "library", "path"],

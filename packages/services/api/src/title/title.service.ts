@@ -9,9 +9,9 @@ import {
   TitleGenreLiterals,
 } from "@hembio/core";
 import { IMDbProvider, SearchResult } from "@hembio/indexer";
-import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import MiniSearch from "minisearch";
+import { PinoLogger } from "nestjs-pino";
 import { TitleNotFoundException } from "./exceptions/TitleNotFoundException";
 
 interface Params {
@@ -27,8 +27,8 @@ interface Params {
 
 @Injectable()
 export class TitleService {
-  private readonly logger = createLogger("api");
   public constructor(
+    private readonly logger: PinoLogger,
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
   ) {
@@ -99,7 +99,8 @@ export class TitleService {
     const { ids, libraryId, name, year, genre, take, skip, orderBy } = params;
     const em = this.em.fork();
 
-    const $and: Array<string | Record<string, any>> = [];
+    // Query<TitleEntity>
+    const $and: Array<string | any> = [];
     if (ids) {
       $and.push({ id: { $in: ids } });
     }

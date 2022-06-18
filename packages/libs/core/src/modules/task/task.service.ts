@@ -5,6 +5,7 @@ import {
   UseRequestContext,
 } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { TaskEntity, TaskType } from "../../entities/TaskEntity";
 
 interface CreateTask extends RequiredEntityData<TaskEntity> {
@@ -14,8 +15,11 @@ interface CreateTask extends RequiredEntityData<TaskEntity> {
 
 @Injectable()
 export class TaskService {
-  // private readonly logger = createLogger("tasks");
-  public constructor(private readonly orm: MikroORM) {}
+  public constructor(
+    @InjectPinoLogger(TaskService.name)
+    private readonly logger: PinoLogger,
+    private readonly orm: MikroORM,
+  ) {}
 
   public async getTasks(
     type: TaskType | TaskType[],

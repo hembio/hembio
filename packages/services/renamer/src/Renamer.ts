@@ -1,9 +1,8 @@
 import path from "path";
 import { pathWalker } from "@hembio/fs";
-import { createLogger } from "@hembio/logger";
 import { Matcher } from "@hembio/matcher";
 
-export const logger = createLogger("renamer", { mobx: true });
+export const logger = console;
 
 export class Renamer {
   public constructor(private basePath: string) {
@@ -21,11 +20,11 @@ export class Renamer {
         if (match.category === "show") {
           to = `${match.show}/Season ${match.season}/${
             match.show
-          } - S${match.season
+          } - S${match.season?.toString().padStart(2, "0")}E${match.episode
             ?.toString()
-            .padStart(2, "0")}E${match.episode?.toString().padStart(2, "0")}${
-            match.title ? " - " + match.title : ""
-          }.${match.extension}`;
+            .padStart(2, "0")}${match.title ? " - " + match.title : ""}.${
+            match.extension
+          }`;
         } else {
           to = `${match.title} (${match.year})/${match.title} (${match.year}) - ${match.resolution}.${match.extension}`;
         }

@@ -5,15 +5,16 @@ import {
   LibraryEntity,
   TitleEntity,
 } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import chokidar from "chokidar";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { LibraryService } from "~/library/library.service";
 
 @Injectable()
 export class WatcherService {
-  private logger = createLogger("indexer");
   public constructor(
+    @InjectPinoLogger(WatcherService.name)
+    private readonly logger: PinoLogger,
     private readonly em: EntityManager,
     private readonly libraryService: LibraryService,
   ) {

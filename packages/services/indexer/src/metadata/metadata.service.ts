@@ -10,15 +10,14 @@ import {
   TitleGenreSlugs,
   TitleType,
 } from "@hembio/core";
-import { createLogger } from "@hembio/logger";
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import PQueue from "p-queue";
 import { TMDbProvider, TraktProvider } from "~/providers";
 
 @Injectable()
 export class MetadataService {
-  private logger = createLogger("metadata");
   private trakt = new TraktProvider();
   private tmdb = new TMDbProvider();
   private runners = new Set<string>();
@@ -28,6 +27,8 @@ export class MetadataService {
   });
 
   public constructor(
+    @InjectPinoLogger(MetadataService.name)
+    private readonly logger: PinoLogger,
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
     private readonly tasks: TaskService,
@@ -231,7 +232,9 @@ export class MetadataService {
     this.runners.add(runnerName);
     this.logger.info("Checking for missing metadata...");
     try {
-      const titles = await titleRepo.findAll(["genres", "credits"]);
+      const titles = await titleRepo.findAll({
+        populate: ["genres", "credits"],
+      });
       for (const title of titles) {
         if (title.idTrakt) {
           await title.genres.init();
