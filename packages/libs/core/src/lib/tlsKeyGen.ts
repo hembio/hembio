@@ -13,7 +13,7 @@ import { homedir, platform } from "os";
 import { dirname, join } from "path";
 import commandExists from "command-exists";
 import execa, { ExecaError } from "execa";
-import Powershell from "node-powershell";
+import { PowerShell } from "node-powershell";
 import { parseCertificate } from "sshpk";
 import tempWrite from "temp-write";
 import { file as tmpFile } from "tmp-promise";
@@ -294,9 +294,10 @@ async function generateLocalhostPairWindows(
 }
 
 async function certUtilAddStore(cert: string): Promise<void> {
-  const ps = new Powershell({
-    executionPolicy: "Bypass",
-    verbose: false,
+  const ps = new PowerShell({
+    executableOptions: {
+      "-ExecutionPolicy": "Bypass",
+    },
   });
   const command = [
     "Start-Process",
@@ -311,8 +312,7 @@ async function certUtilAddStore(cert: string): Promise<void> {
     "-Wait",
   ].join(" ");
   try {
-    await ps.addCommand(command);
-    await ps.invoke();
+    await ps.invoke(command);
   } catch (error) {
     await ps.dispose();
     throw error;
