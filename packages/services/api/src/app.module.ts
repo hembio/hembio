@@ -1,4 +1,4 @@
-import path from "path";
+import path, { join } from "path";
 import {
   EntityManager,
   MikroORM,
@@ -17,6 +17,7 @@ import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { MercuriusDriver, MercuriusDriverConfig } from "@nestjs/mercurius";
 import { ScheduleModule } from "@nestjs/schedule";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import GraphQLJSON from "graphql-type-json";
 import { CookieModule } from "nest-cookies";
 import { LoggerModule, PinoLogger } from "nestjs-pino";
@@ -59,6 +60,9 @@ const AppConfigModule = ConfigModule.forRoot({
         },
         process.stdout,
       ],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "public"),
     }),
     AppConfigModule,
     ScheduleModule.forRoot(),

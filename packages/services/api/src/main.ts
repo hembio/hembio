@@ -1,4 +1,3 @@
-import { join } from "path";
 import { getEnv, getPki, internalIp } from "@hembio/core";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
@@ -45,10 +44,6 @@ async function bootstrap(): Promise<void> {
   // app.register(fastifyCookie as any, {
   //   secret: "my-secret", // for cookies signature
   // });
-
-  app.useStaticAssets({
-    root: join(__dirname, "..", "public"),
-  });
 
   try {
     await app.listen(port, ip);
