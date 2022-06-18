@@ -4,14 +4,14 @@ import {
   Http2ServerRequest,
   Http2ServerResponse,
 } from "http2";
-import { Socket } from "net";
+import { Socket, isIP } from "net";
 import path from "path";
 import { getCwd, getEnv, getPki, internalIp } from "@hembio/core";
 import { createLogger } from "@hembio/logger";
 import finalhandler from "finalhandler";
 import proxy from "http2-proxy";
 import { HEMBIO_BANNER } from "./constants";
-import { ensureHost } from "./ensureHost";
+import { hasHost, setHost } from "./hosts";
 import { monkeyPatchTls } from "./monkeyPatchTls";
 
 const logger = createLogger("server");
@@ -20,12 +20,11 @@ const defaultWebHandler = (
   err: Error | null,
   req: IncomingMessage,
   res: ServerResponse,
-) => {
+): void => {
   if (err) {
     req.statusCode = 503;
     logger.error(err, "Proxy error");
     finalhandler(req, res)(err);
-    return;
   }
 };
 
@@ -34,7 +33,7 @@ const defaultWSHandler = (
   req: IncomingMessage,
   socket: Socket,
   _head: Buffer,
-) => {
+): void => {
   if (err) {
     logger.error(err, "Proxy error");
     socket.destroy();
@@ -43,28 +42,45 @@ const defaultWSHandler = (
 
 async function bootstrap(): Promise<void> {
   const env = getEnv();
-  const domain = env.HEMBIO_SERVER_DOMAIN || "hembio.local";
+  let domain: string | undefined;
+  let ip: string | undefined;
+  if (env.HEMBIO_SERVER_HOST && isIP(env.HEMBIO_SERVER_HOST)) {
+    ip = env.HEMBIO_SERVER_HOST;
+    domain = env.HEMBIO_SERVER_HOST;
+  } else {
+    ip = await internalIp.v4();
+    domain = env.HEMBIO_SERVER_HOST || ip;
+  }
 
-  const ip = env.HEMBIO_SERVER_IP || (await internalIp.v4()) || "127.0.0.1";
+  if (!ip || !domain) {
+    throw Error("Could not resolve server IP");
+  }
+
   const port = Number(env.HEMBIO_SERVER_PORT) || 443;
 
   // Output the awesome banner :D
   console.log(HEMBIO_BANNER);
 
   // Make sure the specified domain is in the hosts file
-  logger.debug("Ensure domain is in hosts file");
-  try {
-    await ensureHost(domain, ip);
-  } catch (e) {
-    // Ignore
-    // logger.error(
-    //   "Domain could not be added to hosts file. Manually run `yarn dlx hostile set 127.0.0.1 hembio.local` as root/admin to add it.",
-    // );
-    // process.exit(1);
+  logger.debug(
+    `Ensure domain is in hosts file: ${domain} => ${ip}`,
+    domain,
+    ip,
+  );
+
+  if (!(await hasHost(domain, ip))) {
+    try {
+      await setHost(domain, ip);
+    } catch (e) {
+      logger.error(
+        "Domain could not be added to hosts file. Manually run `yarn dlx hostile set 127.0.0.1 hembio.local` as root/admin to add it.",
+      );
+      process.exit(1);
+    }
   }
 
   // Get key/cert for domain (will generate one if it doesn't already exist)
-  logger.debug("Get/generate self-signed key/cert for domain");
+  logger.debug(`Get/generate self-signed key/cert for domain: ${domain} ${ip}`);
   const [key, cert] = await getPki(domain, ip);
 
   // Add self-signed cert to node to prevent errors
@@ -94,7 +110,8 @@ async function bootstrap(): Promise<void> {
       key,
       cert,
       allowHTTP1: true,
-    } /* onRequest */,
+    },
+    // onRequest,
   );
 
   server.on("sessionError", () => {

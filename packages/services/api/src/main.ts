@@ -14,7 +14,7 @@ import { AppModule } from "./app.module";
 async function bootstrap(): Promise<void> {
   const env = getEnv();
   const logger = createLogger("api");
-  const ip = env.HEMBIO_SERVER_IP || (await internalIp.v4()) || "127.0.0.1";
+  const ip = env.HEMBIO_SERVER_HOST || (await internalIp.v4()) || "127.0.0.1";
   const [key, cert] = await getPki("hembio.local", ip);
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
