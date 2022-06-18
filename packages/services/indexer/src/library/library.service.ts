@@ -50,9 +50,9 @@ export class LibraryService {
     setTimeout(async () => {
       await this.orm.isConnected();
       //await this.removeDeletedFilesAndTitles();
-      // await this.checkAllLibraries();
+      await this.checkAllLibraries();
       await this.runTasks();
-      // this.metadataService.checkMissingMetadata();
+      this.metadataService.checkMissingMetadata();
     }, 1000);
   }
 
